@@ -146,6 +146,7 @@ func (t *Tournament) ShufflePlayers() {
 //
 // It will fail if there are not between 8 and 24 players.
 func (t *Tournament) StartTournament() error {
+	log.Printf("Starting %s...", t.Name)
 	ps := len(t.Players)
 	if ps < 8 || ps > 32 {
 		return fmt.Errorf("Tournament needs at 8-32 players, got %d", ps)
@@ -296,6 +297,21 @@ func (t *Tournament) MovePlayers(m *Match) error {
 	for _, p := range ps {
 		t.Runnerups = append(t.Runnerups, p.Name())
 	}
+
+	// Finally, if the next match is a tryout and does not have enough players,
+	// fill it up with runnerups.
+	nm, err := t.NextMatch()
+	if err != nil {
+		return err
+	}
+	if nm.Kind == "tryout" && len(nm.Players) < 4 {
+		log.Printf("Setting runnerups for %s", nm)
+		err := t.PopulateRunnerups(nm)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -310,7 +326,6 @@ func (t *Tournament) NextMatch() (m *Match, err error) {
 	for x := range t.Tryouts {
 		m = t.Tryouts[x]
 		if !m.IsEnded() {
-			t.SetCurrent(m)
 			return
 		}
 	}
@@ -320,13 +335,11 @@ func (t *Tournament) NextMatch() (m *Match, err error) {
 	for x := range t.Semis {
 		m = t.Semis[x]
 		if !m.IsEnded() {
-			t.SetCurrent(m)
 			return
 		}
 	}
 
 	if !t.Final.IsEnded() {
-		t.SetCurrent(t.Final)
 		return t.Final, nil
 	}
 

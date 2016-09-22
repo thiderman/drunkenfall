@@ -211,6 +211,8 @@ func (s *Server) NextHandler(w http.ResponseWriter, r *http.Request) {
 
 	tm := s.getTournament(r)
 	m, err := tm.NextMatch()
+	tm.SetCurrent(m)
+
 	tm.Persist() // TODO(thiderman): Move into NextMatch, probably. Should not be here.
 	if err != nil {
 		http.Error(w, err.Error(), 500)
@@ -222,6 +224,7 @@ func (s *Server) NextHandler(w http.ResponseWriter, r *http.Request) {
 
 // MatchToggleHandler starts and stops matches
 func (s *Server) MatchToggleHandler(w http.ResponseWriter, r *http.Request) {
+	// TODO(thiderman): This should really be two different methods.
 	if !HasPermission(r, PermissionJudge) {
 		PermissionFailure(w, r, "Cannot start match unless judge or above")
 		return
@@ -255,7 +258,6 @@ func (s *Server) MatchCommitHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var req CommitRequest
-	// tm := s.getTournament(r)
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -268,24 +270,10 @@ func (s *Server) MatchCommitHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
-	log.Print(req)
 
+	c := NewMatchCommit(req)
 	m := s.getMatch(r)
-	states := req.State
-	scores := [][]int{
-		[]int{states[0].Ups, states[0].Downs},
-		[]int{states[1].Ups, states[1].Downs},
-		[]int{states[2].Ups, states[2].Downs},
-		[]int{states[3].Ups, states[3].Downs},
-	}
-	shots := []bool{
-		states[0].Shot,
-		states[1].Shot,
-		states[2].Shot,
-		states[3].Shot,
-	}
-
-	m.Commit(scores, shots)
+	m.Commit(c)
 
 	data, err := json.Marshal(UpdateMatchMessage{
 		Match: m,

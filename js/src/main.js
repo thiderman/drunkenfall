@@ -10,6 +10,7 @@ import Tournament from './components/Tournament.vue'
 import New from './components/New.vue'
 import Match from './components/Match.vue'
 import ScoreScreen from './components/ScoreScreen.vue'
+import NextScreen from './components/NextScreen.vue'
 import User from './models/User.js'
 import Facebook from './components/Facebook.vue'
 import FacebookFinalize from './components/FacebookFinalize.vue'
@@ -48,6 +49,10 @@ router.map({
   '/towerfall/:tournament/scores/': {
     name: 'scores',
     component: ScoreScreen
+  },
+  '/towerfall/:tournament/next/': {
+    name: 'next',
+    component: NextScreen
   },
   '/towerfall/:tournament/:kind/:match/': {
     name: 'match',

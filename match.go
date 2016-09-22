@@ -3,21 +3,37 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 )
 
 // Match represents a game being played
 type Match struct {
-	Players       []Player    `json:"players"`
-	Judges        []Judge     `json:"judges"`
-	Kind          string      `json:"kind"`
-	Index         int         `json:"index"`
-	Length        int         `json:"length"`
-	Started       time.Time   `json:"started"`
-	Ended         time.Time   `json:"ended"`
-	Tournament    *Tournament `json:"-"`
+	Players    []Player    `json:"players"`
+	Judges     []Judge     `json:"judges"`
+	Kind       string      `json:"kind"`
+	Index      int         `json:"index"`
+	Length     int         `json:"length"`
+	Started    time.Time   `json:"started"`
+	Ended      time.Time   `json:"ended"`
+	Tournament *Tournament `json:"-"`
+
+	// Stores the index to the player in the relative position.  E.g. if player
+	// 3 is in the lead, ScoreOrder[0] will be 2 (the index of player 3).
+	ScoreOrder []int `json:"score_order"`
+
+	// One commit per round - the changeset of what happened in it.
+	Commits []MatchCommit `json:"commits"`
+
 	presentColors map[string]bool
+}
+
+// MatchCommit is a state commit for a round of a match
+type MatchCommit struct {
+	Kills     [][]int `json:"kills"`
+	Shots     []bool  `json:"shots"`
+	Committed string  `json:"comitted"` // ISO-8601
 }
 
 // NewMatch creates a new Match for usage!
@@ -107,11 +123,12 @@ func (m *Match) AddPlayer(p Player) error {
 	// Reset all possible scores
 	p.Reset()
 
-	c := p.Person.ColorPreference[0]
+	c := p.PreferredColor()
 	p.OriginalColor = c
 	if _, ok := m.presentColors[c]; ok {
 		// Color is already present - give the player a new random one.
 		c = Colors.Available(m).Random()
+		log.Printf("Corrected color of %s from %s to %s", p.Person.Nick, p.OriginalColor, c)
 	}
 
 	// Set the player color
@@ -137,8 +154,8 @@ func (m *Match) UpdatePlayer(p Player) error {
 }
 
 // Commit adds a state of the players
-func (m *Match) Commit(scores [][]int, shots []bool) {
-	for i, score := range scores {
+func (m *Match) Commit(c MatchCommit) {
+	for i, score := range c.Kills {
 		shotGiven := false
 		ups := score[0]
 		downs := score[1]
@@ -164,13 +181,16 @@ func (m *Match) Commit(scores [][]int, shots []bool) {
 
 		if downs != 0 {
 			m.Players[i].AddSelf()
+			shotGiven = true
 		}
 
-		if shots[i] && !shotGiven {
+		if c.Shots[i] && !shotGiven {
 			m.Players[i].AddShot()
 		}
 	}
 
+	m.ScoreOrder = m.MakeScoreOrder()
+	m.Commits = append(m.Commits, c)
 	_ = m.Tournament.Persist()
 }
 
@@ -178,12 +198,6 @@ func (m *Match) Commit(scores [][]int, shots []bool) {
 func (m *Match) Start() error {
 	if !m.Started.IsZero() {
 		return errors.New("match already started")
-	}
-
-	// If there are not four players in the match, we need to populate
-	// the match with runnerups from the tournament
-	if len(m.Players) != 4 {
-		m.Tournament.PopulateRunnerups(m)
 	}
 
 	for i := range m.Players {
@@ -207,15 +221,15 @@ func (m *Match) End() error {
 		return errors.New("match already ended")
 	}
 
+	// XXX(thiderman): In certain test cases a Commit() might not have been run
+	// and therefore this might not have been set. Since the calculation is
+	// quick and has no side effects, it's easier to just add it here now. In
+	// the future, make the tests better.
+	m.ScoreOrder = m.MakeScoreOrder()
+
 	// Give the winner one last shot
-	ps := ByScore(m.Players)
-	winner := ps[0].Name()
-	for i, p := range m.Players {
-		if p.Name() == winner {
-			m.Players[i].AddShot()
-			break
-		}
-	}
+	winner := m.ScoreOrder[0]
+	m.Players[winner].AddShot()
 
 	m.Ended = time.Now()
 	// TODO: This is for the tests not to break. Fix by setting up better tests.
@@ -262,4 +276,42 @@ func (m *Match) CanEnd() bool {
 // IsOpen returns boolean the match can be controlled or not
 func (m *Match) IsOpen() bool {
 	return m.IsStarted() && !m.IsEnded()
+}
+
+// MakeScoreOrder returns the score order of the current state of the match
+func (m *Match) MakeScoreOrder() (ret []int) {
+	ps := SortByScore(m.Players)
+	for _, p := range ps {
+		for i, o := range m.Players {
+			if p.Name() == o.Name() {
+				ret = append(ret, i)
+				break
+			}
+		}
+	}
+
+	return
+}
+
+// NewMatchCommit makes a new MatchCommit object from a CommitRequest
+func NewMatchCommit(c CommitRequest) MatchCommit {
+	states := c.State
+	m := MatchCommit{
+		[][]int{
+			[]int{states[0].Ups, states[0].Downs},
+			[]int{states[1].Ups, states[1].Downs},
+			[]int{states[2].Ups, states[2].Downs},
+			[]int{states[3].Ups, states[3].Downs},
+		},
+		[]bool{
+			states[0].Shot,
+			states[1].Shot,
+			states[2].Shot,
+			states[3].Shot,
+		},
+		// ISO-8601 timestamp
+		time.Now().UTC().Format(time.RFC3339),
+	}
+
+	return m
 }

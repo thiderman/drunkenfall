@@ -27,11 +27,11 @@ export default {
     },
     classes: function () {
       if (this.match.isEnded) {
-        if (this.index === 0) {
+        if (this.index === this.match.score_order[0]) {
           return 'gold'
-        } else if (this.index === 1) {
+        } else if (this.index === this.match.score_order[1]) {
           return 'silver'
-        } else if (this.index === 2 && this.match.kind === 'final') {
+        } else if (this.index === this.match.score_order[2] && this.match.kind === 'final') {
           return 'bronze'
         }
 

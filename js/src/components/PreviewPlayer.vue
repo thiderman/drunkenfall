@@ -3,7 +3,7 @@
     <img alt="{{player.displayName}}" :src="player.avatar"/>
 
     <div class="protector">
-      <div class="super-ribbon">
+      <div v-if="showName" class="super-ribbon">
       {{player.firstName}}
       </div>
 
@@ -31,20 +31,13 @@ export default {
   },
 
   computed: {
-    classes: function () {
-      if (!this.match.isEnded) {
-        if (this.index === 0) {
-          return 'gold'
-        } else if (this.index === 1) {
-          return 'silver'
-        } else if (this.index === 2 && this.match.kind === 'final') {
-          return 'bronze'
-        }
-
-        return 'out'
+    showName: function () {
+      // Don't show the first name tag super ribbon if the player name is the
+      // same as that.
+      if (this.player.firstName.toLowerCase() === this.player.displayName.toLowerCase()) {
+        return false
       }
-
-      return this.player.preferred_color
+      return true
     }
   },
 }
@@ -64,8 +57,8 @@ export default {
     display: block;
     object-fit: cover;
     border-radius: 100%;
-    width:  350px;
-    height: 350px;
+    width:  300px;
+    height: 300px;
     margin: 0px auto;
     box-shadow: -1px -1px 6px rgba(0,0,0,0.5);
     background-color: rgba(10,12,14,0.3);
@@ -73,10 +66,11 @@ export default {
 
   .super-ribbon {
     margin: -3.5em auto 2.2em;
+    width: 20%;
   }
   .ribbon {
     font-size: 2em;
-    width: 45%;
+    width: 60%;
   }
 }
 

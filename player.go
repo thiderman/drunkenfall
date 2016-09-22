@@ -337,8 +337,10 @@ func (s ByScore) Less(i, j int) bool {
 
 // SortByScore returns a list in order of the score the players have
 func SortByScore(ps []Player) []Player {
-	sort.Sort(ByScore(ps))
-	return ps
+	tmp := make([]Player, len(ps))
+	copy(tmp, ps)
+	sort.Sort(ByScore(tmp))
+	return tmp
 }
 
 // ByKills is a sort.Interface that sorts players by their kills
@@ -359,8 +361,10 @@ func (s ByKills) Less(i, j int) bool {
 
 // SortByKills returns a list in order of the kills the players have
 func SortByKills(ps []Player) []Player {
-	sort.Sort(ByKills(ps))
-	return ps
+	tmp := make([]Player, len(ps))
+	copy(tmp, ps)
+	sort.Sort(ByKills(tmp))
+	return tmp
 }
 
 // ByRunnerup is a sort.Interface that sorts players by their runnerup status

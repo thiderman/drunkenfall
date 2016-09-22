@@ -13,15 +13,6 @@ export default class Player {
     return "https://graph.facebook.com/" + this.person.facebook_id + "/picture?width=9999"
   }
 
-  get color () {
-    if (this.person.color_preference) {
-      return this.person.color_preference[0]
-    }
-    return ""
-  }
-
-  set color (value) { }
-
   get displayName () {
     return this.person.nick
   }
