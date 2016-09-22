@@ -20,6 +20,8 @@ export default class Player {
     return ""
   }
 
+  set color (value) { }
+
   get displayName () {
     return this.person.nick
   }

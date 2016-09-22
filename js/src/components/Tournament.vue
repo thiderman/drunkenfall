@@ -75,8 +75,7 @@ export default {
     console.debug("Creating API resource")
     let customActions = {
       start: { method: "GET", url: "/api/towerfall{/id}/start/" },
-      next: { method: "GET", url: "/api/towerfall{/id}/next/" },
-      getData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }
+      next: { method: "GET", url: "/api/towerfall{/id}/next/" }
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)
   },
@@ -85,22 +84,19 @@ export default {
     data ({ to }) {
       // listen for tournaments from App
       this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
+        console.debug("Received new tournament from App:", tournament)
         this.$set('tournament', tournament)
+        // enable event to propagate
+        return true
       })
 
-      // TODO perhaps use $root.tournaments again?
-      return this.api.getData({ id: to.params.tournament }).then((res) => {
-        let tournament = Tournament.fromObject(res.data.tournament)
-        console.debug("loaded tournament", tournament)
-        return {
-          tournament: tournament,
-          user: this.$root.user,
+      if (!_.isEmpty(this.$root.tournaments)) {
+        let tournament = _.find(this.$root.tournaments, { id: to.params.tournament })
+        if (tournament) {
+          console.debug("Getting tournament from root:", tournament)
+          this.$set('tournament', tournament)
         }
-      }, (error) => {
-        console.error('error when getting tournament', error)
-        return { tournament: new Tournament() }
-      })
+      }
     }
   }
 }

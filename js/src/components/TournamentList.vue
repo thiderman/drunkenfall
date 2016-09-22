@@ -26,7 +26,6 @@
 
 <script>
 import _ from "lodash"
-import Tournament from "../models/Tournament.js"
 import * as levels from "../models/Level.js"
 
 export default {
@@ -41,14 +40,16 @@ export default {
   },
   route: {
     data ({ to }) {
-      return this.$http.get('/api/towerfall/tournament/').then(function (res) {
-        return {
-          tournaments: _.map(res.data.tournaments, Tournament.fromObject)
-        }
-      }, function (res) {
-        console.error('error when getting tournaments', res)
-        return { tournaments: [] }
+      this.$on("tournament_list", (tournaments) => {
+        this.$set("tournaments", tournaments)
+        // enable event to propagate
+        return true
       })
+
+      if (!_.isEmpty(this.$root.tournaments)) {
+        console.debug("Getting tournaments from root")
+        this.$set('tournaments', this.$root.tournaments)
+      }
     }
   }
 }
