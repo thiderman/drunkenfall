@@ -4,6 +4,7 @@
 /*.out
 /test/*
 *.db
+env.*
 *.log
 *.swp
 /*.env
