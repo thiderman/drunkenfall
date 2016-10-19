@@ -150,32 +150,16 @@ export default {
     data ({ to }) {
       // listen for tournaments from App
       this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
+        console.debug("Received new tournament from App:", tournament)
         this.setData(tournament, to.params.kind, parseInt(to.params.match))
       })
 
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          console.log(res)
-          this.setData(
-            res.data.tournament,
-            to.params.kind,
-            parseInt(to.params.match)
-          )
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-          to.params.kind,
-          parseInt(to.params.match)
-        )
+      if (!_.isEmpty(this.$root.tournaments)) {
+        let tournament = _.find(this.$root.tournaments, { id: to.params.tournament })
+        if (tournament) {
+          console.debug("Getting tournament from root", tournament)
+          this.setData(tournament, to.params.kind, to.params.match)
+        }
       }
     }
   }

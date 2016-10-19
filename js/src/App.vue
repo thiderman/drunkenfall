@@ -87,6 +87,9 @@ export default {
               let tournaments = _.map(res.data.tournaments, Tournament.fromObject)
               this.$set('tournaments', tournaments)
 
+              // first broadcast the entire list, in case the page needs it (mainly TournamentList)
+              this.$broadcast("tournament_list", tournaments)
+              // then, broadcast each tournament separately, to simplify the logic of most pages
               _.each(tournaments, (tournament) => { this.$broadcast(`tournament${tournament.id}`, tournament) })
               return
             }
