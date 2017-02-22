@@ -348,6 +348,34 @@ func TestCorrectColorConflictsNoScores(t *testing.T) {
 	assert.Equal("red", m.Players[3].PreferredColor)
 }
 
+func TestCorrectColorConflictsUserLevels(t *testing.T) {
+	assert := assert.New(t)
+
+	m := MockMatch(0, "final")
+	m.Players = make([]Player, 0)
+
+	m.Tournament.Players[0].PreferredColor = "green"
+	m.Tournament.Players[0].Person.Userlevel = 10000
+	m.Tournament.Players[1].PreferredColor = "green"
+	m.Tournament.Players[2].PreferredColor = "red"
+	m.Tournament.Players[2].Person.Userlevel = -10000
+	m.Tournament.Players[3].PreferredColor = "red"
+
+	assert.Nil(m.AddPlayer(m.Tournament.Players[0]))
+	assert.Nil(m.AddPlayer(m.Tournament.Players[1]))
+	assert.Nil(m.AddPlayer(m.Tournament.Players[2]))
+	assert.Nil(m.AddPlayer(m.Tournament.Players[3]))
+
+	assert.Equal("green", m.Players[0].Color)
+	assert.Equal("green", m.Players[0].PreferredColor)
+	assert.NotEqual("green", m.Players[1].Color)
+	assert.Equal("green", m.Players[1].PreferredColor)
+	assert.NotEqual("red", m.Players[2].Color)
+	assert.Equal("red", m.Players[2].PreferredColor)
+	assert.Equal("red", m.Players[3].Color)
+	assert.Equal("red", m.Players[3].PreferredColor)
+}
+
 // This test was needed since somehow the color were being kept
 func TestCorrectColorConflictsResetsToPreferredColor(t *testing.T) {
 	assert := assert.New(t)

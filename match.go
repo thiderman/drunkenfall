@@ -189,7 +189,7 @@ func (m *Match) CorrectFuckingColorConflicts() error {
 		if len(pair) >= 2 {
 			// We want to sort them by score, so that we can let the player with the
 			// highest score keep their color.
-			ps, err := SortByTournamentScore(pair)
+			ps, err := SortByColorConflicts(pair)
 			if err != nil {
 				return err
 			}

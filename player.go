@@ -311,6 +311,22 @@ func (p *Player) HTML() (out string) {
 	return
 }
 
+
+// ByScore is a sort.Interface that sorts players by their score
+type ByColorConflict []Player
+
+func (s ByColorConflict) Len() int { return len(s) }
+
+func (s ByColorConflict) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
+
+func (s ByColorConflict) Less(i, j int) bool {
+	if s[i].Person.Userlevel != s[j].Person.Userlevel {
+		return s[i].Person.Userlevel > s[j].Person.Userlevel
+	}
+	return s[i].Score() > s[j].Score()
+}
+
+
 // ByScore is a sort.Interface that sorts players by their score
 type ByScore []Player
 
@@ -335,9 +351,9 @@ func SortByScore(ps []Player) []Player {
 	return tmp
 }
 
-// SortByTournamentScore returns a list in order of the score the players
-// have, computed from the total of the tournament
-func SortByTournamentScore(ps []Player) (tmp []Player, err error) {
+// SortByColorConflicts returns a list in an unspecified order,
+// Probably by User level and then score.
+func SortByColorConflicts(ps []Player) (tmp []Player, err error) {
 	var tp *Player
 	tmp = make([]Player, len(ps))
 	for i, p := range ps {
@@ -348,7 +364,7 @@ func SortByTournamentScore(ps []Player) (tmp []Player, err error) {
 		}
 		tmp[i] = *tp
 	}
-	sort.Sort(ByScore(tmp))
+	sort.Sort(ByColorConflict(tmp))
 	return
 }
 
