@@ -109,11 +109,12 @@ export default {
       this.intervalID = setInterval(() => {
         d = moment.duration(d - interval, 'milliseconds')
 
+        // NOTE: Due to this messing with the chroma-key on stream, we're removing this! Byeeeeeeeeeeeeeeeee!
         // During the last minute, make sure to add the pulse class.
         // Do so for every second, so that reloads will make sense as well.
-        if (d.hours() === 0 && d.minutes() === 0) {
-          document.getElementsByTagName("body")[0].className = "red-pulse"
-        }
+        // if (d.hours() === 0 && d.minutes() === 0) {
+        //   document.getElementsByTagName("body")[0].className = "red-pulse"
+        // }
 
         // If we're ever at a negative interval, stop immediately.
         // Technically we probably only really need the seconds here, but
