@@ -9,7 +9,7 @@ BUILDTIME=`date +%FT%T%z` # ISO-8601
 LDFLAGS=-ldflags "-X $(BINARY).version=${VERSION} -X $(BINARY).buildtime=${BUILDTIME}"
 
 .DEFAULT_GOAL: all
-.PHONY: download install test clean npm npm-start $(BINARY)-start nginx-start
+.PHONY: download install install-linter test lint clean npm npm-start $(BINARY)-start nginx-start
 
 all: clean download npm test $(BINARY)
 
@@ -22,8 +22,15 @@ download:
 install:
 	go install -v ${LDFLAGS} ./...
 
+install-linter:
+	go get -v -u github.com/alecthomas/gometalinter
+	gometalinter --install
+
 test:
 	go test -v
+
+lint: install-linter
+	gometalinter $(SOURCES)
 
 clean:
 	rm -f $(BINARY)
