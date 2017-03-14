@@ -6,7 +6,7 @@ BINARY=drunkenfall
 VERSION=$(shell git describe --dirty --always --tags)
 BUILDTIME=`date +%FT%T%z` # ISO-8601
 
-LDFLAGS=-ldflags "-X $(BINARY).version=${VERSION} -X  $(BINARY).buildtime=${BUILDTIME}"
+LDFLAGS=-ldflags "-X $(BINARY).version=${VERSION} -X $(BINARY).buildtime=${BUILDTIME}"
 
 .DEFAULT_GOAL: all
 .PHONY: download install test clean npm npm-start $(BINARY)-start nginx-start
