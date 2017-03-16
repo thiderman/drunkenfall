@@ -44,6 +44,10 @@ install-linter:
 test:
 	go test -v -coverprofile=cover.out
 
+.PHONY: race
+race:
+	go test -race -v
+
 .PHONY: lint
 lint: install-linter
 	gometalinter $(LINTER_ARGS) $(SOURCEDIR)
