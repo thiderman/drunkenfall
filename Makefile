@@ -8,7 +8,11 @@ BUILDTIME = `date +%FT%T%z` # ISO-8601
 
 LDFLAGS = -ldflags "-X $(BINARY).version=${VERSION} -X $(BINARY).buildtime=${BUILDTIME}"
 
-LINTER_ARGS = -j 4 --enable-gc --disable=errcheck --deadline=10m --tests
+export GOPATH := $(shell go env GOPATH)
+export PATH := $(GOPATH)/bin:$(PATH)
+# gotype is disabled since it seems pointless and also produces 250 errors
+# about not finding dependencies that definitely exists.
+LINTER_ARGS = -j 4 --enable-gc --disable=errcheck --disable=gotype --deadline=10m --tests
 
 .DEFAULT_GOAL: all
 
@@ -46,7 +50,7 @@ test:
 
 .PHONY: race
 race:
-	go test -race -v
+	@echo go test -race -v
 
 .PHONY: lint
 lint: install-linter
@@ -58,6 +62,10 @@ npm: js/package.json
 .PHONY: npm
 npm-start: npm
 	cd js; npm run dev
+
+.PHONY: npm-dist
+npm-dist: npm
+	cd js; npm run build
 
 $(BINARY)-start: $(BINARY)
 	./$(BINARY)
