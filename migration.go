@@ -127,11 +127,7 @@ func getVersion(db *bolt.DB) (int, error) {
 
 		x := b.Get(levelKey)
 		version, err = strconv.Atoi(string(x))
-		if err != nil {
-			return err
-		}
-
-		return nil
+		return err
 	})
 
 	return version, err
@@ -144,10 +140,8 @@ func setVersion(tx *bolt.Tx, version int) error {
 	}
 
 	out, _ := json.Marshal(version)
-	if err := b.Put(levelKey, out); err != nil {
-		return err
-	}
-	return nil
+	err = b.Put(levelKey, out)
+	return err
 }
 
 // InitialMigration adds the db_version bucket with the sole entry
