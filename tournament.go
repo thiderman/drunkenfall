@@ -323,52 +323,26 @@ func (t *Tournament) UpdatePlayers() error {
 
 // MovePlayers moves the winner(s) of a Match into the next bracket of matches
 // or into the Runnerup bracket.
-// TODO(thiderman): This method is way too long and should be split into several.
 func (t *Tournament) MovePlayers(m *Match) error {
 	if m.Kind == tryout {
-		ps := SortByKills(m.Players)
-		for i := 0; i < len(ps); i++ {
-			p := ps[i]
-			// If we are in a four-match tryout, both the winner and the second-place
-			// are to be sent to the semis.
-			// If there are more than four matches, just send the winner
-			if len(t.Tryouts) == 4 && i < 2 || i == 0 {
-				// This spreads the winners into the semis so that the winners do not
-				// face off immediately in the semis
-				index := (i + m.Index) % 2
-				t.Semis[index].AddPlayer(p)
+		err := t.moveTryoutPlayers(m)
+		if err != nil {
+			return err
+		}
 
-				// If the player is also inside of the runnerups, move them from the
-				// runnerup roster since they now have advanced to the finals. This
-				// only happens for players that win the runnerup rounds.
-				t.removeFromRunnerups(p.Person)
-
-			} else {
-				// For everyone else, add them into the Runnerup bracket unless they are
-				// already in there.
-				found := false
-				for j := 0; j < len(t.Runnerups); j++ {
-					r := t.Runnerups[j]
-					if r.ID == p.Person.ID {
-						found = true
-						break
-					}
-				}
-				if !found {
-					t.Runnerups = append(t.Runnerups, p.Person)
-				}
+		// If the next match is also a tryout and does not have enough players,
+		// fill it up with runnerups.
+		nm, err := t.NextMatch()
+		if err != nil {
+			return err
+		}
+		if nm.Kind == tryout && len(nm.Players) < 4 {
+			log.Printf("Setting runnerups for %s", nm)
+			err := t.PopulateRunnerups(nm)
+			if err != nil {
+				return err
 			}
 		}
-	}
-
-	// Get the runnerups and sort them into the Runnerup array
-	ps, err := t.GetRunnerupPlayers()
-	if err != nil {
-		log.Fatal(err)
-	}
-	t.Runnerups = make([]*Person, 0)
-	for _, p := range ps {
-		t.Runnerups = append(t.Runnerups, p.Person)
 	}
 
 	// For the semis, just place the winner and silver into the final
@@ -380,20 +354,56 @@ func (t *Tournament) MovePlayers(m *Match) error {
 		}
 	}
 
-	// Finally, if the next match is a tryout and does not have enough players,
-	// fill it up with runnerups.
-	// TODO(thiderman): Currently this is what will set t.Current. Might not be
-	// the best place and should probably be fixed.
-	nm, err := t.NextMatch()
+	return nil
+}
+
+func (t *Tournament) moveTryoutPlayers(m *Match) error {
+	ps := SortByKills(m.Players)
+	for i := 0; i < len(ps); i++ {
+		p := ps[i]
+		// If we are in a four-match tryout, both the winner and the second-place
+		// are to be sent to the semis.
+		// If there are more than four matches, just send the winner
+		if len(t.Tryouts) == 4 && i < 2 || i == 0 {
+			// This spreads the winners into the semis so that the winners do not
+			// face off immediately in the semis
+			index := (i + m.Index) % 2
+			t.Semis[index].AddPlayer(p)
+
+			// If the player is also inside of the runnerups, move them from the
+			// runnerup roster since they now have advanced to the finals. This
+			// only happens for players that win the runnerup rounds.
+			t.removeFromRunnerups(p.Person)
+		} else {
+			// For everyone else, add them into the Runnerup bracket unless they are
+			// already in there.
+			found := false
+			for j := 0; j < len(t.Runnerups); j++ {
+				r := t.Runnerups[j]
+				if r.ID == p.Person.ID {
+					found = true
+					break
+				}
+			}
+			if !found {
+				t.Runnerups = append(t.Runnerups, p.Person)
+			}
+		}
+	}
+
+	return t.UpdateRunnerups()
+}
+
+// UpdateRunnerups updates the runnerup list
+func (t *Tournament) UpdateRunnerups() error {
+	// Get the runnerups and sort them into the Runnerup array
+	ps, err := t.GetRunnerupPlayers()
 	if err != nil {
 		return err
 	}
-	if nm.Kind == tryout && len(nm.Players) < 4 {
-		log.Printf("Setting runnerups for %s", nm)
-		err := t.PopulateRunnerups(nm)
-		if err != nil {
-			return err
-		}
+	t.Runnerups = make([]*Person, 0)
+	for _, p := range ps {
+		t.Runnerups = append(t.Runnerups, p.Person)
 	}
 
 	return nil
