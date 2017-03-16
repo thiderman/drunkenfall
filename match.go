@@ -52,12 +52,12 @@ func NewMatch(t *Tournament, index int, kind string) *Match {
 	m.presentColors = mapset.NewSet()
 
 	// The pause between tryout/semi brackets should be longer
-	if kind == "semi" && index == 0 {
+	if kind == semi && index == 0 {
 		m.Pause = time.Minute * 10
 	}
 
 	// Finals are longer <3
-	if kind == "final" {
+	if kind == final {
 		m.Length = t.finalLength
 		m.Pause = time.Minute * 10
 	}
@@ -77,7 +77,7 @@ func (m *Match) String() string {
 		tempo = "playing"
 	}
 
-	if m.Kind == "final" {
+	if m.Kind == final {
 		name = "Final"
 	} else {
 		name = fmt.Sprintf("%s %d", strings.Title(m.Kind), m.Index+1)
@@ -99,9 +99,9 @@ func (m *Match) String() string {
 // Title returns a title string
 func (m *Match) Title() string {
 	l := 2
-	if m.Kind == "final" {
+	if m.Kind == final {
 		return "Final"
-	} else if m.Kind == "tryout" {
+	} else if m.Kind == tryout {
 		l = len(m.Tournament.Tryouts)
 	}
 
@@ -295,7 +295,7 @@ func (m *Match) End() error {
 	m.Ended = time.Now()
 	// TODO: This is for the tests not to break. Fix by setting up better tests.
 	if m.Tournament != nil {
-		if m.Kind == "final" {
+		if m.Kind == final {
 			if err := m.Tournament.AwardMedals(m); err != nil {
 				return err
 			}

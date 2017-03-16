@@ -19,6 +19,12 @@ import (
 	"strings"
 )
 
+const (
+	semi   = "semi"
+	final  = "final"
+	tryout = "tryout"
+)
+
 // Setup variables for the cookies. Can be used outside of this file.
 var (
 	CookieStoreKey = []byte("dtf")

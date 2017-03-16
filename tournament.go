@@ -54,16 +54,16 @@ func NewTournament(name, id string, scheduledStart time.Time, server *Server) (*
 
 	// Set tryouts
 	for i := 0; i < 4; i++ {
-		match := NewMatch(&t, i, "tryout")
+		match := NewMatch(&t, i, tryout)
 		t.Tryouts = append(t.Tryouts, match)
 	}
 
 	// Set the predefined matches
-	t.Semis = []*Match{NewMatch(&t, 0, "semi"), NewMatch(&t, 1, "semi")}
-	t.Final = NewMatch(&t, 0, "final")
+	t.Semis = []*Match{NewMatch(&t, 0, semi), NewMatch(&t, 1, semi)}
+	t.Final = NewMatch(&t, 0, final)
 
 	// Mark the current match
-	t.Current = CurrentMatch{"tryout", 0}
+	t.Current = CurrentMatch{tryout, 0}
 
 	t.SetMatchPointers()
 	t.Persist()
@@ -200,7 +200,7 @@ func (t *Tournament) StartTournament() error {
 	// More than 16 players - add four more tryouts
 	if ps > 16 {
 		for i := 16; i < ps; i += 4 {
-			match := NewMatch(t, i/4, "tryout")
+			match := NewMatch(t, i/4, tryout)
 			t.Tryouts = append(t.Tryouts, match)
 		}
 	}
@@ -325,7 +325,7 @@ func (t *Tournament) UpdatePlayers() error {
 // or into the Runnerup bracket.
 // TODO(thiderman): This method is way too long and should be split into several.
 func (t *Tournament) MovePlayers(m *Match) error {
-	if m.Kind == "tryout" {
+	if m.Kind == tryout {
 		ps := SortByKills(m.Players)
 		for i := 0; i < len(ps); i++ {
 			p := ps[i]
@@ -372,7 +372,7 @@ func (t *Tournament) MovePlayers(m *Match) error {
 	}
 
 	// For the semis, just place the winner and silver into the final
-	if m.Kind == "semi" {
+	if m.Kind == semi {
 		for i, p := range SortByKills(m.Players) {
 			if i < 2 {
 				t.Final.AddPlayer(p)
@@ -388,7 +388,7 @@ func (t *Tournament) MovePlayers(m *Match) error {
 	if err != nil {
 		return err
 	}
-	if nm.Kind == "tryout" && len(nm.Players) < 4 {
+	if nm.Kind == tryout && len(nm.Players) < 4 {
 		log.Printf("Setting runnerups for %s", nm)
 		err := t.PopulateRunnerups(nm)
 		if err != nil {
@@ -467,7 +467,7 @@ func (t *Tournament) NextMatch() (m *Match, err error) {
 
 // AwardMedals places the winning players in the Winners position
 func (t *Tournament) AwardMedals(m *Match) error {
-	if m.Kind != "final" {
+	if m.Kind != final {
 		return errors.New("awarding medals outside of the final")
 	}
 
