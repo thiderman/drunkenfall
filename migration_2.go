@@ -130,14 +130,16 @@ func MigrateTournamentRunnerupStringPerson(db *bolt.DB) error {
 			}
 
 			load := func(id string) *mig2curPerson {
-				tx, err = db.Begin(false)
-				if err != nil {
-					log.Fatal(err)
+				// Prefixing tx and err with l because otherwise heavy shadowing will
+				// break angrily.
+				ltx, lerr := db.Begin(false)
+				if lerr != nil {
+					log.Fatal(lerr)
 					return nil
 				}
-				defer tx.Rollback()
+				defer ltx.Rollback()
 
-				b := tx.Bucket(PeopleKey)
+				b := ltx.Bucket(PeopleKey)
 				bs := b.Get([]byte(id))
 				p := &mig2curPerson{}
 				_ = json.Unmarshal(bs, p)
