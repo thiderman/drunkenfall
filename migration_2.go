@@ -130,7 +130,7 @@ func MigrateTournamentRunnerupStringPerson(db *bolt.DB) error {
 			}
 
 			load := func(id string) *mig2curPerson {
-				tx, err := db.Begin(false)
+				tx, err = db.Begin(false)
 				if err != nil {
 					log.Fatal(err)
 					return nil

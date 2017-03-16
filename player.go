@@ -311,7 +311,7 @@ func (p *Player) HTML() (out string) {
 	return
 }
 
-// ByScore is a sort.Interface that sorts players by their score
+// ByColorConflict is a sort.Interface that sorts players by their score
 type ByColorConflict []Player
 
 func (s ByColorConflict) Len() int { return len(s) }

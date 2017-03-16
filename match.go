@@ -33,7 +33,7 @@ type Match struct {
 	presentColors mapset.Set
 }
 
-// MatchCommit is a state commit for a round of a match
+// Round is a state commit for a round of a match
 type Round struct {
 	Kills     [][]int `json:"kills"`
 	Shots     []bool  `json:"shots"`

@@ -30,7 +30,8 @@ var migrations = []func(db *bolt.DB) error{
 	MigrateMatchCommitToRound,
 }
 
-var EmptyDBError = errors.New("drunkenfall: Empty DB.")
+// ErrEmptyDB is raised when bucket is found for the given key
+var ErrEmptyDB = errors.New("drunkenfall: Empty DB")
 
 // Migrate is the main migration entrypoint
 //
@@ -40,13 +41,13 @@ var EmptyDBError = errors.New("drunkenfall: Empty DB.")
 func Migrate(db *bolt.DB) error {
 	err := db.View(func(tx *bolt.Tx) error {
 		if tx.Bucket(TournamentKey) == nil {
-			return EmptyDBError
+			return ErrEmptyDB
 		}
 		return nil
 	})
-	if err == EmptyDBError {
+	if err == ErrEmptyDB {
 		log.Print("Empty db detected, nothing to migrate.")
-		err := db.Update(func(tx *bolt.Tx) error {
+		err = db.Update(func(tx *bolt.Tx) error {
 			return setVersion(tx, len(migrations))
 		})
 		return err

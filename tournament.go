@@ -157,8 +157,8 @@ func (t *Tournament) TogglePlayer(id string) error {
 
 	if err != nil {
 		// If there is an error, the player is not in the tournament and we should add them
-		p := NewPlayer(ps)
-		err := t.AddPlayer(p)
+		p = NewPlayer(ps)
+		err = t.AddPlayer(p)
 		return err
 	}
 
