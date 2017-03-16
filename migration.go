@@ -97,7 +97,7 @@ func applyMigrations(db *bolt.DB, version int) error {
 }
 
 func backup(db *bolt.DB, version int, path string) error {
-	_ = os.Mkdir(path, 0755)
+	_ = os.Mkdir(path, 0700)
 
 	fn := fmt.Sprintf(
 		"%d_from-v%d-to-v%d.db",
