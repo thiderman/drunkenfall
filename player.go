@@ -311,7 +311,6 @@ func (p *Player) HTML() (out string) {
 	return
 }
 
-
 // ByScore is a sort.Interface that sorts players by their score
 type ByColorConflict []Player
 
@@ -325,7 +324,6 @@ func (s ByColorConflict) Less(i, j int) bool {
 	}
 	return s[i].Score() > s[j].Score()
 }
-
 
 // ByScore is a sort.Interface that sorts players by their score
 type ByScore []Player
@@ -341,14 +339,6 @@ func (s ByScore) Swap(i, j int) {
 func (s ByScore) Less(i, j int) bool {
 	// Technically not Less, but we want biggest first...
 	return s[i].Score() > s[j].Score()
-}
-
-// SortByScore returns a list in order of the score the players have
-func SortByScore(ps []Player) []Player {
-	tmp := make([]Player, len(ps))
-	copy(tmp, ps)
-	sort.Sort(ByScore(tmp))
-	return tmp
 }
 
 // SortByColorConflicts returns a list in an unspecified order,

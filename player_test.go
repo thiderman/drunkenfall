@@ -191,25 +191,6 @@ func TestRemoveExplosion(t *testing.T) {
 	assert.Equal(0, p.Explosions)
 }
 
-func TestSortPlayers(t *testing.T) {
-	assert := assert.New(t)
-	p1 := testPlayer() // 2 points
-	p2 := testPlayer() // 14 points
-	p3 := testPlayer() // 7 points
-
-	p1.AddKill()
-	p2.AddSweep()
-	p3.AddShot()
-	p3.AddSelf()
-
-	ps := []Player{p1, p2, p3}
-	ret := SortByScore(ps)
-
-	assert.Equal(14, ret[0].Score())
-	assert.Equal(7, ret[1].Score())
-	assert.Equal(2, ret[2].Score())
-}
-
 // Same number of kills, but more pints for player p2.
 func TestSortTiedPlayersByKills(t *testing.T) {
 	assert := assert.New(t)

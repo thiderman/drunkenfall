@@ -509,24 +509,6 @@ func TestCorrectColorConflictsWithScoresTripleConflict(t *testing.T) {
 	assert.Equal("green", m.Players[3].Color)
 }
 
-func TestSortByScoreDoesNotAlterSourceList(t *testing.T) {
-	assert := assert.New(t)
-	m := MockMatch(0, "tryout")
-
-	m.Players[0].AddKill(1)
-	m.Players[1].AddKill(4)
-	m.Players[2].AddKill(5)
-	m.Players[3].AddKill(10)
-
-	ps := SortByScore(m.Players)
-
-	// As long as the order is reversed, this test is proven.
-	assert.Equal(ps[0].Name(), m.Players[3].Name())
-	assert.Equal(ps[1].Name(), m.Players[2].Name())
-	assert.Equal(ps[2].Name(), m.Players[1].Name())
-	assert.Equal(ps[3].Name(), m.Players[0].Name())
-}
-
 func TestMakeKillOrder(t *testing.T) {
 	assert := assert.New(t)
 	m := MockMatch(0, "tryout")

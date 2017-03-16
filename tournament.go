@@ -38,19 +38,8 @@ type CurrentMatch struct {
 	Index int    `json:"index"`
 }
 
-const timeLayout = "2006-01-02 03:04:00 -0700 MST"
 const minPlayers = 8
 const maxPlayers = 32
-
-// NewTournamentWithRawTime makes a new tournament with raw time..?
-func NewTournamentWithRawTime(name, id, scheduledStartRaw string, server *Server) (*Tournament, error) {
-	sch, err := time.Parse(timeLayout, scheduledStartRaw)
-	if err != nil {
-		return nil, err
-	}
-
-	return NewTournament(name, id, sch, server)
-}
 
 // NewTournament returns a completely new Tournament
 func NewTournament(name, id string, scheduledStart time.Time, server *Server) (*Tournament, error) {
