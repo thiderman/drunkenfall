@@ -8,10 +8,14 @@ BUILDTIME=`date +%FT%T%z` # ISO-8601
 
 LDFLAGS=-ldflags "-X $(BINARY).version=${VERSION} -X $(BINARY).buildtime=${BUILDTIME}"
 
+LINTER_ARGS = -j 4 --enable-gc --disable=errcheck --deadline=10m --tests
+
 .DEFAULT_GOAL: all
 .PHONY: download install install-linter test lint clean npm npm-start $(BINARY)-start nginx-start
 
 all: clean download npm test $(BINARY)
+
+check: test lint
 
 $(BINARY): download $(SOURCES)
 	go build -v ${LDFLAGS} -o ${BINARY}
@@ -27,10 +31,10 @@ install-linter:
 	gometalinter --install
 
 test:
-	go test -v
+	go test -v -coverprofile=cover.out
 
 lint: install-linter
-	gometalinter $(SOURCES)
+	gometalinter $(LINTER_ARGS) $(SOURCEDIR)
 
 clean:
 	rm -f $(BINARY)
