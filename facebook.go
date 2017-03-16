@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"strings"
 
+	"context"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/nu7hatch/gouuid"
@@ -107,7 +108,7 @@ func (s *Server) handleFacebookCallback(w http.ResponseWriter, r *http.Request) 
 
 	code := r.FormValue("code")
 
-	token, err := oauthConf.Exchange(oauth2.NoContext, code)
+	token, err := oauthConf.Exchange(context.TODO(), code)
 	if err != nil {
 		fmt.Printf("oauthConf.Exchange() failed with '%s'\n", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
