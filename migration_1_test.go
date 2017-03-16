@@ -8,12 +8,6 @@ import (
 	"testing"
 )
 
-func fatalError(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 // loadmig1Tournaments ...
 func loadmig1Tournaments(db, ro *bolt.DB) (*mig1curTournament, *mig1prevTournament) {
 	id := "moon"

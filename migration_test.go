@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"testing"
@@ -22,6 +23,13 @@ func testDB(fn string) *bolt.DB {
 		log.Fatal(err)
 	}
 	return db
+}
+
+func fatalError(err error) {
+	if err != nil {
+		debug.PrintStack()
+		log.Fatal(err)
+	}
 }
 
 // migrationDB opens a fixture database, makes a copy and returns a bolt
