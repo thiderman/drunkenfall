@@ -84,6 +84,7 @@ type mig2curTournament struct {
 
 // MigrateTournamentRunnerupStringPerson changes Tournament.Runnerups to be a
 // list of Person{} objects rather than a list of string names.
+// nolint: gocyclo
 func MigrateTournamentRunnerupStringPerson(db *bolt.DB) error {
 	return db.Update(func(tx *bolt.Tx) error {
 		// Load the tournaments

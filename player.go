@@ -148,6 +148,7 @@ func (p *Player) Index() int {
 }
 
 // Action performs an action for a player
+// nolint: gocyclo
 func (p *Player) Action(action, dir string) error {
 	// TODO: This could use with a refactoring...
 	if dir == "up" {

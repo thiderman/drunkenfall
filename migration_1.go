@@ -101,6 +101,7 @@ type mig1curTournament struct {
 
 // MigrateOriginalColorPreferredColor changes Player{} to have a preferred
 // color rather than an original color
+// nolint: gocyclo
 func MigrateOriginalColorPreferredColor(db *bolt.DB) error {
 	return db.Update(func(tx *bolt.Tx) error {
 		// Load the tournaments

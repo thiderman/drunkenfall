@@ -87,6 +87,7 @@ type mig4curTournament struct {
 
 // MigrateMatchCommitToRound changes the type signature of the object that
 // stores differences between rounds and actually calls it... Round{}.
+// nolint: gocyclo
 func MigrateMatchCommitToRound(db *bolt.DB) error {
 	return db.Update(func(tx *bolt.Tx) error {
 		// Load the tournaments

@@ -114,6 +114,7 @@ func mig3SortByKills(ps []mig3prevPlayer) []mig3prevPlayer {
 // implementation had a bugfix. Previously it sorted by the entertainment
 // score and not the amount of kills. This has been fixed and all the scores
 // need to be updated to reflect this in previous tournaments.
+// nolint: gocyclo
 func MigrateMatchScoreOrderKillOrder(db *bolt.DB) error {
 	return db.Update(func(tx *bolt.Tx) error {
 		// Load the tournaments

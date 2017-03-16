@@ -78,6 +78,7 @@ func CreateFromFacebook(s *Server, req *FacebookAuthResponse) *Person {
 }
 
 // PrefillNickname makes a suggestion to the nick based on the person
+// nolint: gocyclo
 func (p *Person) PrefillNickname() {
 	// TODO(thiderman): Move this into data files
 	switch p.Name {
