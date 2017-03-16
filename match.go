@@ -46,7 +46,7 @@ func NewMatch(t *Tournament, index int, kind string) *Match {
 		Index:      index,
 		Kind:       kind,
 		Tournament: t,
-		Length:     10,
+		Length:     t.length,
 		Pause:      time.Minute * 5,
 	}
 	m.presentColors = mapset.NewSet()
@@ -58,7 +58,7 @@ func NewMatch(t *Tournament, index int, kind string) *Match {
 
 	// Finals are longer <3
 	if kind == "final" {
-		m.Length = 20
+		m.Length = t.finalLength
 		m.Pause = time.Minute * 10
 	}
 
