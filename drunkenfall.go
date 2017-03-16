@@ -206,7 +206,7 @@ func (s *Server) EditHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	t, err := LoadTournament([]byte(data), s.DB)
+	t, err := LoadTournament(data, s.DB)
 	if err != nil {
 		log.Fatal(err)
 	}
