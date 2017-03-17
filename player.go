@@ -39,7 +39,6 @@ type Player struct {
 	Sweeps         int     `json:"sweeps"`
 	Kills          int     `json:"kills"`
 	Self           int     `json:"self"`
-	Explosions     int     `json:"explosions"`
 	Matches        int     `json:"matches"`
 	TotalScore     int     `json:"score"`
 	Match          *Match  `json:"-"`
@@ -59,13 +58,12 @@ func NewPlayer(ps *Person) *Player {
 
 func (p *Player) String() string {
 	return fmt.Sprintf(
-		"<%s: %dsh %dsw %dk %ds %de>",
+		"<%s: %dsh %dsw %dk %ds>",
 		p.Name(),
 		p.Shots,
 		p.Sweeps,
 		p.Kills,
 		p.Self,
-		p.Explosions,
 	)
 }
 
@@ -85,7 +83,6 @@ func (p *Player) Score() (out int) {
 	out += p.Shots * 3
 	out += p.Kills * 2
 	out += p.Self
-	out += p.Explosions
 
 	return
 }
@@ -97,7 +94,6 @@ func (p *Player) ScoreData() []ScoreData {
 		{Key: "shots", Value: p.Shots, Player: p},
 		{Key: "sweeps", Value: p.Sweeps, Player: p},
 		{Key: "self", Value: p.Self, Player: p},
-		{Key: "explosions", Value: p.Explosions, Player: p},
 	}
 	return sd
 }
@@ -198,7 +194,6 @@ func (p *Player) Reset() {
 	p.Sweeps = 0
 	p.Kills = 0
 	p.Self = 0
-	p.Explosions = 0
 	p.Matches = 0
 }
 
@@ -210,7 +205,6 @@ func (p *Player) Update(other Player) {
 	p.Sweeps += other.Sweeps
 	p.Kills += other.Kills
 	p.Self += other.Self
-	p.Explosions += other.Explosions
 	p.TotalScore = p.Score()
 
 	// Every call to this method is per match. Count every call
