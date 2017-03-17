@@ -41,16 +41,20 @@ type CurrentMatch struct {
 
 const minPlayers = 8
 const maxPlayers = 32
+const matchLength = 10
+const finalLength = 20
 
 // NewTournament returns a completely new Tournament
 func NewTournament(name, id string, scheduledStart time.Time, server *Server) (*Tournament, error) {
 	t := Tournament{
-		Name:      name,
-		ID:        id,
-		Opened:    time.Now(),
-		Scheduled: scheduledStart,
-		db:        server.DB,
-		server:    server,
+		Name:        name,
+		ID:          id,
+		Opened:      time.Now(),
+		Scheduled:   scheduledStart,
+		db:          server.DB,
+		server:      server,
+		length:      matchLength,
+		finalLength: finalLength,
 	}
 
 	// Set tryouts
