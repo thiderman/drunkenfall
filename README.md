@@ -18,8 +18,8 @@ Tournament management for video game based drinking games! Written in
 ## Installation
 
 ```
-go get -u github.com/thiderman/drunkenfall
-cd $GOPATH/src/github.com/thiderman/drunkenfall
+go get -u github.com/drunkenfall/drunkenfall
+cd $GOPATH/src/github.com/drunkenfall/drunkenfall
 make
 ```
 
@@ -28,9 +28,9 @@ make
 In separate terminals, run each of:
 
 ```
-make start-drunkenfall
-make start-npm
-make start-nginx
+make drunkenfall-start
+make npm-start
+make nginx-start
 ```
 
 ## License
