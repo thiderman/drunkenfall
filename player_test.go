@@ -49,6 +49,14 @@ func TestScoreWithSelfs(t *testing.T) {
 	assert.Equal(8, p.Score())
 }
 
+func TestASweepIsBasically14Points(t *testing.T) {
+	assert := assert.New(t)
+	p := testPlayer()
+	p.AddKills(3) // sweep
+	p.AddShot()
+	assert.Equal(14, p.Score())
+}
+
 func TestScoreWithAll(t *testing.T) {
 	assert := assert.New(t)
 	p := testPlayer()
