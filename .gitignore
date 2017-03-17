@@ -8,3 +8,5 @@
 *.swp
 /*.env
 boltdbweb/
+.idea
+env.sh
