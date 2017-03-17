@@ -147,44 +147,6 @@ func (p *Player) Index() int {
 	return -1
 }
 
-// Action performs an action for a player
-// nolint: gocyclo
-func (p *Player) Action(action, dir string) error {
-	// TODO: This could use with a refactoring...
-	if dir == "up" {
-		switch action {
-		case "kills":
-			p.AddKill()
-		case "shots":
-			p.AddShot()
-		case "sweeps":
-			p.AddSweep()
-		case "self":
-			p.AddSelf()
-		case "explosions":
-			p.AddExplosion()
-		}
-	} else {
-		switch action {
-		case "kills":
-			p.RemoveKill()
-		case "shots":
-			p.RemoveShot()
-		case "sweeps":
-			p.RemoveSweep()
-		case "self":
-			p.RemoveSelf()
-		case "explosions":
-			p.RemoveExplosion()
-		}
-	}
-
-	// Save the change to the database
-	p.Match.Tournament.Persist()
-
-	return nil
-}
-
 // AddShot increases the shot count
 func (p *Player) AddShot() {
 	p.Shots++
