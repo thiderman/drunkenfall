@@ -50,7 +50,7 @@ test:
 
 .PHONY: race
 race:
-	@echo go test -race -v
+	go test -race -v
 
 .PHONY: lint
 lint: install-linter

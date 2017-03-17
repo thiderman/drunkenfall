@@ -55,8 +55,10 @@ func (d *Database) LoadTournaments() error {
 				return err
 			}
 
+			tournamentMutex.Lock()
 			d.Tournaments = append(d.Tournaments, t)
 			d.tournamentRef[t.ID] = t
+			tournamentMutex.Unlock()
 			return nil
 		})
 		return err

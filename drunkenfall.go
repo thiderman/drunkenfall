@@ -17,6 +17,7 @@ import (
 	"github.com/thiderman/drunkenfall/websockets"
 	"golang.org/x/net/websocket"
 	"strings"
+	"sync"
 )
 
 const (
@@ -24,6 +25,8 @@ const (
 	final  = "final"
 	tryout = "tryout"
 )
+
+var tournamentMutex = &sync.Mutex{}
 
 // Setup variables for the cookies. Can be used outside of this file.
 var (
@@ -565,11 +568,13 @@ func (s *Server) Serve() error {
 
 // SendWebsocketUpdate sends an update to all listening sockets
 func (s *Server) SendWebsocketUpdate() {
+	tournamentMutex.Lock()
 	msg := websockets.Message{
 		Data: UpdateStateMessage{
 			Tournaments: s.DB.Tournaments,
 		},
 	}
+	tournamentMutex.Unlock()
 
 	s.ws.SendAll(&msg)
 }
