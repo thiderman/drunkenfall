@@ -103,6 +103,9 @@ func (p *Person) PrefillNickname() {
 	case "Barney Trotwell":
 		p.Nick = "FrontierPsycho"
 		p.Userlevel = PermissionProducer
+	case "Yasa Akbulut":
+		p.Nick = "yasa"
+		p.Userlevel = PermissionProducer
 
 	// Commentators
 	case "Daniel McHugh":
