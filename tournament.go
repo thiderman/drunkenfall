@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/deckarep/golang-set"
+	"github.com/drunkenfall/faking"
 	"log"
 	"math/rand"
 	"time"
@@ -564,7 +565,7 @@ func (t *Tournament) SetMatchPointers() error {
 
 // SetupFakeTournament creates a fake tournament
 func SetupFakeTournament(s *Server) *Tournament {
-	title, id := FakeTournamentTitle()
+	title, id := faking.FakeTournamentTitle()
 
 	t, err := NewTournament(title, id, time.Now().Add(time.Hour), s)
 	if err != nil {
@@ -575,10 +576,10 @@ func SetupFakeTournament(s *Server) *Tournament {
 	// Fake between 14 and max_players players
 	for i := 0; i < rand.Intn(18)+14; i++ {
 		ps := &Person{
-			ID:              FakeName(),
-			Name:            FakeName(),
-			Nick:            FakeNick(),
-			AvatarURL:       FakeAvatar(),
+			ID:              faking.FakeName(),
+			Name:            faking.FakeName(),
+			Nick:            faking.FakeNick(),
+			AvatarURL:       faking.FakeAvatar(),
 			ColorPreference: []string{RandomColor(Colors)},
 		}
 		p := NewPlayer(ps)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/drunkenfall/faking"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"math/rand"
@@ -38,9 +39,9 @@ func testPlayer() Player {
 
 func testPerson(i int) *Person {
 	return &Person{
-		ID:   fmt.Sprintf("%d: %s", i, FakeName()),
-		Name: fmt.Sprintf("%d: %s", i, FakeName()),
-		Nick: FakeNick(),
+		ID:   fmt.Sprintf("%d: %s", i, faking.FakeName()),
+		Name: fmt.Sprintf("%d: %s", i, faking.FakeName()),
+		Nick: faking.FakeNick(),
 		ColorPreference: []string{
 			RandomColor(Colors),
 			RandomColor(Colors),
