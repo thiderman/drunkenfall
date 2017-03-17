@@ -182,7 +182,7 @@ func TestCommitSweepAndSuicidePlayer3(t *testing.T) {
 		Kills: [][]int{
 			[]int{0, 0},
 			[]int{0, 0},
-			[]int{3, 1},
+			[]int{3, -1},
 			[]int{0, 0},
 		},
 		Shots: []bool{
@@ -213,7 +213,7 @@ func TestCommitSuicidePlayer4(t *testing.T) {
 			[]int{0, 0},
 			[]int{0, 0},
 			[]int{0, 0},
-			[]int{0, 1},
+			[]int{0, -1},
 		},
 		Shots: []bool{
 			false,

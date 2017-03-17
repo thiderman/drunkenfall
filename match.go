@@ -221,10 +221,10 @@ func (m *Match) Commit(round Round) {
 		self := score[1]
 
 		m.Players[i].AddKills(kills);
-		if self == 1 {
+		if self == -1 {
 			m.Players[i].AddSelf();
 		}
-		if self == 1 || kills == 3 || round.Shots[i] {
+		if self == -1 || kills == 3 || round.Shots[i] {
 			m.Players[i].AddShot()
 		}
 	}
