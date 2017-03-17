@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/drunkenfall/drunkenfall/websockets"
 	"github.com/stretchr/testify/assert"
-	"github.com/thiderman/drunkenfall/websockets"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"

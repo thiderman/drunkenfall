@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"fmt"
-	"github.com/thiderman/drunkenfall/websockets"
+	"github.com/drunkenfall/drunkenfall/websockets"
 	"golang.org/x/net/websocket"
 	"strings"
 	"sync"
