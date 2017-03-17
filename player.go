@@ -161,37 +161,17 @@ func (p *Player) RemoveShot() {
 	p.Shots--
 }
 
-// AddSweep increases the sweep count, gives three kills and a shot.
+// AddSweep increases the sweep count
 func (p *Player) AddSweep() {
 	p.Sweeps++
-	p.AddShot()
-	p.AddKill()
-	p.AddKill()
-	p.AddKill()
 }
 
-// RemoveSweep decreases the sweep count, three kills and a shot
-// Fails silently if sweeps are zero.
-func (p *Player) RemoveSweep() {
-	if p.Sweeps == 0 {
-		return
-	}
-	p.Sweeps--
-	p.RemoveShot()
-	p.RemoveKill()
-	p.RemoveKill()
-	p.RemoveKill()
-}
 
-// AddKill increases the kill count
-func (p *Player) AddKill(kills ...int) {
-	// This is basically only to help out with testing.
-	// Adding an optional argument with the amount of kills lets us just use
-	// one call to AddKill() rather than 10.
-	if len(kills) > 0 {
-		p.Kills += kills[0]
-	} else {
-		p.Kills++
+// AddKills increases the kill count and adds a sweep if necessary
+func (p *Player) AddKills(kills int) {
+	p.Kills += kills
+	if kills == 3 {
+		p.AddSweep()
 	}
 }
 
@@ -204,39 +184,9 @@ func (p *Player) RemoveKill() {
 	p.Kills--
 }
 
-// AddSelf increases the self count, decreases the kill, and gives a shot
+// AddSelf increases the self count and decreases the kill
 func (p *Player) AddSelf() {
 	p.Self++
-	p.RemoveKill()
-	p.AddShot()
-}
-
-// RemoveSelf decreases the self count and a shot
-// Fails silently if selfs are zero.
-func (p *Player) RemoveSelf() {
-	if p.Self == 0 {
-		return
-	}
-	p.Self--
-	p.AddKill()
-	p.RemoveShot()
-}
-
-// AddExplosion increases the explosion count, the kill count and gives a shot
-func (p *Player) AddExplosion() {
-	p.Explosions++
-	p.AddShot()
-	p.AddKill()
-}
-
-// RemoveExplosion decreases the explosion count, a shot and a kill
-// Fails silently if Explosions are zero.
-func (p *Player) RemoveExplosion() {
-	if p.Explosions == 0 {
-		return
-	}
-	p.Explosions--
-	p.RemoveShot()
 	p.RemoveKill()
 }
 

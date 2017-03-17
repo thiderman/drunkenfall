@@ -153,7 +153,7 @@ func TestRunnerupInsertion(t *testing.T) {
 	m, err := tm.NextMatch()
 	assert.Nil(err)
 	m.Start()
-	m.Players[0].AddKill(10)
+	m.Players[0].AddKills(10)
 	m.End()
 
 	assert.Equal(m.Players[1].Person.ID, tm.Runnerups[0].ID)
@@ -232,10 +232,10 @@ func TestUpdatePlayer(t *testing.T) {
 	m.Start()
 
 	t.Log(m)
-	m.Players[0].AddKill(5)
-	m.Players[1].AddKill(6)
-	m.Players[2].AddKill(7)
-	m.Players[3].AddKill(10)
+	m.Players[0].AddKills(5)
+	m.Players[1].AddKills(6)
+	m.Players[2].AddKills(7)
+	m.Players[3].AddKills(10)
 
 	m.End() // Calls tm.UpdatePlayers()
 
@@ -262,10 +262,10 @@ func TestEnd4MatchTryoutsPlacesWinnerAndSecondIntoSemisAndRestIntoRunnerups(t *t
 
 	m.Start()
 
-	m.Players[0].AddKill(5)
-	m.Players[1].AddKill(6)
-	m.Players[2].AddKill(7)
-	m.Players[3].AddKill(10)
+	m.Players[0].AddKills(5)
+	m.Players[1].AddKills(6)
+	m.Players[2].AddKills(7)
+	m.Players[3].AddKills(10)
 	winner := m.Players[3].Name()
 	silver := m.Players[2].Name()
 
@@ -291,10 +291,10 @@ func TestEndComplete16PlayerTournamentKillsOnly(t *testing.T) {
 
 	m.Start()
 
-	m.Players[0].AddKill(5)
-	m.Players[1].AddKill(6)
-	m.Players[2].AddKill(7)
-	m.Players[3].AddKill(10)
+	m.Players[0].AddKills(5)
+	m.Players[1].AddKills(6)
+	m.Players[2].AddKills(7)
+	m.Players[3].AddKills(10)
 	winner := m.Players[3].Name()
 	silver := m.Players[2].Name()
 
@@ -313,10 +313,10 @@ func TestEndComplete16PlayerTournamentKillsOnly(t *testing.T) {
 
 	m2.Start()
 
-	m2.Players[0].AddKill(2)
-	m2.Players[1].AddKill(10)
-	m2.Players[2].AddKill(8)
-	m2.Players[3].AddKill(4)
+	m2.Players[0].AddKills(2)
+	m2.Players[1].AddKills(10)
+	m2.Players[2].AddKills(8)
+	m2.Players[3].AddKills(4)
 	winner2 := m2.Players[1].Name()
 	silver2 := m2.Players[2].Name()
 
@@ -335,10 +335,10 @@ func TestEndComplete16PlayerTournamentKillsOnly(t *testing.T) {
 
 	m3.Start()
 
-	m3.Players[0].AddKill(10)
-	m3.Players[1].AddKill(3)
-	m3.Players[2].AddKill(3)
-	m3.Players[3].AddKill(5)
+	m3.Players[0].AddKills(10)
+	m3.Players[1].AddKills(3)
+	m3.Players[2].AddKills(3)
+	m3.Players[3].AddKills(5)
 	winner3 := m3.Players[0].Name()
 	silver3 := m3.Players[3].Name()
 
@@ -357,10 +357,10 @@ func TestEndComplete16PlayerTournamentKillsOnly(t *testing.T) {
 
 	m4.Start()
 
-	m4.Players[0].AddKill(9)
-	m4.Players[1].AddKill(10)
-	m4.Players[2].AddKill(5)
-	m4.Players[3].AddKill(5)
+	m4.Players[0].AddKills(9)
+	m4.Players[1].AddKills(10)
+	m4.Players[2].AddKills(5)
+	m4.Players[3].AddKills(5)
 	winner4 := m4.Players[1].Name()
 	silver4 := m4.Players[0].Name()
 
@@ -381,10 +381,10 @@ func TestEndComplete16PlayerTournamentKillsOnly(t *testing.T) {
 
 	s1.Start()
 
-	s1.Players[0].AddKill(10)
-	s1.Players[1].AddKill(7)
-	s1.Players[2].AddKill(9)
-	s1.Players[3].AddKill(8)
+	s1.Players[0].AddKills(10)
+	s1.Players[1].AddKills(7)
+	s1.Players[2].AddKills(9)
+	s1.Players[3].AddKills(8)
 	winners1 := s1.Players[0].Name()
 	silvers1 := s1.Players[2].Name()
 
@@ -403,10 +403,10 @@ func TestEndComplete16PlayerTournamentKillsOnly(t *testing.T) {
 
 	s2.Start()
 
-	s2.Players[0].AddKill(8)
-	s2.Players[1].AddKill(10)
-	s2.Players[2].AddKill(8)
-	s2.Players[3].AddKill(9)
+	s2.Players[0].AddKills(8)
+	s2.Players[1].AddKills(10)
+	s2.Players[2].AddKills(8)
+	s2.Players[3].AddKills(9)
 	winners2 := s2.Players[1].Name()
 	silvers2 := s2.Players[3].Name()
 
@@ -425,10 +425,10 @@ func TestEndComplete16PlayerTournamentKillsOnly(t *testing.T) {
 
 	f.Start()
 
-	f.Players[0].AddKill(7)
-	f.Players[1].AddKill(2)
-	f.Players[2].AddKill(9)
-	f.Players[3].AddKill(10)
+	f.Players[0].AddKills(7)
+	f.Players[1].AddKills(2)
+	f.Players[2].AddKills(9)
+	f.Players[3].AddKills(10)
 	gold := f.Players[3].Name()
 	lowe := f.Players[2].Name()
 	bronze := f.Players[0].Name()
@@ -457,10 +457,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 
 	m.Start()
 
-	m.Players[0].AddKill(5)
-	m.Players[1].AddKill(6)
-	m.Players[2].AddKill(7)
-	m.Players[3].AddKill(10)
+	m.Players[0].AddKills(5)
+	m.Players[1].AddKills(6)
+	m.Players[2].AddKills(7)
+	m.Players[3].AddKills(10)
 	winner := m.Players[3].Name()
 
 	m.End()
@@ -477,10 +477,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 
 	m2.Start()
 
-	m2.Players[0].AddKill(2)
-	m2.Players[1].AddKill(10)
-	m2.Players[2].AddKill(8)
-	m2.Players[3].AddKill(4)
+	m2.Players[0].AddKills(2)
+	m2.Players[1].AddKills(10)
+	m2.Players[2].AddKills(8)
+	m2.Players[3].AddKills(4)
 	winner2 := m2.Players[1].Name()
 
 	m2.End()
@@ -497,10 +497,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 
 	m3.Start()
 
-	m3.Players[0].AddKill(10)
-	m3.Players[1].AddKill(3)
-	m3.Players[2].AddKill(3)
-	m3.Players[3].AddKill(5)
+	m3.Players[0].AddKills(10)
+	m3.Players[1].AddKills(3)
+	m3.Players[2].AddKills(3)
+	m3.Players[3].AddKills(5)
 	winner3 := m3.Players[0].Name()
 
 	m3.End()
@@ -517,10 +517,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 
 	m4.Start()
 
-	m4.Players[0].AddKill(9)
-	m4.Players[1].AddKill(10)
-	m4.Players[2].AddKill(5)
-	m4.Players[3].AddKill(5)
+	m4.Players[0].AddKills(9)
+	m4.Players[1].AddKills(10)
+	m4.Players[2].AddKills(5)
+	m4.Players[3].AddKills(5)
 	winner4 := m4.Players[1].Name()
 
 	m4.End()
@@ -542,10 +542,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 	assert.Equal(4, len(m5.Players))
 	assert.Equal(12, len(tm.Runnerups))
 
-	m5.Players[0].AddKill(8)
-	m5.Players[1].AddKill(7)
-	m5.Players[2].AddKill(2)
-	m5.Players[3].AddKill(10)
+	m5.Players[0].AddKills(8)
+	m5.Players[1].AddKills(7)
+	m5.Players[2].AddKills(2)
+	m5.Players[3].AddKills(10)
 	winner5 := m5.Players[3].Name()
 
 	m5.End()
@@ -574,10 +574,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 
 	s1.Start()
 
-	s1.Players[0].AddKill(10)
-	s1.Players[1].AddKill(7)
-	s1.Players[2].AddKill(9)
-	s1.Players[3].AddKill(8)
+	s1.Players[0].AddKills(10)
+	s1.Players[1].AddKills(7)
+	s1.Players[2].AddKills(9)
+	s1.Players[3].AddKills(8)
 	winners1 := s1.Players[0].Name()
 	silvers1 := s1.Players[2].Name()
 
@@ -596,10 +596,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 
 	s2.Start()
 
-	s2.Players[0].AddKill(8)
-	s2.Players[1].AddKill(10)
-	s2.Players[2].AddKill(8)
-	s2.Players[3].AddKill(9)
+	s2.Players[0].AddKills(8)
+	s2.Players[1].AddKills(10)
+	s2.Players[2].AddKills(8)
+	s2.Players[3].AddKills(9)
 	winners2 := s2.Players[1].Name()
 	silvers2 := s2.Players[3].Name()
 
@@ -618,10 +618,10 @@ func TestEndComplete19PlayerTournamentKillsOnly(t *testing.T) {
 
 	f.Start()
 
-	f.Players[0].AddKill(7)
-	f.Players[1].AddKill(2)
-	f.Players[2].AddKill(9)
-	f.Players[3].AddKill(10)
+	f.Players[0].AddKills(7)
+	f.Players[1].AddKills(2)
+	f.Players[2].AddKills(9)
+	f.Players[3].AddKills(10)
 
 	gold := f.Players[3].Name()
 	lowe := f.Players[2].Name()

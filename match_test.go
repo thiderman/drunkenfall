@@ -95,7 +95,7 @@ func TestEndGivesShotToWinner(t *testing.T) {
 
 	err := m.Start()
 	assert.Nil(err)
-	m.Players[2].AddKill(10)
+	m.Players[2].AddKills(10)
 	m.KillOrder = m.MakeKillOrder()
 
 	err = m.End()
@@ -513,10 +513,10 @@ func TestMakeKillOrder(t *testing.T) {
 	assert := assert.New(t)
 	m := MockMatch(0, "tryout")
 
-	m.Players[0].AddKill(1)
-	m.Players[1].AddKill(4)
-	m.Players[2].AddKill(5)
-	m.Players[3].AddKill(10)
+	m.Players[0].AddKills(1)
+	m.Players[1].AddKills(4)
+	m.Players[2].AddKills(5)
+	m.Players[3].AddKills(10)
 
 	ko := m.MakeKillOrder()
 

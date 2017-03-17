@@ -214,44 +214,23 @@ func (m *Match) CorrectFuckingColorConflicts() error {
 	return nil
 }
 
-// Commit adds a state of the players
-func (m *Match) Commit(c Round) {
-	for i, score := range c.Kills {
-		shotGiven := false
-		ups := score[0]
-		downs := score[1]
+// Commit Applies the round actions to the state of the players
+func (m *Match) Commit(round Round) {
+	for i, score := range round.Kills {
+		kills := score[0]
+		self := score[1]
 
-		// If the score is 3, then this player killed everyone else.
-		// Count that as a sweep.
-		if ups == 3 {
-			m.Players[i].AddSweep()
-			// Since AddSweep gives a shot, we shouldn't give another further down.
-			shotGiven = true
-
-			// If we have a sweep and a down, we need to redact the
-			// extra shot, because no player should get more than
-			// one shot per round. Removing one from here makes
-			// sure that the `downs` calculation below still adds
-			// the one.
-			if downs == 1 {
-				m.Players[i].RemoveShot()
-			}
-		} else if ups > 0 {
-			m.Players[i].AddKill(ups)
+		m.Players[i].AddKills(kills);
+		if self == 1 {
+			m.Players[i].AddSelf();
 		}
-
-		if downs != 0 {
-			m.Players[i].AddSelf()
-			shotGiven = true
-		}
-
-		if c.Shots[i] && !shotGiven {
+		if self == 1 || kills == 3 || round.Shots[i] {
 			m.Players[i].AddShot()
 		}
 	}
 
 	m.KillOrder = m.MakeKillOrder()
-	m.Rounds = append(m.Rounds, c)
+	m.Rounds = append(m.Rounds, round)
 	_ = m.Tournament.Persist()
 }
 

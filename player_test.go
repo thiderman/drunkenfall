@@ -18,20 +18,22 @@ func TestScoreWithShots(t *testing.T) {
 func TestScoreWithSweeps(t *testing.T) {
 	assert := assert.New(t)
 	p := testPlayer()
-	p.AddSweep()
+	p.AddKills(3)
+	p.AddShot()
 
 	assert.Equal(14, p.Score())
-	p.AddSweep()
+	p.AddKills(3)
+	p.AddShot()
 	assert.Equal(28, p.Score())
 }
 
 func TestScoreWithKills(t *testing.T) {
 	assert := assert.New(t)
 	p := testPlayer()
-	p.AddKill()
+	p.AddKills(1)
 
 	assert.Equal(2, p.Score())
-	p.AddKill()
+	p.AddKills(1)
 	assert.Equal(4, p.Score())
 }
 
@@ -39,31 +41,24 @@ func TestScoreWithSelfs(t *testing.T) {
 	assert := assert.New(t)
 	p := testPlayer()
 	p.AddSelf()
+	p.AddShot()
 
 	assert.Equal(4, p.Score())
 	p.AddSelf()
+	p.AddShot()
 	assert.Equal(8, p.Score())
-}
-
-func TestScoreWithExplosions(t *testing.T) {
-	assert := assert.New(t)
-	p := testPlayer()
-	p.AddExplosion()
-
-	assert.Equal(6, p.Score())
-	p.AddExplosion()
-	assert.Equal(12, p.Score())
 }
 
 func TestScoreWithAll(t *testing.T) {
 	assert := assert.New(t)
 	p := testPlayer()
 	p.AddShot()
-	p.AddSweep()
-	p.AddKill()
+	p.AddKills(3) // sweep
+	p.AddShot()
+	p.AddKills(1)
 	p.AddSelf()
-	p.AddExplosion()
-	assert.Equal(27, p.Score())
+	p.AddShot()
+	assert.Equal(21, p.Score())
 }
 
 func TestAddShot(t *testing.T) {
@@ -91,41 +86,26 @@ func TestAddSweep(t *testing.T) {
 	assert := assert.New(t)
 	p := testPlayer()
 
-	p.AddSweep()
+	p.AddKills(3)
+	p.AddShot()
 	assert.Equal(1, p.Sweeps)
 	assert.Equal(1, p.Shots)
 	assert.Equal(3, p.Kills)
 
-	p.AddSweep()
+	p.AddKills(3)
+	p.AddShot()
 	assert.Equal(2, p.Sweeps)
 	assert.Equal(2, p.Shots)
 	assert.Equal(6, p.Kills)
-}
-
-func TestRemoveSweep(t *testing.T) {
-	assert := assert.New(t)
-	p := testPlayer()
-	p.Sweeps = 1
-	p.Shots = 1
-	p.Kills = 3
-
-	p.RemoveSweep()
-	assert.Equal(0, p.Sweeps)
-	assert.Equal(0, p.Shots)
-	assert.Equal(0, p.Kills)
-	p.RemoveSweep()
-	assert.Equal(0, p.Sweeps)
-	assert.Equal(0, p.Shots)
-	assert.Equal(0, p.Kills)
 }
 
 func TestAddKill(t *testing.T) {
 	assert := assert.New(t)
 	p := testPlayer()
 
-	p.AddKill()
+	p.AddKills(1)
 	assert.Equal(1, p.Kills)
-	p.AddKill()
+	p.AddKills(1)
 	assert.Equal(2, p.Kills)
 }
 
@@ -145,51 +125,15 @@ func TestAddSelf(t *testing.T) {
 	p := testPlayer()
 
 	p.AddSelf()
+	p.AddShot()
 	assert.Equal(1, p.Self)
 	assert.Equal(1, p.Shots)
 	p.AddSelf()
+	p.AddShot()
 	assert.Equal(2, p.Self)
 	assert.Equal(2, p.Shots)
 }
 
-func TestRemoveSelf(t *testing.T) {
-	assert := assert.New(t)
-	p := testPlayer()
-	p.Self = 1
-	p.Shots = 1
-
-	p.RemoveSelf()
-	assert.Equal(0, p.Self)
-	assert.Equal(0, p.Shots)
-	p.RemoveSelf()
-	assert.Equal(0, p.Self)
-	assert.Equal(0, p.Shots)
-}
-
-func TestAddExplosion(t *testing.T) {
-	assert := assert.New(t)
-	p := testPlayer()
-
-	p.AddExplosion()
-	assert.Equal(1, p.Explosions)
-	assert.Equal(1, p.Shots)
-	assert.Equal(1, p.Kills)
-	p.AddExplosion()
-	assert.Equal(2, p.Explosions)
-	assert.Equal(2, p.Shots)
-	assert.Equal(2, p.Kills)
-}
-
-func TestRemoveExplosion(t *testing.T) {
-	assert := assert.New(t)
-	p := testPlayer()
-	p.Explosions = 1
-
-	p.RemoveExplosion()
-	assert.Equal(0, p.Explosions)
-	p.RemoveExplosion()
-	assert.Equal(0, p.Explosions)
-}
 
 // Same number of kills, but more pints for player p2.
 func TestSortTiedPlayersByKills(t *testing.T) {
