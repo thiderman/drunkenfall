@@ -1,5 +1,7 @@
 # Drunkenfall
 
+[![Build Status](http://jenkins.dragonisle.se/job/Drunkenfall/job/drunkenfall/job/master/badge/icon)](http://jenkins.dragonisle.se/job/Drunkenfall/job/drunkenfall/job/master/)
+
 Tournament management for video game based drinking games! Written in
 [go](https://golang.org/) and [vue.js](https://vuejs.org/).
 
