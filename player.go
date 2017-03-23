@@ -162,7 +162,6 @@ func (p *Player) AddSweep() {
 	p.Sweeps++
 }
 
-
 // AddKills increases the kill count and adds a sweep if necessary
 func (p *Player) AddKills(kills int) {
 	p.Kills += kills

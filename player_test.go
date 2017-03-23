@@ -142,7 +142,6 @@ func TestAddSelf(t *testing.T) {
 	assert.Equal(2, p.Shots)
 }
 
-
 // Same number of kills, but more pints for player p2.
 func TestSortTiedPlayersByKills(t *testing.T) {
 	assert := assert.New(t)
