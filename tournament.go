@@ -23,6 +23,7 @@ type Tournament struct {
 	Semis       []*Match     `json:"semis"`
 	Final       *Match       `json:"final"`
 	Current     CurrentMatch `json:"current"`
+	Previous    CurrentMatch `json:"previous"`
 	Opened      time.Time    `json:"opened"`
 	Scheduled   time.Time    `json:"scheduled"`
 	Started     time.Time    `json:"started"`
@@ -449,6 +450,11 @@ func (t *Tournament) BackfillSemis(ids []string) error {
 // SetCurrent sets the current match of the tournament
 func (t *Tournament) SetCurrent(m *Match) {
 	t.Current = CurrentMatch{m.Kind, m.Index}
+}
+
+// SetPrevious sets the previous match of the tournament
+func (t *Tournament) SetPrevious(m *Match) {
+	t.Previous = CurrentMatch{m.Kind, m.Index}
 }
 
 // NextMatch returns the next match

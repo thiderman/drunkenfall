@@ -77,7 +77,11 @@ export default {
       // the updates won't trigger properly.
       this.$set('updated', Date.now())
     },
-    setData: function (tournament, kind, match) {
+    setData: function (tournament) {
+      let match
+      let index = tournament.current.index
+      let kind = tournament.current.kind
+
       if (kind === 'tryout') {
         kind = 'tryouts'
       } else if (kind === 'semi') {
@@ -85,11 +89,35 @@ export default {
       }
 
       if (kind === 'final') {
-        this.$set('match', Match.fromObject(tournament[kind]))
+        match = Match.fromObject(tournament[kind])
       } else {
-        this.$set('match', Match.fromObject(tournament[kind][match]))
+        match = Match.fromObject(tournament[kind][index])
       }
 
+      if (!match.isStarted) {
+        // If we're on the first match, there is no previous, so bail.
+        if (index === 0 && kind === 'tryouts') {
+          this.$set('tournament', Tournament.fromObject(tournament))
+          return
+        }
+
+        index = tournament.previous.index
+        kind = tournament.previous.kind
+
+        if (kind === 'tryout') {
+          kind = 'tryouts'
+        } else if (kind === 'semi') {
+          kind = 'semis'
+        }
+
+        if (kind === 'final') {
+          match = Match.fromObject(tournament[kind])
+        } else {
+          match = Match.fromObject(tournament[kind][index])
+        }
+      }
+
+      this.$set('match', match)
       this.$set('tournament', Tournament.fromObject(tournament))
       this.renderChart()
     },
@@ -200,7 +228,7 @@ export default {
       // listen for tournaments from App
       this.$on(`tournament${to.params.tournament}`, (tournament) => {
         console.debug("New tournament from App:", tournament)
-        this.setData(tournament, to.params.kind, parseInt(to.params.match))
+        this.setData(tournament)
       })
 
       if (to.router.app.tournaments.length === 0) {
@@ -208,11 +236,7 @@ export default {
         // data manually
         this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
           console.log(res)
-          this.setData(
-            res.data.tournament,
-            to.params.kind,
-            parseInt(to.params.match)
-          )
+          this.setData(res.data.tournament)
         }, function (res) {
           console.log('error when getting tournament')
           console.log(res)

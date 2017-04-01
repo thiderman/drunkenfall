@@ -71,14 +71,14 @@ router.map({
     name: 'next',
     component: NextScreen
   },
+  '/towerfall/:tournament/charts/': {
+    name: 'charts',
+    component: PostMatch
+  },
   '/towerfall/:tournament/:kind/:match/': {
     name: 'match',
     component: Match
   },
-  '/towerfall/:tournament/:kind/:match/post': {
-    name: 'postmatch',
-    component: PostMatch
-  }
 })
 
 router.beforeEach(function () {
