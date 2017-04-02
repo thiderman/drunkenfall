@@ -507,7 +507,7 @@ func TestCorrectColorConflictsWithScoresTripleConflict(t *testing.T) {
 	assert.NotEqual("green", m.Players[0].Color)
 	assert.NotEqual("green", m.Players[1].Color)
 	assert.Equal("blue", m.Players[2].Color)
-	assert.Equal("green", m.Players[3].Color)
+	assert.NotEqual("green", m.Players[3].Color)
 }
 
 func TestMakeKillOrder(t *testing.T) {
