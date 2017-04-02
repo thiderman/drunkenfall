@@ -6,7 +6,7 @@ Tournament management for video game based drinking games! Written in
 ## Supported games
 
 ### TowerFall
-*Get a shot when you lose points (i.e. accidentally kill your player)*
+*Get a shot when you lose any number of points (i.e. accidentally kill your player)*
 
 * Supports 8-32 players, with a backfilling runner-up system making it possible
   to run a tournament with a number of players that is not divisable by 4.
