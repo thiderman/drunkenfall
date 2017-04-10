@@ -45,7 +45,7 @@
     <div class="category tryouts">
       <h3>Tryouts</h3>
       <div class="matches">
-        <template v-for="m in tournament.tryouts">
+        <template v-for="m in tournament.tryout">
           <match-overview :match="m" class="match {{m.kind}}">
         </template>
       </div>
@@ -55,7 +55,7 @@
     <div class="category semis">
       <h3>Semi-finals</h3>
       <div class="matches">
-        <template v-for="m in tournament.semis">
+        <template v-for="m in tournament.semi">
           <match-overview :match="m" class="match {{m.kind}}">
         </template>
       </div>
@@ -127,12 +127,6 @@ export default {
     nextMatch: function () {
       let kind = this.tournament.current.kind
       let idx = this.tournament.current.index
-
-      if (kind === 'tryout') {
-        kind = 'tryouts'
-      } else if (kind === 'semi') {
-        kind = 'semis'
-      }
 
       console.log("kind", kind)
       let m

@@ -60,11 +60,6 @@ export default {
     setData: function (tournament) {
       let kind = tournament.current.kind
       let index = tournament.current.index
-      if (kind === 'tryout') {
-        kind = 'tryouts'
-      } else if (kind === 'semi') {
-        kind = 'semis'
-      }
 
       if (kind === 'final') {
         this.$set('match', Match.fromObject(tournament[kind]))
