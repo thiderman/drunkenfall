@@ -46,7 +46,11 @@ install-linter:
 
 .PHONY: test
 test:
-	go test -v -coverprofile=cover.out
+	go test
+
+.PHONY: cover
+cover:
+	go test -coverprofile=cover.out
 
 .PHONY: race
 race:

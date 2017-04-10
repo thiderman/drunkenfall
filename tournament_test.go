@@ -4,10 +4,18 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"log"
+	"os"
 	"strconv"
 	"testing"
 	"time"
 )
+
+func TestMain(m *testing.M) {
+	// This makes sure that the test output just has the filenames, making it
+	// easier for tools that parses it to find where the log output happened.
+	log.SetFlags(log.Lshortfile)
+	os.Exit(m.Run())
+}
 
 // testTournament makes a test tournament with `count` players.
 func testTournament(count int) (t *Tournament) {

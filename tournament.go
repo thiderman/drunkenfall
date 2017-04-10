@@ -116,8 +116,6 @@ func (t *Tournament) URL() string {
 }
 
 // AddPlayer adds a player into the tournament
-//
-// If the four default tryout matches are full, four more will be generated.
 func (t *Tournament) AddPlayer(p *Player) error {
 	p.Person.Correct()
 
@@ -202,7 +200,7 @@ func (t *Tournament) StartTournament() error {
 		return fmt.Errorf("Tournament needs %d or more players and %d or less, got %d", minPlayers, maxPlayers, ps)
 	}
 
-	// More than 16 players - add four more tryouts
+	// More than 16 players - add more tryouts until every player gets to play once.
 	if ps > 16 {
 		for i := 16; i < ps; i += 4 {
 			match := NewMatch(t, i/4, tryout)
