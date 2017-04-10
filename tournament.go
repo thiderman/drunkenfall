@@ -29,6 +29,7 @@ type Tournament struct {
 	Scheduled   time.Time    `json:"scheduled"`
 	Started     time.Time    `json:"started"`
 	Ended       time.Time    `json:"ended"`
+	Events      []*Event     `json:"events"`
 	db          *Database
 	server      *Server
 	length      int
@@ -73,6 +74,10 @@ func NewTournament(name, id string, scheduledStart time.Time, server *Server) (*
 	t.Current = CurrentMatch{tryout, 0}
 
 	t.SetMatchPointers()
+	t.LogEvent("new_tournament", "{name} ({id}) created",
+		"name", name,
+		"id", id)
+
 	t.Persist()
 	return &t, nil
 }
@@ -117,6 +122,16 @@ func (t *Tournament) URL() string {
 	return out
 }
 
+// LogEvent makes an event and stores it on the tournament object
+func (t *Tournament) LogEvent(kind, message string, items ...interface{}) {
+	ev, err := NewEvent(kind, message, items...)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	t.Events = append(t.Events, ev)
+}
+
 // AddPlayer adds a player into the tournament
 func (t *Tournament) AddPlayer(p *Player) error {
 	p.Person.Correct()
@@ -134,6 +149,10 @@ func (t *Tournament) AddPlayer(p *Player) error {
 		t.Runnerups = append(t.Runnerups, p.Person)
 	}
 
+	t.LogEvent("player_join", "{nick} has joined",
+		"nick", p.Person.Nick,
+		"person", p.Person)
+
 	err := t.Persist()
 	if err != nil {
 		log.Fatal(err)
@@ -150,6 +169,10 @@ func (t *Tournament) removePlayer(p Player) error {
 			break
 		}
 	}
+
+	t.LogEvent("player_remove", "{nick} has left",
+		"nick", p.Person.Nick,
+		"person", p.Person)
 
 	err := t.Persist()
 	return err
@@ -196,7 +219,6 @@ func (t *Tournament) ShufflePlayers() {
 //
 // It will fail if there are not between 16 and max_players players.
 func (t *Tournament) StartTournament() error {
-	log.Printf("Starting %s...", t.Name)
 	ps := len(t.Players)
 	if ps < minPlayers || ps > maxPlayers {
 		return fmt.Errorf("Tournament needs %d or more players and %d or less, got %d", minPlayers, maxPlayers, ps)
@@ -219,7 +241,7 @@ func (t *Tournament) StartTournament() error {
 		log.Fatal(err)
 	}
 	m.SetTime(0)
-
+	t.LogEvent("start", "Tournament started")
 	t.Persist()
 	return nil
 }
@@ -233,6 +255,7 @@ func (t *Tournament) Reshuffle() error {
 	}
 
 	t.ShufflePlayers()
+	t.LogEvent("reshuffle", "Players were reshuffled")
 	t.Persist()
 
 	return nil
@@ -425,8 +448,8 @@ func (t *Tournament) BackfillSemis(ids []string) error {
 		return fmt.Errorf("Need %d players, got %d", semiPlayers, len(ids))
 	}
 
-	log.Printf("Backfilling %d semi players\n", semiPlayers)
-	for _, id := range ids {
+	added := make([]*Person, semiPlayers)
+	for x, id := range ids {
 		index := 0
 		if len(t.Semis[0].Players) == 4 {
 			index = 1
@@ -439,8 +462,13 @@ func (t *Tournament) BackfillSemis(ids []string) error {
 		}
 
 		t.Semis[index].AddPlayer(*p)
+		added[x] = ps
 		t.removeFromRunnerups(ps)
 	}
+
+	t.LogEvent("backfill_semi", "Backfilling {count} semi players",
+		"count", semiPlayers,
+		"players", added)
 
 	t.Persist()
 	return nil
@@ -493,6 +521,8 @@ func (t *Tournament) AwardMedals(m *Match) error {
 
 	ps := SortByKills(m.Players)
 	t.Winners = ps[0:3]
+
+	t.LogEvent("tournament_end", "Tournament finished")
 
 	t.Ended = time.Now()
 	t.Persist()

@@ -273,21 +273,17 @@ func (m *Match) End() error {
 	m.Players[winner].AddShot()
 
 	m.Ended = time.Now()
-	m.Tournament.SetPrevious(m)
-	// TODO: This is for the tests not to break. Fix by setting up better tests.
-	if m.Tournament != nil {
-		if m.Kind == final {
-			if err := m.Tournament.AwardMedals(m); err != nil {
-				return err
-			}
-		} else {
-			if err := m.Tournament.MovePlayers(m); err != nil {
-				return err
-			}
+	if m.Kind == final {
+		if err := m.Tournament.AwardMedals(m); err != nil {
+			return err
 		}
-
-		m.Tournament.Persist()
+	} else {
+		if err := m.Tournament.MovePlayers(m); err != nil {
+			return err
+		}
 	}
+
+	m.Tournament.Persist()
 	return nil
 }
 

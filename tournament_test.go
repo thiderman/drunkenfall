@@ -131,6 +131,17 @@ func TestStartingTournamentSetsStartedTimestamp(t *testing.T) {
 	assert.NotNil(tm.Started)
 }
 
+func TestStartingTournamentCreatesTenEvents(t *testing.T) {
+	assert := assert.New(t)
+	tm := testTournament(8)
+
+	tm.StartTournament()
+	assert.Equal(1+8+1, len(tm.Events))
+	assert.Equal(tm.Events[0].Kind, "new_tournament")
+	assert.Equal(tm.Events[1].Kind, "player_join")
+	assert.Equal(tm.Events[9].Kind, "start")
+}
+
 func TestPopulateMatchesPopulatesTryoutsFor8Players(t *testing.T) {
 	assert := assert.New(t)
 	tm := testTournament(8)

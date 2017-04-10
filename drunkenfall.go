@@ -197,7 +197,6 @@ func (s *Server) JoinHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("%s has joined %s!", p.Name(), tm.Name)
 	s.Redirect(w, tm.URL())
 }
 
