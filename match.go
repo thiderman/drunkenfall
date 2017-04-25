@@ -3,10 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/deckarep/golang-set"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/deckarep/golang-set"
 )
 
 // Match represents a game being played
@@ -37,7 +38,7 @@ type Match struct {
 type Round struct {
 	Kills     [][]int `json:"kills"`
 	Shots     []bool  `json:"shots"`
-	Committed string  `json:"comitted"` // ISO-8601
+	Committed string  `json:"committed"` // ISO-8601
 }
 
 // NewMatch creates a new Match for usage!
@@ -370,10 +371,10 @@ func NewMatchCommit(c CommitRequest) Round {
 	states := c.State
 	m := Round{
 		[][]int{
-			[]int{states[0].Ups, states[0].Downs},
-			[]int{states[1].Ups, states[1].Downs},
-			[]int{states[2].Ups, states[2].Downs},
-			[]int{states[3].Ups, states[3].Downs},
+			{states[0].Ups, states[0].Downs},
+			{states[1].Ups, states[1].Downs},
+			{states[2].Ups, states[2].Downs},
+			{states[3].Ups, states[3].Downs},
 		},
 		[]bool{
 			states[0].Shot,

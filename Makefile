@@ -12,11 +12,20 @@ export GOPATH := $(shell go env GOPATH)
 export PATH := $(GOPATH)/bin:$(PATH)
 # gotype is disabled since it seems pointless and also produces 250 errors
 # about not finding dependencies that definitely exists.
-LINTER_ARGS = -j 4 --enable-gc --disable=errcheck --disable=gotype --deadline=10m --tests
+LINTER_ARGS = -j 4 \
+  --enable-gc \
+  --enable=gofmt \
+  --enable=misspell \
+  --enable=unparam \
+  --enable=unused \
+  --disable=errcheck \
+  --disable=gotype \
+  --deadline=10m \
+  --tests
 
 .DEFAULT_GOAL: all
 
-all: clean download npm test $(BINARY)
+all: clean download npm test race lint $(BINARY)
 
 check: test lint
 
@@ -78,8 +87,3 @@ $(BINARY)-start: $(BINARY)
 nginx-start:
 	mkdir -p logs
 	sudo nginx -p . -c conf/nginx.conf # TODO: Make sure we can run this without sudo
-
-# Listing all the make targets; http://stackoverflow.com/a/26339924/983746
-.PHONY: list
-list:
-	@$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'

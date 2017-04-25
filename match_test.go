@@ -124,10 +124,10 @@ func TestCommitSweepPlayer1(t *testing.T) {
 
 	c := Round{
 		Kills: [][]int{
-			[]int{3, 0},
-			[]int{0, 0},
-			[]int{0, 0},
-			[]int{0, 0},
+			{3, 0},
+			{0, 0},
+			{0, 0},
+			{0, 0},
 		},
 		Shots: []bool{
 			false,
@@ -152,10 +152,10 @@ func TestCommitDoubleKillPlayer2(t *testing.T) {
 
 	c := Round{
 		Kills: [][]int{
-			[]int{0, 0},
-			[]int{2, 0},
-			[]int{0, 0},
-			[]int{0, 0},
+			{0, 0},
+			{2, 0},
+			{0, 0},
+			{0, 0},
 		},
 		Shots: []bool{
 			false,
@@ -180,10 +180,10 @@ func TestCommitSweepAndSuicidePlayer3(t *testing.T) {
 
 	c := Round{
 		Kills: [][]int{
-			[]int{0, 0},
-			[]int{0, 0},
-			[]int{3, -1},
-			[]int{0, 0},
+			{0, 0},
+			{0, 0},
+			{3, -1},
+			{0, 0},
 		},
 		Shots: []bool{
 			false,
@@ -210,10 +210,10 @@ func TestCommitSuicidePlayer4(t *testing.T) {
 
 	c := Round{
 		Kills: [][]int{
-			[]int{0, 0},
-			[]int{0, 0},
-			[]int{0, 0},
-			[]int{0, -1},
+			{0, 0},
+			{0, 0},
+			{0, 0},
+			{0, -1},
 		},
 		Shots: []bool{
 			false,
@@ -239,10 +239,10 @@ func TestCommitShotsForPlayer2and3(t *testing.T) {
 
 	c := Round{
 		Kills: [][]int{
-			[]int{0, 0},
-			[]int{0, 0},
-			[]int{0, 0},
-			[]int{0, 0},
+			{0, 0},
+			{0, 0},
+			{0, 0},
+			{0, 0},
 		},
 		Shots: []bool{
 			false,
@@ -268,10 +268,10 @@ func TestCommitSweepForPlayer1(t *testing.T) {
 
 	c := Round{
 		Kills: [][]int{
-			[]int{3, 0},
-			[]int{0, 0},
-			[]int{0, 0},
-			[]int{0, 0},
+			{3, 0},
+			{0, 0},
+			{0, 0},
+			{0, 0},
 		},
 		// For the frontend it makes sense that a sweep marks a shot, therefore we
 		// need to make sure that we don't add another shot.
@@ -299,10 +299,10 @@ func TestCommitStoredOnMatch(t *testing.T) {
 
 	c := Round{
 		Kills: [][]int{
-			[]int{0, 0},
-			[]int{1, 0},
-			[]int{1, 0},
-			[]int{1, 0},
+			{0, 0},
+			{1, 0},
+			{1, 0},
+			{1, 0},
 		},
 		// For the frontend it makes sense that a sweep marks a shot, therefore we
 		// need to make sure that we don't add another shot.

@@ -12,13 +12,14 @@ import (
 
 	"context"
 	"encoding/json"
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/gorilla/mux"
 	"github.com/nu7hatch/gouuid"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/facebook"
-	"os"
-	"strconv"
-	"time"
 )
 
 var (
@@ -69,17 +70,6 @@ func init() {
 	}
 
 	oauthStateString = randomUUID.String()
-}
-
-const htmlIndex = `<html><body>
-Log in with <a href="/facebook/login">facebook</a>
-</body></html>
-`
-
-func (s *Server) handleMain(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(htmlIndex))
 }
 
 func (s *Server) handleFacebookLogin(w http.ResponseWriter, r *http.Request) {

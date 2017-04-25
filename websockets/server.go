@@ -3,8 +3,9 @@ package websockets
 import (
 	"log"
 
-	"golang.org/x/net/websocket"
 	"time"
+
+	"golang.org/x/net/websocket"
 )
 
 // Server represents Websocket server
@@ -105,7 +106,7 @@ func (s *Server) OnConnected(ws *websocket.Conn) {
 func (s *Server) Listen() {
 	log.Println("Websocket handler initialized")
 
-	// Setup the worst Ping implentation of all time
+	// Setup the worst Ping implementation of all time
 	go func() {
 		for {
 			s.Pulse()

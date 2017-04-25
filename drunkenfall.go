@@ -3,9 +3,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,11 +10,16 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
+
 	"fmt"
-	"github.com/drunkenfall/drunkenfall/websockets"
-	"golang.org/x/net/websocket"
 	"strings"
 	"sync"
+
+	"github.com/drunkenfall/drunkenfall/websockets"
+	"golang.org/x/net/websocket"
 )
 
 const (
@@ -109,6 +111,9 @@ func NewServer(db *Database) *Server {
 	s.ws = websockets.NewServer()
 	s.router = s.BuildRouter(s.ws)
 
+	// Give the db a reference to the server.
+	// Not the cleanest, but y'know... here we are.
+	db.Server = &s
 	return &s
 }
 
@@ -646,7 +651,7 @@ func ErrorResponse(w http.ResponseWriter, r *http.Request, msg string) {
 // GeneralResponse returns an error with the statuscode of status, status being
 // the input of the function. Also redirects the user to the best of its ability
 // to / (meaning errors are completely ignored :') ).
-func GeneralResponse(w http.ResponseWriter, r *http.Request, status int, msg string) {
+func GeneralResponse(w http.ResponseWriter, _ *http.Request, status int, msg string) {
 	data, err := json.Marshal(GeneralRedirect{
 		Message:  msg,
 		Redirect: "/",
@@ -673,11 +678,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Create the server instance...
+	// Create the server instance
 	s := NewServer(db)
-	// ...and give the db a reference to the server.
-	// Not the cleanest, but y'know... here we are.
-	db.Server = s
 
 	// Load tournaments from the database
 	err = db.LoadTournaments()
