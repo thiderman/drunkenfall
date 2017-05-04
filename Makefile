@@ -51,7 +51,7 @@ install-linter:
 	gometalinter --install
 
 test:
-	go test
+	go test -v
 
 cover:
 	go test -coverprofile=cover.out

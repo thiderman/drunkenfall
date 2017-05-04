@@ -28,6 +28,7 @@ type Match struct {
 	Scheduled     time.Time     `json:"scheduled"`
 	Started       time.Time     `json:"started"`
 	Ended         time.Time     `json:"ended"`
+	Events        []*Event      `json:"events"`
 	Tournament    *Tournament   `json:"-"`
 	KillOrder     []int         `json:"kill_order"`
 	Rounds        []Round       `json:"commits"`
@@ -126,6 +127,16 @@ func (m *Match) URL() string {
 	return out
 }
 
+// LogEvent makes an event and stores it on the tournament object
+func (m *Match) LogEvent(kind, message string, items ...interface{}) {
+	ev, err := NewEvent(kind, message, items...)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	m.Events = append(m.Events, ev)
+}
+
 // AddPlayer adds a player to the match
 func (m *Match) AddPlayer(p Player) error {
 	if len(m.Players) == 4 {
@@ -208,14 +219,20 @@ func (m *Match) CorrectFuckingColorConflicts() error {
 				if err := m.UpdatePlayer(p); err != nil {
 					return err
 				}
-				log.Println(fmt.Sprintf("%s corrected from %s to %s", p.Name(), p.PreferredColor, new))
+				m.LogEvent(
+					"color_conflict",
+					"{nick} corrected from {preferred} to {new}",
+					"nick", p.Person.Nick,
+					"preferred", p.PreferredColor,
+					"new", new)
 			}
 		}
 	}
 	return nil
 }
 
-// Commit Applies the round actions to the state of the players
+// Commit applies the round actions to the state of the players
+// TODO(thiderman): It should not be possible to commit to a non-started match
 func (m *Match) Commit(round Round) {
 	for i, score := range round.Kills {
 		kills := score[0]
@@ -247,9 +264,12 @@ func (m *Match) Start() error {
 	}
 
 	m.Started = time.Now()
+	m.LogEvent("started", "match started")
+
 	if m.Tournament != nil {
 		m.Tournament.Persist()
 	}
+
 	return nil
 }
 
@@ -273,6 +293,8 @@ func (m *Match) End() error {
 	m.Players[winner].AddShot()
 
 	m.Ended = time.Now()
+	m.LogEvent("ended", "match ended")
+
 	if m.Kind == final {
 		if err := m.Tournament.AwardMedals(m); err != nil {
 			return err
@@ -303,9 +325,9 @@ func (m *Match) Reset() error {
 
 // SetTime sets the scheduled time based on the Pause attribute
 func (m *Match) SetTime(minutes int) {
-	log.Print(fmt.Sprintf("Setting time for %s in %d minutes", m, minutes))
+	m.LogEvent("time_set", "Scheduled in {minutes} minutes",
+		"minutes", minutes)
 	m.Scheduled = time.Now().Add(time.Minute * time.Duration(minutes))
-	log.Print(m.Scheduled)
 	m.Tournament.Persist()
 }
 

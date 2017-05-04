@@ -20,7 +20,7 @@ type Event struct {
 	Message string                 `json:"message"`
 }
 
-// NewEvent ...
+// NewEvent creates a new event and maps the argument into the items
 func NewEvent(kind, message string, items ...interface{}) (*Event, error) {
 	if len(items)%2 != 0 {
 		return nil, fmt.Errorf("Creating event with uneven items: %s", items)
@@ -47,4 +47,10 @@ func NewEvent(kind, message string, items ...interface{}) (*Event, error) {
 func (e *Event) JSON() (out []byte, err error) {
 	out, err = json.Marshal(e)
 	return
+}
+
+func (e *Event) String() string {
+	// TODO(thiderman): It would be neat to have something that just properly
+	// formats the message, but for now just do something stupid and simple
+	return fmt.Sprintf("<%s: %v>", e.Message, e.Items)
 }

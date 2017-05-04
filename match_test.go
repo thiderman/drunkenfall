@@ -88,6 +88,7 @@ func TestStart(t *testing.T) {
 	err := m.Start()
 	assert.Nil(err)
 	assert.Equal(false, m.Started.IsZero())
+	assert.Equal(1, len(m.Events))
 }
 
 func TestEndGivesShotToWinner(t *testing.T) {
@@ -347,6 +348,9 @@ func TestCorrectColorConflictsNoScores(t *testing.T) {
 	assert.Equal("blue", m.Players[2].PreferredColor)
 	assert.Equal("red", m.Players[3].Color)
 	assert.Equal("red", m.Players[3].PreferredColor)
+
+	// Just one event - nothing started or ended
+	assert.Equal(1, len(m.Events))
 }
 
 func TestCorrectColorConflictsUserLevels(t *testing.T) {
@@ -375,6 +379,8 @@ func TestCorrectColorConflictsUserLevels(t *testing.T) {
 	assert.Equal("red", m.Players[2].PreferredColor)
 	assert.Equal("red", m.Players[3].Color)
 	assert.Equal("red", m.Players[3].PreferredColor)
+
+	assert.Equal(2, len(m.Events))
 }
 
 // This test was needed since somehow the color were being kept
@@ -418,6 +424,8 @@ func TestCorrectColorConflictsResetsToPreferredColor(t *testing.T) {
 	assert.NotEqual("green", m2.Players[2].Color)
 	assert.Equal("green", m2.Players[2].PreferredColor)
 	assert.NotEqual("green", m2.Players[3].Color)
+
+	assert.Equal(3, len(m.Events))
 }
 
 func TestCorrectColorConflictsNoScoresDoubleConflict(t *testing.T) {
@@ -444,6 +452,8 @@ func TestCorrectColorConflictsNoScoresDoubleConflict(t *testing.T) {
 	assert.Equal("blue", m.Players[2].PreferredColor)
 	assert.NotEqual("blue", m.Players[3].Color)
 	assert.Equal("blue", m.Players[3].PreferredColor)
+
+	assert.Equal(2, len(m.Events))
 }
 
 func TestCorrectColorConflictsWithScoresDoubleConflict(t *testing.T) {
@@ -477,6 +487,8 @@ func TestCorrectColorConflictsWithScoresDoubleConflict(t *testing.T) {
 	assert.Equal("blue", m.Players[2].PreferredColor)
 	assert.Equal("blue", m.Players[3].Color)
 	assert.Equal("blue", m.Players[3].PreferredColor)
+
+	assert.Equal(2, len(m.Events))
 }
 
 func TestCorrectColorConflictsWithScoresTripleConflict(t *testing.T) {
@@ -508,6 +520,8 @@ func TestCorrectColorConflictsWithScoresTripleConflict(t *testing.T) {
 	assert.NotEqual("green", m.Players[1].Color)
 	assert.Equal("blue", m.Players[2].Color)
 	assert.Equal("green", m.Players[3].Color)
+
+	assert.Equal(2, len(m.Events))
 }
 
 func TestMakeKillOrder(t *testing.T) {
