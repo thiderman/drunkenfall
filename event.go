@@ -33,6 +33,10 @@ func NewEvent(kind, message string, items ...interface{}) (*Event, error) {
 		m[key] = val
 	}
 
+	if _, ok := m["person"]; !ok {
+		return nil, fmt.Errorf("%s does not contain a person", kind)
+	}
+
 	e := Event{
 		Date:    time.Now(),
 		Kind:    kind,

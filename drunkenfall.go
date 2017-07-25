@@ -148,9 +148,9 @@ func (s *Server) NewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.Fake {
-		t = SetupFakeTournament(s)
+		t = SetupFakeTournament(r, s)
 	} else {
-		t, err = NewTournament(req.Name, req.ID, req.Scheduled, s)
+		t, err = NewTournament(req.Name, req.ID, req.Scheduled, r, s)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
@@ -243,7 +243,7 @@ func (s *Server) BackfillSemisHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	spl := strings.Split(string(data), ",")
-	err = tm.BackfillSemis(spl)
+	err = tm.BackfillSemis(r, spl)
 
 	if err != nil {
 		PermissionFailure(w, r, err.Error())
@@ -261,7 +261,7 @@ func (s *Server) ReshuffleHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tm := s.getTournament(r)
-	err := tm.Reshuffle()
+	err := tm.Reshuffle(r)
 
 	if err != nil {
 		PermissionFailure(w, r, err.Error())
@@ -303,7 +303,7 @@ func (s *Server) StartTournamentHandler(w http.ResponseWriter, r *http.Request) 
 	}
 
 	tm := s.getTournament(r)
-	err := tm.StartTournament()
+	err := tm.StartTournament(r)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -385,8 +385,7 @@ func (s *Server) MatchEndHandler(w http.ResponseWriter, r *http.Request) {
 			errorMsg := fmt.Sprintf("Cannot end the match `%s` that is in not started.", m.String())
 			return errors.New(errorMsg)
 		}
-		log.Printf("%s ended", m.String())
-		err := m.End()
+		err := m.End(r)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -403,8 +402,8 @@ func (s *Server) MatchStartHandler(w http.ResponseWriter, r *http.Request) {
 			errorMsg := fmt.Sprintf("Cannot start the match `%s` that is already in progress.", m.String())
 			return errors.New(errorMsg)
 		}
-		log.Printf("%s started", m.String())
-		err := m.Start()
+
+		err := m.Start(r)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -526,7 +525,7 @@ func (s *Server) SetTimeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	m.SetTime(x)
+	m.SetTime(r, x)
 	s.Redirect(w, m.URL())
 }
 

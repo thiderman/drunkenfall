@@ -2,19 +2,20 @@ package main
 
 import (
 	"fmt"
-	"github.com/drunkenfall/faking"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"math/rand"
 	"testing"
 	"time"
+
+	"github.com/drunkenfall/faking"
+	"github.com/stretchr/testify/assert"
 )
 
 // MockMatch makes a mock Match{} with a dummy Tournament{}
 func MockMatch(idx int, cat string) (m *Match) {
 	tm := testTournament(8)
 	tm.SetMatchPointers()
-	err := tm.StartTournament()
+	err := tm.StartTournament(nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,7 +78,7 @@ func TestStartAlreadyStartedMatch(t *testing.T) {
 	m := MockMatch(1, "tryout")
 	m.Started = time.Now()
 
-	err := m.Start()
+	err := m.Start(nil)
 	assert.NotNil(err)
 }
 
@@ -85,7 +86,7 @@ func TestStart(t *testing.T) {
 	assert := assert.New(t)
 	m := MockMatch(1, "tryout")
 
-	err := m.Start()
+	err := m.Start(nil)
 	assert.Nil(err)
 	assert.Equal(false, m.Started.IsZero())
 	assert.Equal(1, len(m.Events))
@@ -95,12 +96,12 @@ func TestEndGivesShotToWinner(t *testing.T) {
 	assert := assert.New(t)
 	m := MockMatch(1, "tryout")
 
-	err := m.Start()
+	err := m.Start(nil)
 	assert.Nil(err)
 	m.Players[2].AddKills(10)
 	m.KillOrder = m.MakeKillOrder()
 
-	err = m.End()
+	err = m.End(nil)
 	assert.Nil(err)
 	assert.Equal(1, m.Players[2].Shots)
 }
@@ -110,7 +111,7 @@ func TestEndAlreadyEndedMatch(t *testing.T) {
 	m := MockMatch(1, "tryout")
 	m.Ended = time.Now()
 
-	err := m.End()
+	err := m.End(nil)
 	assert.NotNil(err)
 }
 

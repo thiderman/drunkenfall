@@ -172,6 +172,10 @@ func (p *Person) Correct() {
 
 // PersonFromSession returns the Person{} object attached to the session
 func PersonFromSession(s *Server, r *http.Request) *Person {
+	if r == nil {
+		return nil
+	}
+
 	session, _ := CookieStore.Get(r, "session")
 	id := session.Values["user"].(string)
 

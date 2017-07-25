@@ -14,6 +14,8 @@
         <div class="action" @click="reshuffle"
           v-if="user.level(levels.producer) && tournament.canShuffle">Reshuffle</div>
         <a v-link="{ name: 'credits', params: { tournament: tournament.id }}">Credits</a>
+        <div class="action" @click="log"
+          v-if="user.level(levels.producer)">Log</div>
       </div>
       <div class="clear"></div>
     </header>
@@ -200,6 +202,9 @@ export default {
       } else {
         console.error("reshuffle called with no tournament")
       }
+    },
+    log: function () {
+      this.$route.router.go('log/')
     },
     setTime: function (x) {
       this.api.setTime({ id: this.tournament.id, time: x }).then((res) => {

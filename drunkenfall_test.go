@@ -3,21 +3,22 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/drunkenfall/drunkenfall/websockets"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/drunkenfall/drunkenfall/websockets"
+	"github.com/stretchr/testify/assert"
 )
 
 func testServer() *httptest.Server {
 	// Server tests use the fake production data.
 	s := MockServer("production_data.db")
 
-	SetupFakeTournament(s)
-	SetupFakeTournament(s)
+	SetupFakeTournament(nil, s)
+	SetupFakeTournament(nil, s)
 	s.DB.LoadTournaments()
 
 	ws := websockets.NewServer()

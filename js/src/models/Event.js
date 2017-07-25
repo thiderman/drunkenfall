@@ -18,7 +18,10 @@ export default class Event {
   }
 
   get print () {
-    return template(this.message, this.items)
+    return template(
+      this.message.replace("{new}", "<span class='{new}'>{new}</span>")
+        .replace("{preferred}", "<span class='{preferred}'>{preferred}</span>"),
+      this.items)
   }
 
 }

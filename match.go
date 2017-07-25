@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"strings"
 	"time"
 
@@ -221,10 +222,11 @@ func (m *Match) CorrectFuckingColorConflicts() error {
 				}
 				m.LogEvent(
 					"color_conflict",
-					"{nick} corrected from {preferred} to {new}",
+					"{nick} corrected from {preferred} to {new}", // Unfortunately we cannot reuse person from below..
 					"nick", p.Person.Nick,
 					"preferred", p.PreferredColor,
-					"new", new)
+					"new", new,
+					"person", p.Person)
 			}
 		}
 	}
@@ -253,7 +255,7 @@ func (m *Match) Commit(round Round) {
 }
 
 // Start starts the match
-func (m *Match) Start() error {
+func (m *Match) Start(r *http.Request) error {
 	if !m.Started.IsZero() {
 		return errors.New("match already started")
 	}
@@ -264,7 +266,10 @@ func (m *Match) Start() error {
 	}
 
 	m.Started = time.Now()
-	m.LogEvent("started", "match started")
+	m.LogEvent(
+		"started", "{match} started",
+		"match", m.Title(),
+		"person", PersonFromSession(m.Tournament.server, r))
 
 	if m.Tournament != nil {
 		m.Tournament.Persist()
@@ -277,7 +282,7 @@ func (m *Match) Start() error {
 //
 // It is also the place that moves players into either the Runnerup bracket
 // or into their place in the semis.
-func (m *Match) End() error {
+func (m *Match) End(r *http.Request) error {
 	if !m.Ended.IsZero() {
 		return errors.New("match already ended")
 	}
@@ -293,10 +298,13 @@ func (m *Match) End() error {
 	m.Players[winner].AddShot()
 
 	m.Ended = time.Now()
-	m.LogEvent("ended", "match ended")
+	m.LogEvent(
+		"ended", "{match} ended",
+		"match", m.Title(),
+		"person", PersonFromSession(m.Tournament.server, r))
 
 	if m.Kind == final {
-		if err := m.Tournament.AwardMedals(m); err != nil {
+		if err := m.Tournament.AwardMedals(r, m); err != nil {
 			return err
 		}
 	} else {
@@ -324,10 +332,14 @@ func (m *Match) Reset() error {
 }
 
 // SetTime sets the scheduled time based on the Pause attribute
-func (m *Match) SetTime(minutes int) {
-	m.LogEvent("time_set", "Scheduled in {minutes} minutes",
-		"minutes", minutes)
+func (m *Match) SetTime(r *http.Request, minutes int) {
 	m.Scheduled = time.Now().Add(time.Minute * time.Duration(minutes))
+
+	m.LogEvent(
+		"time_set", "{match} scheduled in {minutes}m",
+		"minutes", minutes,
+		"match", m.Title(),
+		"person", PersonFromSession(m.Tournament.server, r))
 	m.Tournament.Persist()
 }
 
