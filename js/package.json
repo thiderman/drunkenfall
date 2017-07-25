@@ -19,6 +19,7 @@
     "node-sass": "^3.13.1",
     "sass": "^0.5.0 ",
     "sass-loader": "^4.0.0",
+    "string-template": "^1.0.0",
     "vue": "^1.0.21",
     "vue-cookie": "^1.0.0",
     "vue-pikaday": "^0.1.1",

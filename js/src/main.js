@@ -14,6 +14,7 @@ import Participants from './components/Participants.vue'
 import Edit from './components/Edit.vue'
 import Match from './components/Match.vue'
 import PostMatch from './components/PostMatch.vue'
+import Log from './components/Log.vue'
 import ScoreScreen from './components/ScoreScreen.vue'
 import NextScreen from './components/NextScreen.vue'
 import User from './models/User.js'
@@ -79,6 +80,9 @@ router.map({
   '/towerfall/:tournament/credits/': {
     name: 'credits',
     component: Credits
+  '/towerfall/:tournament/log/': {
+    name: 'charts',
+    component: Log
   },
   '/towerfall/:tournament/:kind/:match/': {
     name: 'match',
