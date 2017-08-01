@@ -19,6 +19,7 @@ import NextScreen from './components/NextScreen.vue'
 import User from './models/User.js'
 import Facebook from './components/Facebook.vue'
 import FacebookFinalize from './components/FacebookFinalize.vue'
+import Credits from './components/Credits.vue'
 
 // install router
 Vue.use(Router)
@@ -74,6 +75,10 @@ router.map({
   '/towerfall/:tournament/charts/': {
     name: 'charts',
     component: PostMatch
+  },
+  '/towerfall/:tournament/credits/': {
+    name: 'credits',
+    component: Credits
   },
   '/towerfall/:tournament/:kind/:match/': {
     name: 'match',
