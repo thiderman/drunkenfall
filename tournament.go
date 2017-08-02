@@ -595,9 +595,7 @@ func (t *Tournament) GetCredits() (*Credits, error) {
 		t.Winners[1].Person,
 		t.Winners[2].Person,
 	}
-	for _, p := range t.Runnerups {
-		players = append(players, p)
-	}
+	players = append(players, t.Runnerups...)
 
 	c := &Credits{
 		Executive:     executive,

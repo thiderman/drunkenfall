@@ -465,12 +465,10 @@ func (s *Server) MatchCommitHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	_, _ = w.Write(data)
-
-	return
 }
 
 // TournamentListHandler returns a list of all tournaments
-func (s *Server) TournamentListHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) TournamentListHandler(w http.ResponseWriter, _ *http.Request) {
 	data, err := json.Marshal(&TournamentList{
 		Tournaments: s.DB.Tournaments,
 	})
@@ -534,7 +532,7 @@ func (s *Server) SetTimeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // PeopleHandler returns a list of all the players registered in the app
-func (s *Server) PeopleHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) PeopleHandler(w http.ResponseWriter, _ *http.Request) {
 	if err := s.DB.LoadPeople(); err != nil {
 		log.Fatal(err)
 	}

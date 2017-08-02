@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Person someone having a role in the tournament
+// A Person is someone having a role in the tournament
 type Person struct {
 	ID              string   `json:"id"`
 	Name            string   `json:"name"`
@@ -21,6 +21,7 @@ type Person struct {
 	Userlevel       int      `json:"userlevel"`
 }
 
+// Credits represents the data structure needed to display the credits
 type Credits struct {
 	Executive     *Person   `json:"executive"`
 	Producers     []*Person `json:"producers"`
