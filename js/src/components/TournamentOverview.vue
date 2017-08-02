@@ -13,6 +13,7 @@
           v-if="user.level(levels.judge) && tournament.isRunning">Next match</div>
         <div class="action" @click="reshuffle"
           v-if="user.level(levels.producer) && tournament.canShuffle">Reshuffle</div>
+        <a v-link="{ name: 'credits', params: { tournament: tournament.id }}">Credits</a>
       </div>
       <div class="clear"></div>
     </header>
