@@ -366,6 +366,25 @@ func (m *Match) MakeKillOrder() (ret []int) {
 	return
 }
 
+// ArchersHarmed returns the number of killed archers during the match
+func (m *Match) ArchersHarmed() int {
+	ret := 0
+
+	for _, r := range m.Rounds {
+		for _, k := range r.Kills {
+			ret += k[0]
+
+			// If someone suicided, it shows up as a minus one. This means
+			// an archer was harmed and should count towards the total.
+			if k[1] == -1 {
+				ret++
+			}
+		}
+	}
+
+	return ret
+}
+
 // NewMatchCommit makes a new MatchCommit object from a CommitRequest
 func NewMatchCommit(c CommitRequest) Round {
 	states := c.State

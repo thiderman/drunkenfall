@@ -1,2 +1,5 @@
 # List all the tournaments in the current DB
 GET http://127.0.0.1:42000/api/towerfall/tournament/
+
+# List the credits data from the test tournament
+GET http://127.0.0.1:42000/api/towerfall/test/credits/

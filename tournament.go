@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/deckarep/golang-set"
-	"github.com/drunkenfall/faking"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/deckarep/golang-set"
+	"github.com/drunkenfall/faking"
 )
 
 // Tournament is the main container of data for this app.
@@ -569,6 +570,58 @@ func (t *Tournament) SetMatchPointers() error {
 
 	// log.Printf("%s: Pointers loaded.", t.ID)
 	return nil
+}
+
+// GetCredits returns the credits object needed to display the credits roll.
+func (t *Tournament) GetCredits() (*Credits, error) {
+	// TODO(thiderman): Many of these values are currently hardcoded or
+	// broadly grabs everything.
+	// We should move towards specifying these live when setting
+	// up the tournament itself.
+
+	executive := t.db.GetPerson("1279099058796903") // thiderman
+	producers := []*Person{
+		t.db.GetPerson("10153943465786915"), // GoosE
+		t.db.GetPerson("10154542569541289"), // Queen Obscene
+		t.db.GetPerson("10153964695568099"), // Karl-Astrid
+		t.db.GetPerson("10153910124391516"), // Hest
+		t.db.GetPerson("10154040229117471"), // Skolpadda
+		t.db.GetPerson("10154011729888111"), // Moijra
+		t.db.GetPerson("10154296655435218"), // Dalan
+	}
+
+	players := []*Person{
+		t.Winners[0].Person,
+		t.Winners[1].Person,
+		t.Winners[2].Person,
+	}
+	for _, p := range t.Runnerups {
+		players = append(players, p)
+	}
+
+	c := &Credits{
+		Executive:     executive,
+		Producers:     producers,
+		Players:       players,
+		ArchersHarmed: t.ArchersHarmed(),
+	}
+
+	return c, nil
+}
+
+// ArchersHarmed returns the amount of killed archers during the tournament
+func (t *Tournament) ArchersHarmed() int {
+	ret := 0
+
+	for _, m := range t.Tryouts {
+		ret += m.ArchersHarmed()
+	}
+	for _, m := range t.Semis {
+		ret += m.ArchersHarmed()
+	}
+	ret += t.Final.ArchersHarmed()
+
+	return ret
 }
 
 // SetupFakeTournament creates a fake tournament

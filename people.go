@@ -21,6 +21,13 @@ type Person struct {
 	Userlevel       int      `json:"userlevel"`
 }
 
+type Credits struct {
+	Executive     *Person   `json:"executive"`
+	Producers     []*Person `json:"producers"`
+	Players       []*Person `json:"players"`
+	ArchersHarmed int       `json:"archers_harmed"`
+}
+
 // Userlevels. Designed so that we can insert new ones in between them.
 const (
 	PermissionProducer    = 100

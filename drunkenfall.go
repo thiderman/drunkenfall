@@ -272,6 +272,30 @@ func (s *Server) ReshuffleHandler(w http.ResponseWriter, r *http.Request) {
 	s.Redirect(w, tm.URL())
 }
 
+// CreditsHandler returns the data object needed to display the
+// credits roll.
+func (s *Server) CreditsHandler(w http.ResponseWriter, r *http.Request) {
+	// if !HasPermission(r, PermissionCommentator) {
+	// 	PermissionFailure(w, r, "You need to be a commentator to get credits data")
+	// 	return
+	// }
+
+	tm := s.getTournament(r)
+	credits, err := tm.GetCredits()
+
+	if err != nil {
+		PermissionFailure(w, r, err.Error())
+		return
+	}
+
+	data, err := json.Marshal(credits)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write(data)
+}
+
 // StartTournamentHandler starts tournaments
 func (s *Server) StartTournamentHandler(w http.ResponseWriter, r *http.Request) {
 	if !HasPermission(r, PermissionCommentator) {
@@ -547,6 +571,7 @@ func (s *Server) BuildRouter(ws *websockets.Server) http.Handler {
 	r.HandleFunc("/{id}/toggle/{person}", s.ToggleHandler)
 	r.HandleFunc("/{id}/time/{time}", s.SetTimeHandler)
 	r.HandleFunc("/{id}/next/", s.NextHandler)
+	r.HandleFunc("/{id}/credits/", s.CreditsHandler)
 
 	// Install the websockets
 	r.Handle("/auto-updater", websocket.Handler(ws.OnConnected))
