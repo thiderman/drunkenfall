@@ -5,7 +5,7 @@
         <div class="title">{{tournament.name}}</div>
       </div>
       <div class="links">
-        <a v-link="{ name: 'join', params: { tournament: tournament.id }}">Join</a>
+        <router-link to="{ name: 'join', params: { tournament: tournament.id }}">Join</router-link>
 
         <div class="action" @click="start"
           v-if="user.level(levels.judge) && tournament.canStart">Start</div>
@@ -49,7 +49,7 @@
       <h3>Tryouts</h3>
       <div class="matches">
         <template v-for="m in tournament.tryouts">
-          <match-overview :match="m" class="match {{m.kind}}">
+          <match-overview :match="m" :class="'match ' + m.kind">
         </template>
       </div>
       <div class="clear"></div>
@@ -59,7 +59,7 @@
       <h3>Semi-finals</h3>
       <div class="matches">
         <template v-for="m in tournament.semis">
-          <match-overview :match="m" class="match {{m.kind}}">
+          <match-overview :match="m" :class="'match ' + m.kind">
         </template>
       </div>
       <div class="clear"></div>

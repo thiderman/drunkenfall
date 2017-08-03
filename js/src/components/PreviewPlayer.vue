@@ -1,13 +1,13 @@
 <template>
-  <div class="player {{player.color}}">
-    <img alt="{{player.displayName}}" :src="player.avatar"/>
+  <div :class="'player ' + player.color">
+    <img :alt="player.displayName" :src="player.avatar"/>
 
     <div class="protector">
       <div v-if="showName" class="super-ribbon">
       {{player.firstName}}
       </div>
 
-      <div class="ribbon {{player.color}}">
+      <div :class="'ribbon ' + player.color">
         <strong class="ribbon-content">
           {{player.displayName}}
         </strong>
@@ -17,16 +17,12 @@
 </template>
 
 <script>
-import Match from "../models/Match.js"
-
 export default {
   name: 'ControlPlayer',
 
   props: {
     player: {},
-    match: {
-      coerce: (val) => { return Match.fromObject(val) }
-    },
+    match: {},
     index: 0,
   },
 

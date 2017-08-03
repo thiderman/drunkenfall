@@ -1,20 +1,16 @@
 <template>
-  <div class="player {{classes}}">
+  <div :class="'player ' + classes">
     <p>{{display_name}}</p>
   </div>
 </template>
 
 <script>
-import Match from "../models/Match.js"
-
 export default {
   name: 'Player',
 
   props: {
     player: Object,
-    match: {
-      coerce: (val) => { return Match.fromObject(val) }
-    },
+    match: {},
     index: 0
   },
 

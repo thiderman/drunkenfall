@@ -33,7 +33,7 @@
       </div>
 
       <input type="submit" class="submit" value="Go go go!"
-        v-bind:class="{'ready': ready}"/>
+        v-bind:class="{'isReady': isReady}"/>
     </form>
 
   </div>
@@ -69,7 +69,7 @@ export default {
     },
     submit (event) {
       event.preventDefault()
-      if (this.ready === false) {
+      if (this.isReady === false) {
         console.log('Did not fill in all details')
         return
       }
@@ -100,7 +100,7 @@ export default {
   },
 
   computed: {
-    ready: function () {
+    isReady: function () {
       return this.$data.color !== '' && this.$data.name !== ''
     }
   },
@@ -155,7 +155,7 @@ form {
     transition: 1.0s;
     background-color: #333333;
 
-    &.ready {
+    &.isReady {
       background-color: #405060;
     }
   }

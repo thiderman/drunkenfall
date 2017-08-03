@@ -3,7 +3,7 @@
     <header>
       <div class="content">
         <div class="title">
-          {{tournament.name}} / {{match.kind | capitalize}} {{match.index +1}}
+          {{tournament.name}} / {{capitalizedKind}} {{match.index +1}}
         </div>
       </div>
       <div class="links" v-if="user.level(levels.judge)">
@@ -45,32 +45,12 @@ export default {
   },
 
   computed: {
-    can_commit: function () {
-      return true
+    capitalizedKind: function () {
+      return _.capitalize(this.match.kind)
     }
   },
 
   methods: {
-    commit: function () {
-      // TODO this could potentially be a class
-      let payload = {
-        'state': _.map(this.$refs.players, (controlPlayer) => {
-          return _.pick(controlPlayer, ['ups', 'downs', 'shot', 'reason'])
-        })
-      }
-
-      console.log(payload)
-      this.api.commit({ id: this.tournament.id, kind: this.match.kind, index: this.match.index }, payload).then(function (res) {
-        console.log(res)
-        this.$set('match', Match.fromObject(res.data.match))
-
-        _.each(this.$refs.players, (controlPlayer) => { controlPlayer.reset() })
-      }, function (res) {
-        console.log('error when setting score')
-        console.log(res)
-      })
-    },
-
     refresh: function () {
       // Hax to make vue refresh the entire page.
       // Since nothing on this page is properly bound to components right now
@@ -214,10 +194,6 @@ export default {
   created: function () {
     console.debug("Creating API resource")
     let customActions = {
-      commit: { method: "POST", url: "/api/towerfall/tournament{/id}{/kind}{/index}/commit/" },
-      start: { method: "GET", url: "/api/towerfall/tournament{/id}{/kind}{/index}/start/" },
-      end: { method: "GET", url: "/api/towerfall/tournament{/id}{/kind}{/index}/end/" },
-      reset: { method: "GET", url: "/api/towerfall/tournament{/id}{/kind}{/index}/reset/" },
       getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)

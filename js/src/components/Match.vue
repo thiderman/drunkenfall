@@ -3,7 +3,7 @@
     <header>
       <div class="content">
         <div class="title">
-          {{tournament.name}} / {{match.kind | capitalize}} {{match.index +1}} / Round {{match.commits.length + 1}}
+          {{tournament.name}} / {{capitalizedKind}} {{match.index +1}} / Round {{match.commits.length + 1}}
         </div>
       </div>
       <div class="links" v-if="user.level(levels.judge)">
@@ -21,19 +21,19 @@
     </header>
 
     <div class="control" v-if="user.level(levels.judge)">
-      <template v-for="player in match.players" v-ref:players>
-        <control-player :index="$index" :player="player" :match="match"
+      <template v-for="(player, index) in match.players" ref="players">
+        <control-player :index="index" :player="player" :match="match"
                         :downs="0" :ups="0">
       </template>
     </div>
 
     <div class="control" v-if="!user.level(levels.judge)">
-      <template v-if="!match.isStarted" v-for="player in match.players" v-ref:players>
-        <preview-player :index="$index" :player="player" :match="match">
+      <template v-if="!match.isStarted" v-for="(player, index) in match.players" ref="players">
+        <preview-player :index="index" :player="player" :match="match">
       </template>
 
-      <template v-if="match.isStarted" v-for="player in match.players" v-ref:players>
-        <live-player :index="$index + 1" :player="player" :match="match">
+      <template v-if="match.isStarted" v-for="(player, index) in match.players" ref="players">
+        <live-player :index="index + 1" :player="player" :match="match">
       </template>
     </div>
 
@@ -70,6 +70,9 @@ export default {
   computed: {
     can_commit: function () {
       return true
+    },
+    capitalizedKind: function () {
+      return _.capitalize(this.match.kind)
     }
   },
 

@@ -5,9 +5,9 @@
         <div class="title">Drunken TowerFall</div>
       </div>
       <div class="links">
-        <a v-link="{name: 'new'}" v-if="user.level(levels.producer)">New Tournament</a>
+        <router-link to="{name: 'new'}" v-if="user.level(levels.producer)">New Tournament</router-link>
         <a @click="clear" v-if="user.level(levels.producer)">Clear tests</a>
-        <a v-link="{name: 'facebook'}" v-if="!user.authenticated">Facebook</a>
+        <router-link to="{name: 'facebook'}" v-if="!user.authenticated">Facebook</router-link>
         <a href="/api/facebook/login" v-if="user.level(levels.producer) && user.authenticated">Re-facebook</a>
       </div>
       <div class="clear"></div>
@@ -17,10 +17,10 @@
       <div v-for="tournament in tournaments"
         :tournament="tournament.id" track-by="id">
 
-        <a v-link="{ name: 'tournament', params: { tournament: tournament.id }}"
+        <router-link to="{ name: 'tournament', params: { tournament: tournament.id }}"
           :class="{ test: tournament.isTest, current: !tournament.isStest && !tournament.isStarted}">
           {{tournament.name}}
-        </a>
+        </router-link>
       </div>
     </div>
 

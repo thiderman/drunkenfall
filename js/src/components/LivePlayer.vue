@@ -1,5 +1,5 @@
 <template>
-  <div class="player {{player.color}}">
+  <div :class="player ' + player.color">
     <div class="section">
       <h1>P{{index}}</h1>
     </div>
@@ -15,22 +15,18 @@
     </div>
 
     <div class="section">
-      <img alt="{{player.displayName}}" :src="player.avatar"/>
+      <img :alt="player.displayName" :src="player.avatar"/>
     </div>
   </div>
 </template>
 
 <script>
-import Match from "../models/Match.js"
-
 export default {
   name: 'ControlPlayer',
 
   props: {
     player: {},
-    match: {
-      coerce: (val) => { return Match.fromObject(val) }
-    },
+    match: {},
     index: 0,
   },
 

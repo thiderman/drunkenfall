@@ -1,5 +1,5 @@
 <template>
-  <a v-link="{ name: 'match', params: { kind: match.kind, match: match.index }}">
+  <router-link to="{ name: 'match', params: { kind: match.kind, match: match.index }}">
     <template v-for="x in 4">
       <player v-if="match.players.length > x" :player="match.players[x]" :match="match" :index="x"></player>
 
@@ -7,12 +7,11 @@
         <p>???</p>
       </div>
     </template>
-  </a>
+  </router-link>
 </template>
 
 <script>
 import Player from './Player.vue'
-import Match from '../models/Match.js'
 
 export default {
   name: 'MatchOverview',
@@ -20,9 +19,7 @@ export default {
     Player
   },
   props: {
-    match: {
-      coerce: (val) => { return Match.fromObject(val) }
-    }
+    match: {}
   }
 }
 </script>

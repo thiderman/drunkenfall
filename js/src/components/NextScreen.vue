@@ -3,7 +3,7 @@
     <header>
       <div class="content">
         <div class="title">
-          {{tournament.name}} / {{match.kind | capitalize}} {{match.index +1}}
+          {{tournament.name}} / {{capitalizedKind}} {{match.index +1}}
         </div>
       </div>
       <div class="links">
@@ -20,8 +20,8 @@
     </div>
 
     <div class="players">
-      <template v-for="player in playersReversed" v-ref:players>
-        <preview-player :index="$index + 1" :player="player" :match="match">
+      <template v-for="(player, index) in playersReversed" ref="players">
+        <preview-player :index="index + 1" :player="player" :match="match">
       </template>
     </div>
   </div>
@@ -53,6 +53,9 @@ export default {
   computed: {
     playersReversed: function () {
       return _.reverse(this.match.players)
+    },
+    capitalizedKind: function () {
+      return _.capitalize(this.match.kind)
     }
   },
 
