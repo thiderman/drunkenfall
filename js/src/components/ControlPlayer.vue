@@ -1,5 +1,5 @@
 <template>
-  <div class="player {{player.preferred_color}}">
+  <div :class="'player ' + player.preferred_color">
     <div class="button" @click="score(index, -1)">
       <div><p>-</p></div>
     </div>
@@ -12,20 +12,20 @@
        </div>
      </div>
 
-     <div class="slider {{player.color}}" @click="reset">
-       <div v-el:name>{{player.displayName}}</div>
+     <div :class="'slider ' + player.color" @click="reset">
+       <div ref="name">{{player.displayName}}</div>
      </div>
 
      <div v-if="match.length == 10" class="scores">
        <div v-for="n in 10"
-         class="{{bullet_class(player, index, n+1)}}">
+         :class="bullet_class(player, index, n+1)">
          <p>{{n+1}}</p>
        </div>
      </div>
 
      <div v-if="match.length == 20" class="scores final">
        <div v-for="n in 20"
-         class="{{bullet_class(player, index, n+1)}}">
+         :class="bullet_class(player, index, n+1)">
          <p>{{n+1}}</p>
        </div>
      </div>
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import Match from "../models/Match.js"
 import fitText from "../util/fittext.js"
 
 export default {
@@ -45,9 +44,7 @@ export default {
 
   props: {
     player: {},
-    match: {
-      coerce: (val) => { return Match.fromObject(val) }
-    },
+    match: {},
     index: 0,
     shot: false,
     ups: 0,
@@ -70,7 +67,7 @@ export default {
       }
 
       return this.player.preferred_color
-    }
+    },
   },
 
   methods: {
@@ -124,8 +121,8 @@ export default {
     }
   },
 
-  ready: function () {
-    fitText(this.$els.name, this.$els.name.innerText, "'Yanone Kaffeesatz', sans-serif", 1)
+  mounted: function () {
+    fitText(this.$refs.name, this.$refs.name.innerText, "'Yanone Kaffeesatz', sans-serif", 1)
   }
 }
 </script>
