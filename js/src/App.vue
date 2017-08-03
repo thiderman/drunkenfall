@@ -1,10 +1,3 @@
-<template>
-  <router-view
-    keep-alive
-    transition>
-  </router-view>
-</template>
-
 <script>
 /* eslint-env browser */
 import Tournament from "./models/Tournament.js"
@@ -46,7 +39,11 @@ export default {
     connect: function () {
       if (!this.ws) {
         console.log('Setting up new websocket')
-        this.$set('ws', new WebSocket('ws://' + window.location.host + '/api/towerfall/auto-updater'))
+        this.$set(
+          this.$data,
+          'ws',
+          new WebSocket('ws://' + window.location.host + '/api/towerfall/auto-updater'),
+        )
 
         let timeoutId
 
@@ -83,12 +80,12 @@ export default {
             if (res.data.tournaments) {
               // The main bulk update. This contains the latest state.
               let tournaments = _.map(res.data.tournaments, Tournament.fromObject)
-              this.$set('tournaments', tournaments)
+              this.$set(this.$data, 'tournaments', tournaments)
               console.log("data", this.$data.tournaments)
 
-              _.each(tournaments, (tournament) => {
-                this.$broadcast(`tournament${tournament.id}`, tournament)
-              })
+              // _.each(tournaments, (tournament) => {
+              //   this.$broadcast(`tournament${tournament.id}`, tournament)
+              // })
               return
             }
 
