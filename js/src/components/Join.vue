@@ -59,7 +59,7 @@ export default {
       this.api.join({ id: this.tournament.id }).then((res) => {
         console.log("join response:", res)
         var j = res.json()
-        this.$route.router.go('/towerfall' + j.redirect)
+        this.$route.router.push('/towerfall' + j.redirect)
       }, (err) => {
         console.error(`joining tournament ${this.tournament} failed`, err)
       })

@@ -104,7 +104,7 @@ export default {
     end: function () {
       this.api.end({ id: this.tournament.id, kind: this.match.kind, index: this.match.index }).then(function (res) {
         console.log(res)
-        this.$route.router.go('/towerfall/' + this.tournament.id + '/')
+        this.$route.router.push('/towerfall/' + this.tournament.id + '/')
       }, function (res) {
         console.log('error when getting tournament')
         console.log(res)

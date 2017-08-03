@@ -169,7 +169,7 @@ export default {
         this.api.start({ id: this.tournament.id }).then((res) => {
           console.log("start response:", res)
           let j = res.json()
-          this.$route.router.go('/towerfall' + j.redirect)
+          this.$route.router.push('/towerfall' + j.redirect)
         }, (err) => {
           console.error(`start for ${this.tournament} failed`, err)
         })
@@ -182,7 +182,7 @@ export default {
         this.api.next({ id: this.tournament.id }).then((res) => {
           console.debug("next response:", res)
           let j = res.json()
-          this.$route.router.go('/towerfall' + j.redirect)
+          this.$route.router.push('/towerfall' + j.redirect)
         }, (err) => {
           console.error(`next for ${this.tournament} failed`, err)
         })
@@ -195,7 +195,7 @@ export default {
         this.api.reshuffle({ id: this.tournament.id }).then((res) => {
           console.debug("reshuffle response:", res)
           let j = res.json()
-          this.$route.router.go('/towerfall' + j.redirect)
+          this.$route.router.push('/towerfall' + j.redirect)
         }, (err) => {
           console.error(`reshuffle for ${this.tournament} failed`, err)
         })
@@ -211,7 +211,7 @@ export default {
         console.debug("settime response:", res)
         let j = res.json()
         console.log('Redirect to /towerfall' + j.redirect)
-        // this.$route.router.go('/towerfall' + j.redirect)
+        // this.$route.router.push('/towerfall' + j.redirect)
       }, (err) => {
         console.error(`settime for ${this.tournament} failed`, err)
       })
@@ -241,7 +241,7 @@ export default {
         console.debug("backfill response:", res)
         let j = res.json()
         console.log('Redirect to /towerfall' + j.redirect)
-        // this.$route.router.go('/towerfall' + j.redirect)
+        // this.$route.router.push('/towerfall' + j.redirect)
       }, (err) => {
         console.error(`backfill for ${this.tournament} failed`, err)
       })

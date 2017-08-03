@@ -61,7 +61,7 @@ export default {
         this.api.start({ id: this.tournament.id }).then((res) => {
           console.log("start response:", res)
           let j = res.json()
-          this.$route.router.go('/towerfall' + j.redirect)
+          this.$route.router.push('/towerfall' + j.redirect)
         }, (err) => {
           console.error(`start for ${this.tournament} failed`, err)
         })
@@ -74,7 +74,7 @@ export default {
         this.api.usurp({ id: this.tournament.id }).then((res) => {
           console.log("usurp response:", res)
           let j = res.json()
-          this.$route.router.go('/towerfall' + j.redirect)
+          this.$route.router.push('/towerfall' + j.redirect)
         }, (err) => {
           console.error(`usurp for ${this.tournament} failed`, err)
         })
@@ -86,7 +86,7 @@ export default {
       this.api.join({ id: this.tournament.id }).then((res) => {
         console.log("join response:", res)
         var j = res.json()
-        this.$route.router.go('/towerfall' + j.redirect)
+        this.$route.router.push('/towerfall' + j.redirect)
       }, (err) => {
         console.error(`joining tournament ${this.tournament} failed`, err)
       })

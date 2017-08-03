@@ -91,7 +91,7 @@ export default {
         console.log(res)
         var j = res.json()
         console.log(j)
-        this.$route.router.go('/towerfall' + j.redirect)
+        this.$route.router.push('/towerfall' + j.redirect)
       }, (res) => {
         console.log('fail')
         console.log(res)

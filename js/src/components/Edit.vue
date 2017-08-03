@@ -36,7 +36,7 @@ export default {
       this.api.edit({ id: this.tournament.id }, this.data).then((res) => {
         console.log("edit response:", res)
         var j = res.json()
-        this.$route.router.go('/towerfall' + j.redirect)
+        this.$route.router.push('/towerfall' + j.redirect)
       }, (err) => {
         console.error(`editing tournament ${this.tournament} failed`, err)
       })
