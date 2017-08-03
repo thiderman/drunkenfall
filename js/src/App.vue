@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     reconnect: function () {
-      this.$delete("ws")
+      this.ws = null
 
       if (this.reconnections < 30) {
         console.warn(`closed uncleanly, reconnecting (try number ${this.reconnections})`)
