@@ -1,66 +1,31 @@
 <template>
   <div>
     <div id="executive">
-      <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
+      <img :alt="executive.nick" :src="executive.avatar"/>
       <h2>Executive Producer</h2>
-      <h1>Lowe Thiderman</h1>
-      <h3 class="purple">thiderman</h3>
+      <h1>{{executive.name}}</h1>
+      <h3 :class="executive.color">{{executive.nick}}</h3>
     </div>
 
     <div id="producers">
       <h1>Producers</h1>
 
       <div class="first">
-        <div class="producer">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
+        <div class="producer" v-for="p in first_producers">
+          <img :alt="p.nick" :src="p.avatar"/>
           <div>
-            <h1>Magnus Ulenius</h1>
-            <h3 class="red">GoosE</h3>
-          </div>
-        </div>
-        <div class="producer">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1>Ida Andreasson</h1>
-            <h3 class="blue">Queen Obscene</h3>
-          </div>
-        </div>
-        <div class="producer">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1>Karl-Astrid Krantz</h1>
-            <h3 class="pink">QRL-Astrid</h3>
-          </div>
-        </div>
-        <div class="producer">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1>Jonathan Gustafsson</h1>
-            <h3 class="orange">Gishten</h3>
+            <h1>{{p.name}}</h1>
+            <h3 :class="p.color">{{p.nick}}</h3>
           </div>
         </div>
       </div>
 
       <div class="second">
-        <div class="producer">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
+        <div class="producer" v-for="p in second_producers">
+          <img :alt="p.nick" :src="p.avatar"/>
           <div>
-            <h1>Mike Goeppner</h1>
-            <h3 class="white">Skolpadda</h3>
-          </div>
-        </div>
-        <div class="producer">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1>Li Larsson</h1>
-            <h3 class="red">Moijra</h3>
-          </div>
-        </div>
-        <div class="producer">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1>Daniel Dala Thiderman</h1>
-            <h3 class="blue">Dalan</h3>
+            <h1>{{p.name}}</h1>
+            <h3 :class="p.color">{{p.nick}}</h3>
           </div>
         </div>
       </div>
@@ -72,40 +37,10 @@
 
       <div id="players">
         <h1>Combatants</h1>
-        <div class="player">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
+        <div class="player" v-for="p in players">
+          <img :alt="p.nick" :src="p.avatar"/>
           <div>
-            <h1 class="orange">#turkish</h1>
-          </div>
-        </div>
-        <div class="player">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1 class="blue">Queen Obscene</h1>
-          </div>
-        </div>
-        <div class="player">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1 class="red">GoosE</h1>
-          </div>
-        </div>
-        <div class="player">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1 class="white">Fucking longname</h1>
-          </div>
-        </div>
-        <div class="player">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1 class="pink">Ples</h1>
-          </div>
-        </div>
-        <div class="player">
-          <img alt="thiderman" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/18920658_1655829387790533_6528694072985925355_n.jpg?oh=8ba01db0f250fe4c1bbe90de09931d60&oe=59EBF2DB"/>
-          <div>
-            <h1 class="purple">thiderman</h1>
+            <h1 :class="p.color">{{p.nick}}</h1>
           </div>
         </div>
       </div>
@@ -125,7 +60,7 @@
       <div class="clear"></div>
 
       <div id="harmed">
-        <span>683</span> archers were harmed in the making of this broadcast
+        <span>{{archersHarmed}}</span> archers were harmed in the making of this broadcast
       </div>
     </div>
 
@@ -141,14 +76,34 @@
 </template>
 
 <script>
+import Person from '../models/Person.js'
+import _ from "lodash"
+
 let pause = 2000
 let duration = 6000
-let roll = 63 * 1000
+let roll = 8 * 1000
 
 export default {
-  created: function () {
-    document.getElementsByTagName("body")[0].className = "scroll-less"
+  name: 'Credits',
 
+  data () {
+    return {
+      executive: Person,
+      first_producers: [],
+      second_producers: [],
+      players: [],
+      archersHarmed: 0,
+    }
+  },
+
+  created: function () {
+    console.debug("Creating API resource")
+    let customActions = {
+      getCredits: { method: "GET", url: "/api/towerfall{/id}/credits/" }
+    }
+    this.api = this.$resource("/api/towerfall", {}, customActions)
+
+    document.getElementsByTagName("body")[0].className = "scroll-less"
     this.producerCards()
   },
   methods: {
@@ -195,6 +150,23 @@ export default {
           returns.className = "active"
         }, roll)
       }, pause)
+    }
+  },
+  route: {
+    data ({ to }) {
+      this.api.getCredits({ id: to.params.tournament }).then(function (res) {
+        console.log(res)
+        let data = res.json()
+
+        this.$set("executive", Person.fromObject(data.executive))
+        this.$set("first_producers", _.map(data.producers.slice(0, 4), Person.fromObject))
+        this.$set("second_producers", _.map(data.producers.slice(4, 7), Person.fromObject))
+        this.$set("players", _.map(data.players, Person.fromObject))
+        this.$set("archersHarmed", data.archers_harmed)
+      }, function (res) {
+        console.log('error when getting credits data')
+        console.log(res)
+      })
     }
   }
 }
