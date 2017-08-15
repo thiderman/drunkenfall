@@ -97,6 +97,16 @@ var router = new Router({
       component: PostMatch
     },
     {
+      path: '/towerfall/:tournament/log/',
+      name: 'log',
+      component: Log
+    },
+    {
+      path: '/towerfall/:tournament/credits/',
+      name: 'credits',
+      component: Credits
+    },
+    {
       path: '/towerfall/:tournament/:kind/:match/',
       name: 'match',
       component: Match
