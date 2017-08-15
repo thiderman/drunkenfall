@@ -124,6 +124,11 @@ func (s *Server) RegisterHandlersAndListeners() {
 
 	// Also websocket listener
 	go s.ws.Listen()
+
+	// Send an initial complete update. Without this, the clients will
+	// not receieve anything when they connect, leaving them stranded
+	// and sad.
+	s.SendWebsocketUpdate()
 }
 
 // NewHandler shows the page to create a new tournament
