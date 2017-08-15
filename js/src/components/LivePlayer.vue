@@ -1,5 +1,5 @@
 <template>
-  <div :class="player ' + player.color">
+  <div :class="'player ' + player.color">
     <div class="section">
       <h1>P{{index}}</h1>
     </div>

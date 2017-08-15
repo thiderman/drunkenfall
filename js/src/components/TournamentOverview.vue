@@ -21,7 +21,7 @@
       <div class="clear"></div>
     </header>
 
-    <div class="subheader" v-if="user.level(levels.commentator)">
+    <div class="subheader" v-if="user.level(levels.commentator) && nextMatch">
       <div v-if="!nextMatch.isScheduled">
         <p>
           Pause until
@@ -288,11 +288,6 @@ export default {
   font-size: 150%;
   display: block;
   position: relative;
-
-  &.gold, &.silver, &.bronze {
-    color: #fff;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-  }
 
 }
 

@@ -1,12 +1,18 @@
 <template>
   <div>
-    <tournament-preview v-if="!tournament.isStarted" :tournament="tournament" :user="user" :levels="levels"></tournament-preview>
-    <tournament-overview v-if="tournament.isStarted" :tournament="tournament" :user="user" :levels="levels" :selected="[]"></tournament-overview>
+    <tournament-preview v-if="tournament && !tournament.isStarted"
+                        :tournament="tournament"
+                        :user="user"
+                        :levels="levels"></tournament-preview>
+    <tournament-overview v-if="tournament && tournament.isStarted"
+                         :tournament="tournament"
+                         :user="user"
+                         :levels="levels"
+                         :selected="[]"></tournament-overview>
   </div>
 </template>
 
 <script>
-import Tournament from '../models/Tournament'
 import TournamentOverview from '../components/TournamentOverview'
 import TournamentPreview from '../components/TournamentPreview'
 import * as levels from "../models/Level"

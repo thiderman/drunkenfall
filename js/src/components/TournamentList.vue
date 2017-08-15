@@ -5,19 +5,19 @@
         <div class="title">Drunken TowerFall</div>
       </div>
       <div class="links">
-        <router-link to="{name: 'new'}" v-if="user.level(levels.producer)">New Tournament</router-link>
-        <a @click="clear" v-if="user.level(levels.producer)">Clear tests</a>
-        <router-link to="{name: 'facebook'}" v-if="!user.authenticated">Facebook</router-link>
-        <a href="/api/facebook/login" v-if="user.level(levels.producer) && user.authenticated">Re-facebook</a>
+        <router-link :to="{name: 'new'}" v-if="user && user.level(levels.producer)">New Tournament</router-link>
+        <a @click="clear" v-if="user && user.level(levels.producer)">Clear tests</a>
+        <router-link :to="{name: 'facebook'}" v-if="!user.authenticated">Facebook</router-link>
+        <a href="/api/facebook/login" v-if="user && user.level(levels.producer) && user.authenticated">Re-facebook</a>
       </div>
       <div class="clear"></div>
     </header>
 
-    <div class="tournaments" :class="{ loading: !tournament }">
+    <div class="tournaments" :class="{ loading: !tournaments }">
       <div v-for="tournament in tournaments"
         :tournament="tournament.id" track-by="id">
 
-        <router-link to="{ name: 'tournament', params: { tournament: tournament.id }}"
+        <router-link :to="{ name: 'tournament', params: { tournament: tournament.id }}"
           :class="{ test: tournament.isTest, current: !tournament.isStest && !tournament.isStarted}">
           {{tournament.name}}
         </router-link>
