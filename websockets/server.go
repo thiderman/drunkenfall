@@ -119,9 +119,8 @@ func (s *Server) Listen() {
 
 		// Add new a client
 		case c := <-s.addCh:
-			log.Println("Client connected")
 			s.clients[c.id] = c
-			log.Println(len(s.clients), "clients connected.")
+			log.Printf("New client connected. %d total clients connected.", len(s.clients))
 			s.sendPastMessages(c)
 
 		// del a client
