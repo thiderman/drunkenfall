@@ -13,7 +13,7 @@ import * as levels from "../models/Level"
 import _ from 'lodash'
 
 export default {
-  name: 'Tournament',
+  name: 'TournamentView',
 
   components: {
     TournamentOverview,

@@ -61,7 +61,7 @@ var router = new Router({
     {
       path: '/towerfall/:tournament/',
       name: 'tournament',
-      component: Tournament
+      component: TournamentView
     },
     {
       path: '/towerfall/:tournament/join/',
