@@ -13,9 +13,6 @@ export default class User {
   }
 
   level (lvl) {
-    if (this.userlevel >= lvl) {
-      return true
-    }
-    return false
+    return this.userlevel >= lvl
   }
 };

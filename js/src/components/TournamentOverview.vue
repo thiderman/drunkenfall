@@ -155,7 +155,6 @@ export default {
       }
 
       return _.map(t.runnerups, (runnerup) => {
-        console.log("runnerup map", runnerup)
         return _.find(t.players, function (p) {
           return p.person.id === runnerup.id
         })

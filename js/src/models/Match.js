@@ -22,7 +22,6 @@ export default class Match {
         m.end = 20
         break
     }
-
     return m
   }
 
