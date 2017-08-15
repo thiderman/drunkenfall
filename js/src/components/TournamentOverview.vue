@@ -5,7 +5,8 @@
         <div class="title">{{tournament.name}}</div>
       </div>
       <div class="links">
-        <router-link to="{ name: 'join', params: { tournament: tournament.id }}">Join</router-link>
+        <router-link :to="{ name: 'join', params: { tournament: tournament.id }}"
+                     v-if="!tournament.isEnded">Join</router-link>
 
         <div class="action" @click="start"
           v-if="user.level(levels.judge) && tournament.canStart">Start</div>

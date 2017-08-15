@@ -7,8 +7,8 @@
       <div class="links">
         <a v-if="tournament.canStart && user.level(30)" @click="start">Start</a>
         <a v-if="tournament.canStart && user.level(100)" @click="usurp">Usurp</a>
-        <router-link v-if="user.level(10)" to="{ name: 'join', params: { tournament: tournament.id }}">Join</router-link>
-        <router-link v-if="user.level(50)" to="{ name: 'participants', params: { tournament: tournament.id }}">Participants</router-link>
+        <router-link v-if="user.level(10)" :to="{ name: 'join', params: { tournament: tournament.id }}">Join</router-link>
+        <router-link v-if="user.level(50)" :to="{ name: 'participants', params: { tournament: tournament.id }}">Participants</router-link>
       </div>
       <div class="clear"></div>
     </header>

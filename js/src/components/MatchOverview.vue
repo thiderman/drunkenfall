@@ -1,9 +1,9 @@
 <template>
-  <router-link to="{ name: 'match', params: { kind: match.kind, match: match.index }}">
+  <router-link :to="{ name: 'match', params: { kind: match.kind, match: match.index }}">
     <template v-for="x in 4">
-      <player v-if="match.players.length > x" :player="match.players[x]" :match="match" :index="x"></player>
+      <player v-if="match.players.length >= x" :player="match.players[x-1]" :match="match" :index="x-1"></player>
 
-      <div v-if="match.players.length <= x" class="player prefill">
+      <div v-if="match.players.length < x" class="player prefill">
         <p>???</p>
       </div>
     </template>
