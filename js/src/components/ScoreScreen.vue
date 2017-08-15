@@ -32,11 +32,6 @@ export default {
       let kind = tournament.current.kind
       let index = tournament.current.index
       let match
-      if (kind === 'tryout') {
-        kind = 'tryouts'
-      } else if (kind === 'semi') {
-        kind = 'semis'
-      }
 
       if (kind === 'final') {
         match = Match.fromObject(tournament[kind])

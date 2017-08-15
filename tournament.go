@@ -21,8 +21,8 @@ type Tournament struct {
 	Winners     []Player     `json:"winners"` // TODO(thiderman): Refactor to pointer
 	Runnerups   []*Person    `json:"runnerups"`
 	Judges      []Judge      `json:"judges"`
-	Tryouts     []*Match     `json:"tryouts"`
-	Semis       []*Match     `json:"semis"`
+	Tryouts     []*Match     `json:"tryout"`
+	Semis       []*Match     `json:"semi"`
 	Final       *Match       `json:"final"`
 	Current     CurrentMatch `json:"current"`
 	Previous    CurrentMatch `json:"previous"`

@@ -82,12 +82,6 @@ export default {
       let index = tournament.current.index
       let kind = tournament.current.kind
 
-      if (kind === 'tryout') {
-        kind = 'tryouts'
-      } else if (kind === 'semi') {
-        kind = 'semis'
-      }
-
       if (kind === 'final') {
         match = Match.fromObject(tournament[kind])
       } else {
@@ -96,19 +90,13 @@ export default {
 
       if (!match.isStarted) {
         // If we're on the first match, there is no previous, so bail.
-        if (index === 0 && kind === 'tryouts') {
+        if (index === 0 && kind === 'tryout') {
           this.$set('tournament', Tournament.fromObject(tournament))
           return
         }
 
         index = tournament.previous.index
         kind = tournament.previous.kind
-
-        if (kind === 'tryout') {
-          kind = 'tryouts'
-        } else if (kind === 'semi') {
-          kind = 'semis'
-        }
 
         if (kind === 'final') {
           match = Match.fromObject(tournament[kind])

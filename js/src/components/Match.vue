@@ -137,12 +137,6 @@ export default {
       })
     },
     setData: function (tournament, kind, match) {
-      if (kind === 'tryout') {
-        kind = 'tryouts'
-      } else if (kind === 'semi') {
-        kind = 'semis'
-      }
-
       if (kind === 'final') {
         this.$set('match', Match.fromObject(tournament[kind]))
       } else {
