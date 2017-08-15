@@ -22,7 +22,6 @@
     "string-template": "^1.0.0",
     "vue": "^2.0.0",
     "vue-cookie": "^1.0.0",
-    "vue-pikaday": "^0.1.1",
     "vue-resource": "^0.9.3",
     "vue-router": "^2.0.0",
     "vue-socket.io": "^1.0.2"

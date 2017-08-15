@@ -6,7 +6,6 @@ import Resource from 'vue-resource'
 import Cookie from 'vue-cookie'
 import App from './App'
 
-import vPikaday from '../vendor/vue-pikaday'
 
 import TournamentList from './components/TournamentList.vue'
 import Tournament from './components/Tournament.vue'
@@ -28,7 +27,6 @@ import Credits from './components/Credits.vue'
 Vue.use(Router)
 Vue.use(Resource)
 Vue.use(Cookie)
-Vue.use(vPikaday)
 
 // routing
 var router = new Router({
