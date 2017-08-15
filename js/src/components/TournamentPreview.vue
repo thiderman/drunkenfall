@@ -48,11 +48,13 @@ import _ from 'lodash'
 export default {
   name: 'TournamentPreview',
 
-  props: {
-    tournament: new Tournament(),
-    user: new User(),
-    levels: levels,
-    countdown: "00:00:00",
+  data () {
+    return {
+      tournament: new Tournament(),
+      user: new User(),
+      levels: levels,
+      countdown: "00:00:00",
+    }
   },
 
   methods: {
@@ -104,7 +106,7 @@ export default {
     this.api = this.$resource("/api/towerfall", {}, customActions)
 
     // Also create the clock countdown
-    this.$set('countdown', '00:00:00')
+    this.$set(this.$data, 'countdown', '00:00:00')
     this.$watch('tournament', (newVal) => {
       var eventTime = newVal.scheduled.unix()
       var currentTime = moment().unix()
