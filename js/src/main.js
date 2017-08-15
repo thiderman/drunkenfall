@@ -1,6 +1,7 @@
 /* eslint-env browser */
 
 import Vue from 'vue'
+import Vuex from 'vuex'
 import Router from 'vue-router'
 import Resource from 'vue-resource'
 import Cookie from 'vue-cookie'
@@ -23,7 +24,8 @@ import Facebook from './components/Facebook.vue'
 import FacebookFinalize from './components/FacebookFinalize.vue'
 import Credits from './components/Credits.vue'
 
-// install router
+// install packages
+Vue.use(Vuex)
 Vue.use(Router)
 Vue.use(Resource)
 Vue.use(Cookie)
@@ -106,18 +108,38 @@ router.beforeEach((to, from, next) => {
   // isn't set otherwise.
   setTimeout(function () {
     router.app.connect()
+
+    // Always set up the user model from cookies
+    router.app.$store.commit('setUser', User.fromCookies(router.app.$cookie))
   }, 50)
 
   // Reset any pulsating lights
   document.getElementsByTagName("body")[0].className = ""
-
-  // Always set up the user model from cookies
-  // router.app.$set(router.app.$data, 'user', User.fromCookies(router.app.$cookie))
-
   next()
+})
+
+const store = new Vuex.Store({ // eslint-disable-line
+  state: {
+    tournaments: [],
+    user: new User(),
+  },
+  mutations: {
+    updateAll (state, tournaments) {
+      state.tournaments = _.map(tournaments, Tournament.fromObject)
+    },
+    setUser (state, user) {
+      state.user = user
+    }
+  },
+  getters: {
+    getTournament: (state, getters) => (id) => {
+      return state.tournaments.find(t => t.id === id)
+    }
+  }
 })
 
 var Root = Vue.extend(App)
 new Root({ // eslint-disable-line
-  router: router
+  router: router,
+  store: store,
 }).$mount("#app")
