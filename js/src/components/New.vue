@@ -44,6 +44,10 @@ export default {
     }
   },
 
+  created () {
+    this.scheduled = moment().hour(20).minute(0).second(0).format()
+  },
+
   methods: {
     create (event) {
       event.preventDefault()
@@ -56,15 +60,10 @@ export default {
       }
 
       this.$http.post('/api/towerfall/new/', payload).then((res) => {
-        // Success callback
-        console.log('win')
-        console.log(res)
         var j = res.json()
-        console.log(j)
-        this.$route.router.push('/towerfall' + j.redirect)
+        this.$router.push('/towerfall' + j.redirect)
       }, (res) => {
-        console.log('fail')
-        console.log(res)
+        console.warn("creating tournament failed", res)
       })
     },
   }

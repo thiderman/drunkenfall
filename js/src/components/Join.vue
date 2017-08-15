@@ -36,23 +36,28 @@
 </template>
 
 <script>
-import Tournament from '../models/Tournament'
-
 export default {
   name: 'Join',
 
   data () {
     return {
-      tournament: new Tournament(),
       approve: false,
     }
+  },
+
+  computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
   },
 
   methods: {
     join (e) {
       e.preventDefault()
       if (!this.approve) {
-        console.log("Not joing - not approved")
+        console.log("Not joining - not approved")
         return
       }
 
@@ -64,49 +69,15 @@ export default {
         console.error(`joining tournament ${this.tournament} failed`, err)
       })
     },
-    setData: function (tournament) {
-      console.log("setData tournament", tournament)
-      this.$set('tournament', Tournament.fromObject(tournament))
-    }
   },
 
   created: function () {
     console.debug("Creating API resource")
     let customActions = {
-      getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" },
       join: { method: "GET", url: "/api/towerfall/{id}/join/" },
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)
   },
-
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-        this.setData(tournament)
-      })
-
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          this.setData(
-            res.data.tournament,
-          )
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-        )
-      }
-    }
-  }
 }
 </script>
 

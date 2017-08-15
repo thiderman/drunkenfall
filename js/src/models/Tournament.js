@@ -14,6 +14,10 @@ export default class Tournament {
     t.started = moment(t.started)
     t.ended = moment(t.ended)
 
+    t.tryouts = _.map(t.tryouts, Match.fromObject)
+    t.semis = _.map(t.semis, Match.fromObject)
+    t.final = Match.fromObject(t.final)
+
     t.players = _.map(t.players, Player.fromObject)
 
     return t

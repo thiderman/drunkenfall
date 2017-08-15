@@ -22,18 +22,18 @@
 
     <div class="control" v-if="user.level(levels.judge)">
       <template v-for="(player, index) in match.players" ref="players">
-        <control-player :index="index" :player="player" :match="match"
-                        :downs="0" :ups="0">
+        <control-player :index="index-1" :player="player" :match="match"
+                        :downs="0" :ups="0"></control-player>
       </template>
     </div>
 
     <div class="control" v-if="!user.level(levels.judge)">
       <template v-if="!match.isStarted" v-for="(player, index) in match.players" ref="players">
-        <preview-player :index="index" :player="player" :match="match">
+        <preview-player :index="index-1" :player="player" :match="match"></preview-player>
       </template>
 
       <template v-if="match.isStarted" v-for="(player, index) in match.players" ref="players">
-        <live-player :index="index + 1" :player="player" :match="match">
+        <live-player :index="index" :player="player" :match="match"></live-player>
       </template>
     </div>
 
@@ -60,14 +60,29 @@ export default {
 
   data () {
     return {
-      match: new Match(),
-      tournament: new Tournament(),
-      user: this.$root.user,
       levels: levels,
     }
   },
 
   computed: {
+    user () {
+      return this.$store.state.user
+    },
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    match () {
+      let kind = this.$route.params.kind
+      let idx = this.$route.params.match
+
+      if (kind === 'final') {
+        return this.tournament.final
+      }
+      kind = kind + 's'
+      return this.tournament[kind][idx]
+    },
     can_commit: function () {
       return true
     },
@@ -163,45 +178,9 @@ export default {
       start: { method: "GET", url: "/api/towerfall/tournament{/id}{/kind}{/index}/start/" },
       end: { method: "GET", url: "/api/towerfall/tournament{/id}{/kind}{/index}/end/" },
       reset: { method: "GET", url: "/api/towerfall/tournament{/id}{/kind}{/index}/reset/" },
-      getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)
   },
-
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-        this.setData(tournament, to.params.kind, parseInt(to.params.match))
-      })
-
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          console.log(res)
-          let data = res.json()
-          this.setData(
-            data.tournament,
-            to.params.kind,
-            parseInt(to.params.match)
-          )
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-          to.params.kind,
-          parseInt(to.params.match)
-        )
-      }
-    }
-  }
 }
 </script>
 

@@ -45,9 +45,6 @@ export default {
 
   data () {
     return {
-      id: "",
-      name: "",
-      nick: "",
       color: "",
     }
   },
@@ -68,6 +65,7 @@ export default {
       }
     },
     submit (event) {
+      let $vue = this
       event.preventDefault()
       if (this.isReady === false) {
         console.log('Did not fill in all details')
@@ -81,17 +79,9 @@ export default {
         color: this.color
       }
 
-      // Reset the form so that it is clean if the page is reused
-      this.clear()
-      this.name = ''
-      this.color = ''
-
       this.$http.post('/api/facebook/register', payload).then((res) => {
-        // Success callback
-        console.log(res)
         var j = res.json()
-        console.log(j)
-        this.$route.router.push('/towerfall' + j.redirect)
+        $vue.$router.push('/towerfall' + j.redirect)
       }, (res) => {
         console.log('fail')
         console.log(res)
@@ -102,16 +92,17 @@ export default {
   computed: {
     isReady: function () {
       return this.$data.color !== '' && this.$data.name !== ''
-    }
+    },
+    id () {
+      return this.$route.query.id
+    },
+    name () {
+      return this.$route.query.name
+    },
+    nick () {
+      return this.$route.query.nick
+    },
   },
-
-  route: {
-    data ({ to }) {
-      this.$data.id = to.query.id
-      this.$data.name = to.query.name
-      this.$data.nick = to.query.nick
-    }
-  }
 }
 </script>
 

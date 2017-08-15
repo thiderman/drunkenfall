@@ -7,9 +7,10 @@ import Resource from 'vue-resource'
 import Cookie from 'vue-cookie'
 import App from './App'
 
+import _ from 'lodash'
 
 import TournamentList from './components/TournamentList.vue'
-import Tournament from './components/Tournament.vue'
+import TournamentView from './components/Tournament.vue'
 import New from './components/New.vue'
 import Join from './components/Join.vue'
 import Participants from './components/Participants.vue'
@@ -19,10 +20,12 @@ import PostMatch from './components/PostMatch.vue'
 import Log from './components/Log.vue'
 import ScoreScreen from './components/ScoreScreen.vue'
 import NextScreen from './components/NextScreen.vue'
-// import User from './models/User.js'
 import Facebook from './components/Facebook.vue'
 import FacebookFinalize from './components/FacebookFinalize.vue'
 import Credits from './components/Credits.vue'
+
+import User from './models/User.js'
+import Tournament from './models/Tournament.js'
 
 // install packages
 Vue.use(Vuex)

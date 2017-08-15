@@ -22,13 +22,18 @@ export default {
 
   data () {
     return {
-      tournament: new Tournament(),
+      id: null,
       user: this.$root.user,
       levels: levels,
     }
   },
 
   computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
     runnerups: function () {
       let t = this.tournament
 
@@ -80,34 +85,6 @@ export default {
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)
   },
-
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-
-        this.$set(
-          'tournament',
-          Tournament.fromObject(tournament)
-        )
-      })
-
-      // TODO perhaps use $root.tournaments again?
-      return this.api.getData({ id: to.params.tournament }).then((res) => {
-        let data = res.json()
-        let tournament = Tournament.fromObject(data.tournament)
-        console.debug("loaded tournament", tournament)
-        return {
-          tournament: tournament,
-          user: this.$root.user,
-        }
-      }, (error) => {
-        console.error('error when getting tournament', error)
-        return { tournament: new Tournament() }
-      })
-    }
-  }
 }
 </script>
 

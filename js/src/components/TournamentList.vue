@@ -40,9 +40,15 @@ export default {
 
   data () {
     return {
-      tournaments: [],
-      user: this.$root.user,
       levels: levels,
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.state.user
+    },
+    tournaments () {
+      return this.$store.state.tournaments
     }
   },
   methods: {
@@ -52,19 +58,6 @@ export default {
         this.$set('tournaments', _.map(res.data.tournaments, Tournament.fromObject))
       }, function (res) {
         console.error('error when clearing tournaments', res)
-        return { tournaments: [] }
-      })
-    }
-  },
-  route: {
-    data ({ to }) {
-      return this.$http.get('/api/towerfall/tournament/').then(function (res) {
-        let data = JSON.parse(res.data)
-        return {
-          tournaments: _.map(data.tournaments, Tournament.fromObject)
-        }
-      }, function (res) {
-        console.error('error when getting tournaments', res)
         return { tournaments: [] }
       })
     }

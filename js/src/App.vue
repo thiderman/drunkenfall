@@ -1,17 +1,11 @@
 <script>
 /* eslint-env browser */
-import Tournament from "./models/Tournament.js"
 import _ from 'lodash'
 import User from './models/User.js'
 
 export default {
   data () {
     return {
-      // All the tournaments
-      // TODO(thiderman): It's practically pointless to always update all of them
-      // but this was the quickest way. In the future, we can probably just update
-      // either the match, or just the running tournament.
-      tournaments: [],
       // The main websocket object
       ws: null,
       reconnections: 0,
@@ -37,6 +31,7 @@ export default {
     // (Re-)Connect the websocket.
     // Is safe to run when the connection is already up - then it will be a noop.
     connect: function () {
+      let $vue = this
       if (!this.ws) {
         console.log('Setting up new websocket')
         this.$set(
@@ -79,13 +74,7 @@ export default {
           if (res.data) {
             if (res.data.tournaments) {
               // The main bulk update. This contains the latest state.
-              let tournaments = _.map(res.data.tournaments, Tournament.fromObject)
-              this.$set(this.$data, 'tournaments', tournaments)
-              console.log("data", this.$data.tournaments)
-
-              // _.each(tournaments, (tournament) => {
-              //   this.$broadcast(`tournament${tournament.id}`, tournament)
-              // })
+              $vue.$store.commit('updateAll', res.data.tournaments)
               return
             }
 

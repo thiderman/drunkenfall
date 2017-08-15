@@ -18,16 +18,21 @@
 </template>
 
 <script>
-import Tournament from '../models/Tournament'
-
 export default {
   name: 'Edit',
 
   data () {
     return {
-      tournament: new Tournament(),
       data: "",
     }
+  },
+
+  computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
   },
 
   methods: {
@@ -41,49 +46,19 @@ export default {
         console.error(`editing tournament ${this.tournament} failed`, err)
       })
     },
-    setData: function (tournament) {
-      console.log("setData tournament", tournament)
-      this.$set('tournament', Tournament.fromObject(tournament))
-      this.$set('data', JSON.stringify(tournament, null, 2))
-    }
   },
 
   created: function () {
     let customActions = {
-      getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" },
       edit: { method: "POST", url: "/api/towerfall/{id}/edit/" },
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)
   },
-
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-        this.setData(tournament)
-      })
-
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          this.setData(
-            res.data.tournament,
-          )
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-        )
-      }
+  watch: {
+    tournament (val) {
+      this.$set(this.$data, 'data', JSON.stringify(val, null, 2))
     }
-  }
+  },
 }
 </script>
 
