@@ -12,10 +12,13 @@
     <form v-on:submit="create">
       <label for="name">Name</label>
       <input class="text name" v-model="name" name="name" type="text" value="" placeholder="Name"/>
+
       <label for="id">Id</label>
       <input class="text id" v-model="id" name="id" type="text" value="" placeholder="ID"/>
+
       <label for="scheduled">Scheduled to start at</label>
-      <input class="text" v-date="scheduled"/>
+      <input class="text date" v-model="scheduled"/>
+
       <div class="fake-checkbox">
         <label for="checkbox">Fake</label>
         <input type="checkbox" id="checkbox" v-model="fake">
@@ -89,6 +92,15 @@ form {
 
   input.text {
     width: 11em;
+
+    &.name {
+      width: 22em;
+    }
+    &.date {
+      width: 22em;
+      text-align: center;
+      font-size: 1em;
+    }
   }
 
   input.submit {

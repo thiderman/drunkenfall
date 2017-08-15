@@ -41,4 +41,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../variables.scss";
+.gold, .silver, .bronze {
+  p {
+    color: #fff !important;
+  }
+}
 </style>
