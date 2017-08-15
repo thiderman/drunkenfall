@@ -90,6 +90,7 @@ header {
       text-decoration: none;
       margin: 10px auto;
       min-width: 100px;
+      transition: 0.3s;
 
       &.disabled {
         background-color: #444444;
