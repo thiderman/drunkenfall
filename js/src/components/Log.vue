@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="tournament">
     <header>
       <div class="content">
         <div class="title">
           {{tournament.name}} / Events
         </div>
       </div>
-      <div class="links" v-if="user.level(levels.judge)">
+      <div class="links" v-if="user.isJudge">
       </div>
       <div class="clear"></div>
     </header>
@@ -54,8 +54,8 @@ export default {
       events = _.reverse(events)
       events = _.map(events, Event.fromObject)
 
-      this.$set('events', events)
-    },
+      return events
+    }
   },
 
   created: function () {
@@ -65,36 +65,6 @@ export default {
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)
   },
-
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-        this.setData(tournament)
-      })
-
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          console.log(res)
-          this.setData(res.data.tournament)
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-          to.params.kind,
-          parseInt(to.params.match)
-        )
-      }
-    }
-  }
 }
 </script>
 
