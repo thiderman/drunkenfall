@@ -5,10 +5,10 @@
         <div class="title">Drunken TowerFall</div>
       </div>
       <div class="links">
-        <router-link :to="{name: 'new'}" v-if="user && user.level(levels.producer)">New Tournament</router-link>
-        <a @click="clear" v-if="user && user.level(levels.producer)">Clear tests</a>
+        <router-link :to="{name: 'new'}" v-if="user && user.isProducer">New Tournament</router-link>
+        <a @click="clear" v-if="user && user.isProducer">Clear tests</a>
         <router-link :to="{name: 'facebook'}" v-if="!user.authenticated">Facebook</router-link>
-        <a href="/api/facebook/login" v-if="user && user.level(levels.producer) && user.authenticated">Re-facebook</a>
+        <a href="/api/facebook/login" v-if="user && user.isProducer && user.authenticated">Re-facebook</a>
       </div>
       <div class="clear"></div>
     </header>
@@ -33,16 +33,10 @@
 <script>
 import _ from "lodash"
 import Tournament from "../models/Tournament.js"
-import * as levels from "../models/Level.js"
 
 export default {
   name: 'TournamentList',
 
-  data () {
-    return {
-      levels: levels,
-    }
-  },
   computed: {
     user () {
       return this.$store.state.user

@@ -1,3 +1,8 @@
+export const PRODUCER = 100
+export const COMMENTATOR = 50
+export const JUDGE = 30
+export const PLAYER = 10
+
 export default class User {
   static fromCookies (cookieHandler) {
     let u = new User()
@@ -12,7 +17,16 @@ export default class User {
     return u
   }
 
-  level (lvl) {
-    return this.userlevel >= lvl
+  isProducer () {
+    return this.userlevel >= PRODUCER
+  }
+  isCommentator () {
+    return this.userlevel >= COMMENTATOR
+  }
+  isJudge () {
+    return this.userlevel >= JUDGE
+  }
+  isPlayer () {
+    return this.userlevel >= PLAYER
   }
 };

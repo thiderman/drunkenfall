@@ -24,8 +24,6 @@ import PreviewPlayer from './PreviewPlayer.vue'
 import LivePlayer from './LivePlayer.vue'
 import Match from '../models/Match.js'
 import Tournament from '../models/Tournament.js'
-import * as levels from "../models/Level.js"
-import _ from 'lodash'
 
 export default {
   name: 'PostMatch',
@@ -40,10 +38,6 @@ export default {
       match: new Match(),
       tournament: new Tournament(),
       user: this.$root.user,
-      levels: levels,
-    }
-  },
-
   computed: {
     capitalizedKind: function () {
       return _.capitalize(this.match.kind)

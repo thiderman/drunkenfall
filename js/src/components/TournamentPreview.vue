@@ -5,10 +5,10 @@
         <div class="title">{{tournament.name}}</div>
       </div>
       <div class="links">
-        <a v-if="tournament.canStart && user.level(30)" @click="start">Start</a>
-        <a v-if="tournament.canStart && user.level(100)" @click="usurp">Usurp</a>
-        <router-link v-if="user.level(10)" :to="{ name: 'join', params: { tournament: tournament.id }}">Join</router-link>
-        <router-link v-if="user.level(50)" :to="{ name: 'participants', params: { tournament: tournament.id }}">Participants</router-link>
+        <a v-if="tournament.canStart && user.isCommentator" @click="start">Start</a>
+        <a v-if="tournament.canStart && user.isProducer" @click="usurp">Usurp</a>
+        <router-link v-if="user.isPlayer" :to="{ name: 'join', params: { tournament: tournament.id }}">Join</router-link>
+        <router-link v-if="user.isJudge" :to="{ name: 'participants', params: { tournament: tournament.id }}">Participants</router-link>
       </div>
       <div class="clear"></div>
     </header>
@@ -39,9 +39,6 @@
 </template>
 
 <script>
-import Tournament from '../models/Tournament'
-import User from '../models/User'
-import * as levels from "../models/Level"
 import moment from 'moment'
 import _ from 'lodash'
 
@@ -50,11 +47,19 @@ export default {
 
   data () {
     return {
-      tournament: new Tournament(),
-      user: new User(),
-      levels: levels,
       countdown: "00:00:00",
     }
+  },
+
+  computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    user () {
+      return this.$store.state.user
+    },
   },
 
   methods: {

@@ -5,23 +5,28 @@
         <div class="title">{{tournament.name}}</div>
       </div>
       <div class="links">
-        <router-link :to="{ name: 'join', params: { tournament: tournament.id }}"
-                     v-if="!tournament.isEnded">Join</router-link>
-
         <div class="action" @click="start"
-          v-if="user.level(levels.judge) && tournament.canStart">Start</div>
+          v-if="user.isJudge && tournament.canStart">Start</div>
         <div class="action" @click="next"
-          v-if="user.level(levels.judge) && tournament.isRunning">Next match</div>
+          v-if="user.isJudge && tournament.isRunning">Next match</div>
         <div class="action" @click="reshuffle"
-          v-if="user.level(levels.producer) && tournament.canShuffle">Reshuffle</div>
-        <a v-link="{ name: 'credits', params: { tournament: tournament.id }}">Credits</a>
+          v-if="user.isProducer && tournament.canShuffle">Reshuffle</div>
         <div class="action" @click="log"
-          v-if="user.level(levels.producer)">Log</div>
+          v-if="user.isProducer">Log</div>
+
+        <router-link :to="{ name: 'credits', params: { tournament: tournament.id }}">
+          Roll credits
+        </router-link>
+
+        <router-link :to="{ name: 'join', params: { tournament: tournament.id }}"
+          v-if="!tournament.isEnded">
+          Join
+        </router-link>
       </div>
       <div class="clear"></div>
     </header>
 
-    <div class="subheader" v-if="user.level(levels.commentator) && nextMatch">
+    <div class="subheader" v-if="user.isCommentator && nextMatch && !tournament.isEnded">
       <div v-if="!nextMatch.isScheduled">
         <p>
           Pause until
@@ -107,9 +112,6 @@
 
 <script>
 import MatchOverview from './MatchOverview'
-import Tournament from '../models/Tournament'
-import * as levels from "../models/Level"
-import User from '../models/User'
 import Match from '../models/Match'
 import _ from 'lodash'
 
@@ -120,14 +122,25 @@ export default {
     MatchOverview
   },
 
-  props: {
-    tournament: new Tournament(),
-    user: new User(),
-    levels: levels,
-    selected: [],
-  },
-
   computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    user () {
+      return this.$store.state.user
+    },
+    match () {
+      let kind = this.$route.params.kind
+      let idx = this.$route.params.match
+
+      if (kind === 'final') {
+        return this.tournament.final
+      }
+      kind = kind + 's'
+      return this.tournament[kind][idx]
+    },
     nextMatch: function () {
       let kind = this.tournament.current.kind
       let idx = this.tournament.current.index
@@ -138,7 +151,6 @@ export default {
         kind = 'semis'
       }
 
-      console.log("kind", kind)
       let m
       if (kind === 'final') {
         m = Match.fromObject(this.tournament[kind])

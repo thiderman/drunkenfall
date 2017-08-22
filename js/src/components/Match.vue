@@ -6,7 +6,7 @@
           {{tournament.name}} / {{capitalizedKind}} {{match.index +1}} / Round {{match.commits.length + 1}}
         </div>
       </div>
-      <div class="links" v-if="user.level(levels.judge)">
+      <div class="links" v-if="user.isJudge">
         <a v-if="match.canStart" @click="start">Start match</a>
 
         <a v-if="match.isRunning" @click="commit"
@@ -20,16 +20,15 @@
       <div class="clear"></div>
     </header>
 
-    <div class="control" v-if="user.level(levels.judge)">
+    <div class="control" v-if="user.isJudge">
       <template v-for="(player, index) in match.players" ref="players">
-        <control-player :index="index-1" :player="player" :match="match"
-                        :downs="0" :ups="0"></control-player>
+        <control-player :index="index"></control-player>
       </template>
     </div>
 
-    <div class="control" v-if="!user.level(levels.judge)">
+    <div class="control" v-if="!user.isJudge">
       <template v-if="!match.isStarted" v-for="(player, index) in match.players" ref="players">
-        <preview-player :index="index-1" :player="player" :match="match"></preview-player>
+        <preview-player :index="index" :player="player" :match="match"></preview-player>
       </template>
 
       <template v-if="match.isStarted" v-for="(player, index) in match.players" ref="players">
@@ -47,7 +46,6 @@ import PreviewPlayer from './PreviewPlayer.vue'
 import LivePlayer from './LivePlayer.vue'
 import Match from '../models/Match.js'
 import Tournament from '../models/Tournament.js'
-import * as levels from "../models/Level.js"
 import _ from 'lodash'
 
 export default {
@@ -56,12 +54,6 @@ export default {
     ControlPlayer,
     PreviewPlayer,
     LivePlayer,
-  },
-
-  data () {
-    return {
-      levels: levels,
-    }
   },
 
   computed: {

@@ -18,36 +18,28 @@
 </template>
 
 <script>
-import Tournament from '../models/Tournament.js'
 import BasicEvent from '../components/events/BasicEvent.vue'
 import Event from '../models/Event.js'
-import * as levels from "../models/Level.js"
 import _ from 'lodash'
 
 export default {
   name: 'Log',
-
-  data () {
-    return {
-      tournament: new Tournament(),
-      user: this.$root.user,
-      levels: levels,
-      events: [],
-    }
-  },
 
   components: {
     BasicEvent,
   },
 
   computed: {
-  },
-
-  methods: {
-    setData: function (tournament) {
+    user () {
+      return this.$store.state.user
+    },
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    events () {
       let events
-      this.$set('tournament', Tournament.fromObject(tournament))
-
       events = this.tournament.events
       _.each(this.tournament.tryouts, (tryout) => {
         events = _.concat(events, tryout.events)

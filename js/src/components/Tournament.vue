@@ -15,7 +15,6 @@
 <script>
 import TournamentOverview from '../components/TournamentOverview'
 import TournamentPreview from '../components/TournamentPreview'
-import * as levels from "../models/Level"
 import _ from 'lodash'
 
 export default {
@@ -29,8 +28,6 @@ export default {
   data () {
     return {
       id: null,
-      user: this.$root.user,
-      levels: levels,
     }
   },
 
@@ -39,6 +36,9 @@ export default {
       return this.$store.getters.getTournament(
         this.$route.params.tournament
       )
+    },
+    user () {
+      return this.$store.state.user
     },
     runnerups: function () {
       let t = this.tournament
