@@ -25,7 +25,7 @@
     </div>
 
     <h1 v-if="tournaments.length === 0">
-      Tournaments will appear here soon! &lt;3
+      Loading... &lt;3
     </h1>
   </div>
 </template>
