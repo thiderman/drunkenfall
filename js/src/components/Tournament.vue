@@ -1,14 +1,7 @@
 <template>
   <div>
-    <tournament-preview v-if="tournament && !tournament.isStarted"
-                        :tournament="tournament"
-                        :user="user"
-                        :levels="levels"></tournament-preview>
-    <tournament-overview v-if="tournament && tournament.isStarted"
-                         :tournament="tournament"
-                         :user="user"
-                         :levels="levels"
-                         :selected="[]"></tournament-overview>
+    <tournament-preview v-if="tournament && !tournament.isStarted"></tournament-preview>
+    <tournament-overview v-if="tournament && tournament.isStarted"></tournament-overview>
   </div>
 </template>
 
