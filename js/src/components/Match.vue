@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="tournament">
     <header>
       <div class="content">
         <div class="title">
@@ -12,6 +12,11 @@
         <a v-if="match.isRunning" @click="commit"
           v-bind:class="{'disabled': !can_commit}">End round</a>
         <a v-if="match.canEnd" @click="end">End match</a>
+        <router-link
+          v-if="match.isEnded"
+          :to="{ name: 'tournament', params: { tournament: tournament.id }}">
+          Back
+        </router-link>
 
         <a v-if="match.isRunning" @click="reset"
           class="danger">Reset match</a>
@@ -75,53 +80,53 @@ export default {
       kind = kind + 's'
       return this.tournament[kind][idx]
     },
+    round () {
+      if (!this.match.commits) {
+        return 1
+      }
+      return this.match.commits.length + 1
+    },
+    match_id () {
+      return {
+        id: this.tournament.id,
+        kind: this.match.kind,
+        index: this.match.index
+      }
+    },
     can_commit: function () {
       return true
     },
-    capitalizedKind: function () {
-      return _.capitalize(this.match.kind)
-    }
   },
 
   methods: {
     commit: function () {
       // TODO this could potentially be a class
       let payload = {
-        'state': _.map(this.$refs.players, (controlPlayer) => {
+        'state': _.map(this.$children, (controlPlayer) => {
           return _.pick(controlPlayer, ['ups', 'downs', 'shot', 'reason'])
         })
       }
 
       console.log(payload)
-      this.api.commit({ id: this.tournament.id, kind: this.match.kind, index: this.match.index }, payload).then(function (res) {
-        console.log(res)
-        let data = res.json()
-        this.$set('match', Match.fromObject(data.match))
-
-        _.each(this.$refs.players, (controlPlayer) => { controlPlayer.reset() })
+      this.api.commit(this.match_id, payload).then(function (res) {
+        console.log("Round committed.")
+        _.each(this.$children, (controlPlayer) => { controlPlayer.reset() })
       }, function (res) {
         console.log('error when setting score')
         console.log(res)
       })
     },
-
-    refresh: function () {
-      // Hax to make vue refresh the entire page.
-      // Since nothing on this page is properly bound to components right now
-      // the updates won't trigger properly.
-      this.$set('updated', Date.now())
-    },
     end: function () {
-      this.api.end({ id: this.tournament.id, kind: this.match.kind, index: this.match.index }).then(function (res) {
+      this.api.end(this.match_id).then(function (res) {
         console.log(res)
-        this.$route.router.push('/towerfall/' + this.tournament.id + '/')
+        this.$router.push('/towerfall/' + this.tournament.id + '/')
       }, function (res) {
         console.log('error when getting tournament')
         console.log(res)
       })
     },
     start: function () {
-      this.api.start({ id: this.tournament.id, kind: this.match.kind, index: this.match.index }).then(function (res) {
+      this.api.start(this.match_id).then(function (res) {
         console.log(res)
         this.setData(
           res.data.tournament,
@@ -134,7 +139,7 @@ export default {
       })
     },
     reset: function () {
-      this.api.reset({ id: this.tournament.id, kind: this.match.kind, index: this.match.index }).then(function (res) {
+      this.api.reset(this.match_id).then(function (res) {
         console.log(res)
         this.setData(
           res.data.tournament,
