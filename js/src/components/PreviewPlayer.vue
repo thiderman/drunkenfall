@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'ControlPlayer',
+  name: 'PreviewPlayer',
 
   props: {
     player: {},
