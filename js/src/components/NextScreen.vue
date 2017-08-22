@@ -21,7 +21,7 @@
 
     <div class="players">
       <template v-for="(player, index) in playersReversed" ref="players">
-        <preview-player :index="index + 1" :player="player" :match="match">
+        <preview-player :index="index + 1" :player="player" :match="match"></preview-player>
       </template>
     </div>
   </div>

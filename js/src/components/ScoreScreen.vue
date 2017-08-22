@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for="(player, index) in match.players" ref="players">
-      <live-player :index="index + 1" :player="player" :match="match">
+      <live-player :index="index + 1" :player="player" :match="match"></live-player>
     </template>
     <div class="clear"></div>
   </div>

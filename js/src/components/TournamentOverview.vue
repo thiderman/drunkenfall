@@ -50,7 +50,7 @@
       <h3>Tryouts</h3>
       <div class="matches">
         <template v-for="m in tournament.tryouts">
-          <match-overview :match="m" :class="'match ' + m.kind">
+          <match-overview :match="m" :class="'match ' + m.kind"></match-overview>
         </template>
       </div>
       <div class="clear"></div>
@@ -60,7 +60,7 @@
       <h3>Semi-finals</h3>
       <div class="matches">
         <template v-for="m in tournament.semis">
-          <match-overview :match="m" :class="'match ' + m.kind">
+          <match-overview :match="m" :class="'match ' + m.kind"></match-overview>
         </template>
       </div>
       <div class="clear"></div>
@@ -99,7 +99,7 @@
     <div class="category final">
       <h3>Final</h3>
       <div class="matches">
-        <match-overview :match="tournament.final" class="match final">
+        <match-overview :match="tournament.final" class="match final"></match-overview>
       </div>
     </div>
   </div>
