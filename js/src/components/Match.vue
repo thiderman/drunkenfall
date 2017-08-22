@@ -3,7 +3,7 @@
     <header>
       <div class="content">
         <div class="title">
-          {{tournament.name}} / {{capitalizedKind}} {{match.index +1}} / Round {{match.commits.length + 1}}
+          {{tournament.name}} / {{match.title}} / Round {{round}}
         </div>
       </div>
       <div class="links" v-if="user.isJudge">

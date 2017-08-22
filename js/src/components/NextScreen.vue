@@ -3,7 +3,7 @@
     <header>
       <div class="content">
         <div class="title">
-          {{tournament.name}} / {{capitalizedKind}} {{match.index +1}}
+          {{tournament.name}} / {{match.title}}
         </div>
       </div>
       <div class="links">
@@ -54,9 +54,6 @@ export default {
     playersReversed: function () {
       return _.reverse(this.match.players)
     },
-    capitalizedKind: function () {
-      return _.capitalize(this.match.kind)
-    }
   },
 
   methods: {

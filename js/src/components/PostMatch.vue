@@ -3,10 +3,10 @@
     <header>
       <div class="content">
         <div class="title">
-          {{tournament.name}} / {{capitalizedKind}} {{match.index +1}}
+          {{tournament.name}} / {{match.title}}
         </div>
       </div>
-      <div class="links" v-if="user.level(levels.judge)">
+      <div class="links" v-if="user.isJudge">
       </div>
       <div class="clear"></div>
     </header>
@@ -38,9 +38,6 @@ export default {
       match: new Match(),
       tournament: new Tournament(),
       user: this.$root.user,
-  computed: {
-    capitalizedKind: function () {
-      return _.capitalize(this.match.kind)
     }
   },
 

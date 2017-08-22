@@ -28,6 +28,10 @@ export default class Match {
   get end () { return this._end }
   set end (value) { this._end = value }
 
+  get title () {
+    return _.capitalize(this.kind) + " " + (this.index + 1)
+  }
+
   get isStarted () {
     // match is started if 'started' is defined and NOT equal to go's zero date
     return !isGoZeroDateOrFalsy(this.started)
