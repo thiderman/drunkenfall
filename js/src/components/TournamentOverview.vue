@@ -194,7 +194,7 @@ export default {
         this.api.next({ id: this.tournament.id }).then((res) => {
           console.debug("next response:", res)
           let j = res.json()
-          this.$route.router.push('/towerfall' + j.redirect)
+          this.$router.push('/towerfall' + j.redirect)
         }, (err) => {
           console.error(`next for ${this.tournament} failed`, err)
         })
@@ -216,7 +216,12 @@ export default {
       }
     },
     log: function () {
-      this.$route.router.go('log/')
+      this.$router.push({
+        name: "log",
+        params: {
+          tournament: this.tournament.id
+        }
+      })
     },
     setTime: function (x) {
       this.api.setTime({ id: this.tournament.id, time: x }).then((res) => {
