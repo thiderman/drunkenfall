@@ -16,17 +16,17 @@
        <div ref="name">{{player.displayName}}</div>
      </div>
 
-     <div v-if="match.length == 10" class="scores">
+     <div v-if="match.end == 10" class="scores">
        <div v-for="n in 10"
-         :class="bullet_class(player, index, n+1)">
-         <p>{{n+1}}</p>
+         :class="bulletClass(player, index, n)">
+         <p>{{n}}</p>
        </div>
      </div>
 
-     <div v-if="match.length == 20" class="scores final">
+     <div v-if="match.end == 20" class="scores final">
        <div v-for="n in 20"
-         :class="bullet_class(player, index, n+1)">
-         <p>{{n+1}}</p>
+         :class="bulletClass(player, index, n)">
+         <p>{{n}}</p>
        </div>
      </div>
 
@@ -43,35 +43,41 @@ export default {
   name: 'ControlPlayer',
 
   props: {
-    player: {},
-    match: {},
     index: 0,
-    shot: false,
-    ups: 0,
-    downs: 0,
-    reason: ''
+  },
+
+  data () {
+    return {
+      shot: false,
+      ups: 0,
+      downs: 0,
+      reason: ''
+    }
   },
 
   computed: {
-    classes: function () {
-      if (!this.match.isEnded) {
-        if (this.index === 0) {
-          return 'gold'
-        } else if (this.index === 1) {
-          return 'silver'
-        } else if (this.index === 2 && this.match.kind === 'final') {
-          return 'bronze'
-        }
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    match () {
+      let kind = this.$route.params.kind
+      let idx = this.$route.params.match
 
-        return 'out'
+      if (kind === 'final') {
+        return this.tournament.final
       }
-
-      return this.player.preferred_color
+      kind = kind + 's'
+      return this.tournament[kind][idx]
+    },
+    player () {
+      return this.match.players[this.index]
     },
   },
 
   methods: {
-    bullet_class: function (player, playerIndex, n) {
+    bulletClass: function (player, playerIndex, n) {
       if (n > player.kills && n <= (player.kills + this.ups)) {
         return 'up'
       } else if (n === player.kills && this.downs === -1) {
@@ -87,7 +93,6 @@ export default {
         return
       }
 
-      console.log('setting score ' + playerIndex + ' - ' + score)
       if (score === 1 && this.ups < 3) {
         // We can only allow up to three kills per round...
         this.ups += 1
