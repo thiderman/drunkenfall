@@ -3,22 +3,20 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
+	"sync"
 	"time"
 
+	"github.com/drunkenfall/drunkenfall/websockets"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-
-	"fmt"
-	"strings"
-	"sync"
-
-	"github.com/drunkenfall/drunkenfall/websockets"
 	"golang.org/x/net/websocket"
 )
 
