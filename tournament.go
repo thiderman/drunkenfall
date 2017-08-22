@@ -108,8 +108,6 @@ func (t *Tournament) Persist() error {
 		return errors.New("no database instantiated")
 	}
 
-	go t.server.SendWebsocketUpdate()
-
 	return t.db.SaveTournament(t)
 }
 
@@ -689,6 +687,7 @@ func SetupFakeTournament(r *http.Request, s *Server) *Tournament {
 		t.AddPlayer(p)
 	}
 
+	t.Persist()
 	return t
 }
 

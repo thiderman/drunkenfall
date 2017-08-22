@@ -2,9 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/boltdb/bolt"
 	"log"
 	"strings"
+
+	"github.com/boltdb/bolt"
 )
 
 // Database is the persisting class
@@ -84,6 +85,7 @@ func (d *Database) SaveTournament(t *Tournament) error {
 		return nil
 	})
 
+	go d.Server.SendWebsocketUpdate()
 	return ret
 }
 
@@ -213,6 +215,8 @@ func (d *Database) ClearTestTournaments() error {
 		})
 		return err
 	})
+
+	go d.Server.SendWebsocketUpdate()
 
 	return err
 }
