@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="tournament">
     <header v-if="user.authenticated">
       <div class="content">
         <div class="title">{{tournament.name}}</div>
@@ -7,8 +7,15 @@
       <div class="links">
         <a v-if="tournament.canStart && user.isCommentator" @click="start">Start</a>
         <a v-if="tournament.canStart && user.isProducer" @click="usurp">Usurp</a>
-        <router-link v-if="user.isPlayer" :to="{ name: 'join', params: { tournament: tournament.id }}">Join</router-link>
-        <router-link v-if="user.isJudge" :to="{ name: 'participants', params: { tournament: tournament.id }}">Participants</router-link>
+
+        <router-link v-if="user.isPlayer"
+          :to="{ name: 'join', params: { tournament: tournament.id }}">
+          Join
+        </router-link>
+        <router-link v-if="user.isJudge"
+          :to="{ name: 'participants', params: { tournament: tournament.id }}">
+          Participants
+        </router-link>
       </div>
       <div class="clear"></div>
     </header>
@@ -31,7 +38,7 @@
 
       <div class="ribbon">
         <strong class="ribbon-content">
-          {{ countdown }}
+          {{ countdown.time }}
         </strong>
       </div>
     </div>
@@ -39,23 +46,24 @@
 </template>
 
 <script>
-import moment from 'moment'
-import _ from 'lodash'
+import {Countdown} from '../models/Timer.js'
 
 export default {
   name: 'TournamentPreview',
 
   data () {
     return {
-      countdown: "00:00:00",
+      countdown: new Countdown(),
     }
   },
 
   computed: {
     tournament () {
-      return this.$store.getters.getTournament(
+      let t = this.$store.getters.getTournament(
         this.$route.params.tournament
       )
+      this.countdown.start(t.scheduled)
+      return t
     },
     user () {
       return this.$store.state.user
@@ -101,57 +109,9 @@ export default {
   },
 
   created: function () {
-    // API definitions
-    console.debug("Creating API resource")
-    let customActions = {
+    this.api = this.$resource("/api/towerfall", {}, {
       start: { method: "GET", url: "/api/towerfall{/id}/start/" },
       usurp: { method: "GET", url: "/api/towerfall{/id}/usurp/" },
-      getData: { method: "GET", url: "/api/towerfall/tournament/{id}/" }
-    }
-    this.api = this.$resource("/api/towerfall", {}, customActions)
-
-    // Also create the clock countdown
-    this.$set(this.$data, 'countdown', '00:00:00')
-    this.$watch('tournament', (newVal) => {
-      var eventTime = newVal.scheduled.unix()
-      var currentTime = moment().unix()
-      var diffTime = eventTime - currentTime
-      var d = moment.duration(diffTime, 'seconds') // duration
-      var interval = 1000
-      var intervalId = 0
-
-      function pad (n, width) {
-        n = n + ''
-        return n.length >= width ? n : new Array(width - n.length + 1).join("0") + n
-      }
-
-      intervalId = setInterval(() => {
-        d = moment.duration(d - interval, 'milliseconds')
-
-        // NOTE: Due to this messing with the chroma-key on stream, we're removing this! Byeeeeeeeeeeeeeeeee!
-        // During the last minute, make sure to add the pulse class.
-        // Do so for every second, so that reloads will make sense as well.
-        // if (d.hours() === 0 && d.minutes() === 0) {
-        //   document.getElementsByTagName("body")[0].className = "red-pulse"
-        // }
-
-        // If we're ever at a negative interval, stop immediately.
-        // Technically we probably only really need the seconds here, but
-        // if we use all of them any future cases will be fixed immediately.
-        if (_.some([d.hours(), d.minutes(), d.seconds()], (n) => n < 0)) {
-          console.log("Closing interval.")
-          document.getElementsByTagName("body")[0].className = ""
-          clearInterval(intervalId)
-          return
-        }
-
-        this.$set(
-          'countdown',
-          pad(d.hours(), 2) + ":" +
-          pad(d.minutes(), 2) + ":" +
-          pad(d.seconds(), 2)
-        )
-      }, interval)
     })
   }
 }
