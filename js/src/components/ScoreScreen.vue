@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-if="tournament">
     <template v-for="(player, index) in match.players" ref="players">
-      <live-player :index="index + 1" :player="player" :match="match"></live-player>
+      <live-player :index="index" :player="player" :match="match"></live-player>
     </template>
     <div class="clear"></div>
   </div>
@@ -9,8 +9,6 @@
 
 <script>
 import LivePlayer from './LivePlayer.vue'
-import Match from '../models/Match.js'
-import Tournament from '../models/Tournament.js'
 
 export default {
   name: 'ScoreScreen',
@@ -18,82 +16,27 @@ export default {
     LivePlayer,
   },
 
-  data () {
-    return {
-      match: new Match(),
-      tournament: new Tournament(),
-      user: this.$root.user,
-    }
-  },
-
-  methods: {
-    setData: function (tournament) {
-      console.log("setData tournament", tournament)
-      let kind = tournament.current.kind
-      let index = tournament.current.index
-      let match
-      if (kind === 'tryout') {
-        kind = 'tryouts'
-      } else if (kind === 'semi') {
-        kind = 'semis'
-      }
+  computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    // TODO: We're missing the old hack that only set the match once
+    // it was started. Right now, this will move as soon as the match
+    // is ended. Presumably this will be fixed once the tournament
+    // match structure is flattened.
+    match () {
+      let kind = this.tournament.current.kind
+      let idx = this.tournament.current.index
 
       if (kind === 'final') {
-        match = Match.fromObject(tournament[kind])
-      } else {
-        match = Match.fromObject(tournament[kind][index])
+        return this.tournament.final
       }
-
-      // HACK(thiderman): So, this is pretty nasty, but it works. We don't
-      // want this screen to update to the new match until it is started, but
-      // we also at the same time want to show the /next/ screen with the next
-      // match data. To avoid this, we just simply don't set the data on this
-      // until the match has started.
-      // This will break if we have to reload the page since there will be no
-      // previous state.
-      if (match.isStarted) {
-        this.$set('match', match)
-        this.$set('tournament', Tournament.fromObject(tournament))
-      }
-    }
+      kind = kind + 's'
+      return this.tournament[kind][idx]
+    },
   },
-
-  created: function () {
-    console.debug("Creating API resource")
-    let customActions = {
-      getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }
-    }
-    this.api = this.$resource("/api/towerfall", {}, customActions)
-  },
-
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-        this.setData(tournament)
-      })
-
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          this.setData(
-            res.data.tournament,
-          )
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-        )
-      }
-    }
-  }
 }
 </script>
 

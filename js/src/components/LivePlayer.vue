@@ -1,51 +1,29 @@
 <template>
   <div :class="'player ' + player.color">
     <div class="section">
-      <h1>P{{index}}</h1>
+      <h1>P{{index+1}}</h1>
     </div>
 
     <div class="section">
-      <h2>{{player.kills}} <span>/ {{match.length}}</span></h2>
-      <h3>kills</h3>
+      <h2>{{player.kills}} <span>/ {{match.end}}</span></h2>
     </div>
 
     <div class="section">
-      <h2>{{player.shots}}</h2>
-      <h3>shots</h3>
+      <h2>{{player.shots}} <span>{{player.shots | pluralize('shot')}}</span></h2>
     </div>
 
-    <div class="section">
-      <img :alt="player.displayName" :src="player.avatar"/>
-    </div>
+    <img :alt="player.displayName" :src="player.avatar"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ControlPlayer',
+  name: 'LivePlayer',
 
   props: {
     player: {},
     match: {},
     index: 0,
-  },
-
-  computed: {
-    classes: function () {
-      if (!this.match.isEnded) {
-        if (this.index === 0) {
-          return 'gold'
-        } else if (this.index === 1) {
-          return 'silver'
-        } else if (this.index === 2 && this.match.kind === 'final') {
-          return 'bronze'
-        }
-
-        return 'out'
-      }
-
-      return this.player.preferred_color
-    }
   },
 
   created: function () {
@@ -58,14 +36,22 @@ export default {
 @import "../variables.scss";
 
 .player {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   float: left;
   height: 100%;
   width: 25%;
   text-align: center;
   color: white;
 
+  &:nth-child(1) {left: 0}
+  &:nth-child(2) {left: 25%}
+  &:nth-child(3) {left: 50%}
+  &:nth-child(4) {left: 75%}
+
   .section {
-    height: 25%;
+    height: 21vh;
   }
 
   &.green  {background-color: $green-bg;}
@@ -101,10 +87,14 @@ export default {
   }
 
   img {
+    position: absolute;
+    bottom: 1.2%;
+    right: 4%;
+    left:  4%;
     display: block;
     object-fit: cover;
-    width:  20vw;
-    height: 20vw;
+    width:  92%;
+    max-height: 33vh;
     margin: 0px auto;
     box-shadow: -1px -1px 6px rgba(0,0,0,0.5);
     background-color: rgba(10,12,14,0.3);
