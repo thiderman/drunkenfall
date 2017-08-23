@@ -15,6 +15,7 @@ import TournamentView from './components/Tournament.vue'
 import New from './components/New.vue'
 import Join from './components/Join.vue'
 import Participants from './components/Participants.vue'
+import Runnerups from './components/Runnerups.vue'
 import Edit from './components/Edit.vue'
 import Match from './components/Match.vue'
 import PostMatch from './components/PostMatch.vue'
@@ -77,6 +78,11 @@ var router = new Router({
       path: '/towerfall/:tournament/participants/',
       name: 'participants',
       component: Participants
+    },
+    {
+      path: '/towerfall/:tournament/runnerups/',
+      name: 'runnerups',
+      component: Runnerups
     },
     {
       path: '/towerfall/:tournament/edit/',

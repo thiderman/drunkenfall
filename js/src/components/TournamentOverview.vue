@@ -69,37 +69,6 @@
         </template>
       </div>
       <div class="clear"></div>
-
-      <div v-if="runnerups.length > 0 && user.level(levels.judge)">
-        <div class="selected-runnerups" v-if="selected.length > 0">
-          <h3>Selected</h3>
-          <template v-for="p in selected">
-            <div @click="selectRunnerup(p)" class="runnerup">
-              <p class="name">{{p.displayName}}</p>
-              <div class="clear"></div>
-            </div>
-          </template>
-          <div @click="backfillSemis()" class="button">
-            Send
-          </div>
-        </div>
-
-        <h3>Runnerups</h3>
-        <div class="runnerups">
-          <template v-for="player in runnerups">
-            <div @click="selectRunnerup(player)" class="runnerup">
-              <p class="name">{{player.displayName}}</p>
-              <p class="score">
-                <b>{{player.score}}</b> points
-                /
-                <b>{{player.matches}}</b> matches
-              </p>
-              <div class="clear"></div>
-            </div>
-          </template>
-        </div>
-      </div>
-
     </div>
     <div class="category final">
       <h3>Final</h3>
@@ -250,32 +219,15 @@ export default {
     isSelected: function (p) {
       return _.find(this.selected, p) !== undefined
     },
-    backfillSemis: function () {
-      let b = _.map(this.selected, 'person.id').join(',')
-      console.log(b)
-
-      this.api.backfill({id: this.tournament.id}, b).then((res) => {
-        console.debug("backfill response:", res)
-        let j = res.json()
-        console.log('Redirect to /towerfall' + j.redirect)
-        // this.$route.router.push('/towerfall' + j.redirect)
-      }, (err) => {
-        console.error(`backfill for ${this.tournament} failed`, err)
-      })
-    }
   },
 
   created: function () {
-    console.debug("Creating API resource")
-    let customActions = {
+    this.api = this.$resource("/api/towerfall", {}, {
       start: { method: "GET", url: "/api/towerfall{/id}/start/" },
       next: { method: "GET", url: "/api/towerfall{/id}/next/" },
       reshuffle: { method: "GET", url: "/api/towerfall{/id}/reshuffle/" },
       setTime: { method: "GET", url: "/api/towerfall{/id}/time{/time}" },
-      backfill: { method: "POST", url: "/api/towerfall{/id}/backfill/" },
-      getData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }
-    }
-    this.api = this.$resource("/api/towerfall", {}, customActions)
+    })
   },
 }
 </script>

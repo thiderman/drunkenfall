@@ -37,7 +37,6 @@ export default {
   data () {
     return {
       people: [],
-      approve: false,
     }
   },
 
