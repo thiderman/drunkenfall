@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="tournament">
     <header>
       <div class="content">
         <div class="title">Drunken TowerFall / {{tournament.name}} / Participants</div>
@@ -36,7 +36,6 @@ export default {
 
   data () {
     return {
-      tournament: new Tournament(),
       people: [],
       approve: false,
     }
@@ -44,10 +43,7 @@ export default {
 
   methods: {
     toggle (e) {
-      e.preventDefault()
-      console.log("doing toggle")
       let person = e.srcElement
-      console.log(person)
       this.api.toggle({ id: this.tournament.id, person: person.id }).then((res) => {
         console.log("join response:", res)
         var j = res.json()
@@ -63,6 +59,14 @@ export default {
   },
 
   computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    user () {
+      return this.$store.state.user
+    },
     joined () {
       return _.sortBy(this.tournament.players, ['person.name'])
     },
@@ -85,42 +89,16 @@ export default {
       people: { method: "GET", url: "/api/towerfall/people/" },
     }
     this.api = this.$resource("/api/towerfall", {}, customActions)
-  },
 
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-        this.setData(tournament)
-      })
-
-      this.api.people().then(function (res) {
-        this.$set('people', _.sortBy(res.data.people, ['name']))
-      }, function (res) {
-        console.log('error when getting people')
-        console.log(res)
-      })
-
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          this.setData(
-            res.data.tournament,
-          )
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-        )
-      }
-    }
+    // TODO: It could be that this makes more sense to have as
+    // something in the Vuex storage.
+    this.api.people().then(function (res) {
+      console.log(res)
+      this.$set(this.$data, 'people', _.sortBy(JSON.parse(res.data).people, ['name']))
+    }, function (res) {
+      console.log('error when getting people')
+      console.log(res)
+    })
   }
 }
 </script>

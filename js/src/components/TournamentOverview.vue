@@ -18,9 +18,9 @@
           Roll credits
         </router-link>
 
-        <router-link :to="{ name: 'join', params: { tournament: tournament.id }}"
-          v-if="!tournament.isEnded">
-          Join
+        <router-link :to="{ name: 'participants', params: { tournament: tournament.id }}"
+          v-if="user.isProducer && !tournament.isEnded">
+          Participants
         </router-link>
       </div>
       <div class="clear"></div>
