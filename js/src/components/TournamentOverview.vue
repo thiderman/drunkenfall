@@ -14,13 +14,19 @@
         <div class="action" @click="log"
           v-if="user.isProducer">Log</div>
 
-        <router-link :to="{ name: 'credits', params: { tournament: tournament.id }}">
+        <router-link :to="{ name: 'credits', params: { tournament: tournament.id }}"
+          v-if="user.isProducer && tournament.isEnded">
           Roll credits
         </router-link>
 
         <router-link :to="{ name: 'participants', params: { tournament: tournament.id }}"
-          v-if="user.isProducer && !tournament.isEnded">
+          v-if="user.isProducer && canParticipants">
           Participants
+        </router-link>
+
+        <router-link :to="{ name: 'runnerups', params: { tournament: tournament.id }}"
+          v-if="user.isCommentator && shouldBackfill">
+          Backfill semis
         </router-link>
       </div>
       <div class="clear"></div>
@@ -109,6 +115,18 @@ export default {
       }
       kind = kind + 's'
       return this.tournament[kind][idx]
+    },
+    shouldBackfill () {
+      let c = this.tournament.current
+      let ps = _.sumBy(this.tournament.semis, (m) => { return m.players.length })
+
+      if (c.kind === 'semi' && c.index === 0 && ps < 8) {
+        return true
+      }
+      return false
+    },
+    canParticipants () {
+      return this.tournament.current.kind === 'tryout'
     },
     nextMatch: function () {
       let kind = this.tournament.current.kind
