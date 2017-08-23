@@ -118,7 +118,7 @@ export default {
     },
   },
 
-  created: function () {
+  created () {
     this.api = this.$resource("/api/towerfall", {}, {
       toggle: { method: "GET", url: "/api/towerfall/{id}/toggle/{person}" },
       people: { method: "GET", url: "/api/towerfall/people/" },

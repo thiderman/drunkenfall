@@ -27,7 +27,7 @@ export default {
   },
 
   computed: {
-    showName: function () {
+    showName () {
       // Don't show the first name tag super ribbon if the player name is the
       // same as that.
       if (this.player.firstName.toLowerCase() === this.player.displayName.toLowerCase()) {

@@ -33,7 +33,7 @@ export default {
     user () {
       return this.$store.state.user
     },
-    runnerups: function () {
+    runnerups () {
       let t = this.tournament
 
       if (!t.runnerups) {
@@ -47,7 +47,7 @@ export default {
   },
 
   methods: {
-    start: function () {
+    start () {
       if (this.tournament) {
         this.api.start({ id: this.tournament.id }).then((res) => {
           console.log("start response:", res)
@@ -60,7 +60,7 @@ export default {
         console.error("start called with no tournament")
       }
     },
-    next: function () {
+    next () {
       if (this.tournament) {
         this.api.next({ id: this.tournament.id }).then((res) => {
           console.debug("next response:", res)
@@ -75,7 +75,7 @@ export default {
     }
   },
 
-  created: function () {
+  created () {
     console.debug("Creating API resource")
     let customActions = {
       start: { method: "GET", url: "/api/towerfall{/id}/start/" },

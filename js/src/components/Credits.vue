@@ -96,7 +96,7 @@ export default {
     }
   },
 
-  created: function () {
+  created () {
     console.debug("Creating API resource")
     let customActions = {
       getCredits: { method: "GET", url: "/api/towerfall{/id}/credits/" }
@@ -107,7 +107,7 @@ export default {
     this.producerCards()
   },
   methods: {
-    producerCards: function () {
+    producerCards () {
       let $vue = this
       setTimeout(function () {
         let exec = document.getElementById("executive")
@@ -138,7 +138,7 @@ export default {
         }, duration)
       }, pause)
     },
-    rolling: function () {
+    rolling () {
       setTimeout(function () {
         let rolling = document.getElementById("rolling")
         rolling.className = "active"

@@ -90,7 +90,7 @@ export default {
   },
 
   computed: {
-    isReady: function () {
+    isReady () {
       return this.$data.color !== '' && this.$data.name !== ''
     },
     id () {

@@ -71,7 +71,7 @@ export default {
   },
 
   methods: {
-    start: function () {
+    start () {
       if (this.tournament) {
         this.api.start({ id: this.tournament.id }).then((res) => {
           console.log("start response:", res)
@@ -84,7 +84,7 @@ export default {
         console.error("start called with no tournament")
       }
     },
-    usurp: function () {
+    usurp () {
       if (this.tournament) {
         this.api.usurp({ id: this.tournament.id }).then((res) => {
           console.log("usurp response:", res)
@@ -108,7 +108,7 @@ export default {
     }
   },
 
-  created: function () {
+  created () {
     this.api = this.$resource("/api/towerfall", {}, {
       start: { method: "GET", url: "/api/towerfall{/id}/start/" },
       usurp: { method: "GET", url: "/api/towerfall{/id}/usurp/" },

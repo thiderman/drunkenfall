@@ -42,13 +42,13 @@ export default {
   },
 
   methods: {
-    refresh: function () {
+    refresh () {
       // Hax to make vue refresh the entire page.
       // Since nothing on this page is properly bound to components right now
       // the updates won't trigger properly.
       this.$set('updated', Date.now())
     },
-    setData: function (tournament) {
+    setData (tournament) {
       let match
       let index = tournament.current.index
       let kind = tournament.current.kind
@@ -92,7 +92,7 @@ export default {
       this.$set('tournament', Tournament.fromObject(tournament))
       this.renderChart()
     },
-    renderChart: function () {
+    renderChart () {
       // set the dimensions and margins of the graph
       var margin = {top: 70, right: 50, bottom: 50, left: 50}
       var width = window.innerWidth - margin.left - margin.right
@@ -182,7 +182,7 @@ export default {
     },
   },
 
-  created: function () {
+  created () {
     console.debug("Creating API resource")
     let customActions = {
       getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }

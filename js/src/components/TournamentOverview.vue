@@ -128,7 +128,7 @@ export default {
     canParticipants () {
       return this.tournament.current.kind === 'tryout'
     },
-    nextMatch: function () {
+    nextMatch () {
       let kind = this.tournament.current.kind
       let idx = this.tournament.current.index
 
@@ -147,7 +147,7 @@ export default {
       return m
     },
 
-    runnerups: function () {
+    runnerups () {
       let t = this.tournament
 
       if (!t.runnerups) {
@@ -163,7 +163,7 @@ export default {
   },
 
   methods: {
-    start: function () {
+    start () {
       if (this.tournament) {
         this.api.start({ id: this.tournament.id }).then((res) => {
           console.log("start response:", res)
@@ -176,7 +176,7 @@ export default {
         console.error("start called with no tournament")
       }
     },
-    next: function () {
+    next () {
       if (this.tournament) {
         this.api.next({ id: this.tournament.id }).then((res) => {
           console.debug("next response:", res)
@@ -189,7 +189,7 @@ export default {
         console.error("next called with no tournament")
       }
     },
-    reshuffle: function () {
+    reshuffle () {
       if (this.tournament) {
         this.api.reshuffle({ id: this.tournament.id }).then((res) => {
           console.debug("reshuffle response:", res)
@@ -202,7 +202,7 @@ export default {
         console.error("reshuffle called with no tournament")
       }
     },
-    log: function () {
+    log () {
       this.$router.push({
         name: "log",
         params: {
@@ -210,7 +210,7 @@ export default {
         }
       })
     },
-    setTime: function (x) {
+    setTime (x) {
       this.api.setTime({ id: this.tournament.id, time: x }).then((res) => {
         console.debug("settime response:", res)
         let j = res.json()
@@ -221,7 +221,7 @@ export default {
       })
     },
 
-    selectRunnerup: function (p) {
+    selectRunnerup (p) {
       if (this.isSelected(p)) {
         // TODO(thiderman): Doesn't work. Fuck this.
         console.log("selected, to remove", this.selected)
@@ -234,12 +234,12 @@ export default {
 
       this.selected.push(p)
     },
-    isSelected: function (p) {
+    isSelected (p) {
       return _.find(this.selected, p) !== undefined
     },
   },
 
-  created: function () {
+  created () {
     this.api = this.$resource("/api/towerfall", {}, {
       start: { method: "GET", url: "/api/towerfall{/id}/start/" },
       next: { method: "GET", url: "/api/towerfall{/id}/next/" },

@@ -48,7 +48,7 @@ export default {
     },
   },
 
-  created: function () {
+  created () {
     let customActions = {
       edit: { method: "POST", url: "/api/towerfall/{id}/edit/" },
     }

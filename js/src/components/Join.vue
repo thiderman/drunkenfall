@@ -71,7 +71,7 @@ export default {
     },
   },
 
-  created: function () {
+  created () {
     console.debug("Creating API resource")
     let customActions = {
       join: { method: "GET", url: "/api/towerfall/{id}/join/" },

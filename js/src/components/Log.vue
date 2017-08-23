@@ -58,7 +58,7 @@ export default {
     }
   },
 
-  created: function () {
+  created () {
     console.debug("Creating API resource")
     let customActions = {
       getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }

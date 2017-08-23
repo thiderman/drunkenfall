@@ -93,13 +93,13 @@ export default {
         index: this.match.index
       }
     },
-    can_commit: function () {
+    can_commit () {
       return true
     },
   },
 
   methods: {
-    commit: function () {
+    commit () {
       // TODO this could potentially be a class
       let payload = {
         'state': _.map(this.$children, (controlPlayer) => {
@@ -116,7 +116,7 @@ export default {
         console.log(res)
       })
     },
-    end: function () {
+    end () {
       this.api.end(this.match_id).then(function (res) {
         console.log(res)
         this.$router.push('/towerfall/' + this.tournament.id + '/')
@@ -125,7 +125,7 @@ export default {
         console.log(res)
       })
     },
-    start: function () {
+    start () {
       this.api.start(this.match_id).then(function (res) {
         console.log(res)
         this.setData(
@@ -138,7 +138,7 @@ export default {
         console.log(res)
       })
     },
-    reset: function () {
+    reset () {
       this.api.reset(this.match_id).then(function (res) {
         console.log(res)
         this.setData(
@@ -151,7 +151,7 @@ export default {
         console.log(res)
       })
     },
-    setData: function (tournament, kind, match) {
+    setData (tournament, kind, match) {
       if (kind === 'tryout') {
         kind = 'tryouts'
       } else if (kind === 'semi') {
@@ -168,7 +168,7 @@ export default {
     }
   },
 
-  created: function () {
+  created () {
     console.debug("Creating API resource")
     let customActions = {
       commit: { method: "POST", url: "/api/towerfall/tournament{/id}{/kind}{/index}/commit/" },

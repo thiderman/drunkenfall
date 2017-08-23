@@ -15,13 +15,13 @@ export default {
   },
 
   computed: {
-    avatar: function () {
+    avatar () {
       return this.player.avatar
     },
-    display_name: function () {
+    display_name () {
       return this.player.person.nick
     },
-    classes: function () {
+    classes () {
       if (this.match.isEnded) {
         if (this.index === this.match.kill_order[0]) {
           return 'gold'

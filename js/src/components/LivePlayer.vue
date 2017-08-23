@@ -26,7 +26,7 @@ export default {
     index: 0,
   },
 
-  created: function () {
+  created () {
     document.getElementsByTagName("body")[0].className = "scroll-less"
   }
 }

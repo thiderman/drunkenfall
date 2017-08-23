@@ -51,7 +51,7 @@ export default {
         console.error(`joining tournament ${this.tournament} failed`, err)
       })
     },
-    setData: function (tournament) {
+    setData (tournament) {
       console.log("setData tournament", tournament)
       this.$set('tournament', Tournament.fromObject(tournament))
     }
@@ -80,7 +80,7 @@ export default {
     },
   },
 
-  created: function () {
+  created () {
     console.debug("Creating API resource")
     let customActions = {
       getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" },

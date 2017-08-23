@@ -77,7 +77,7 @@ export default {
   },
 
   methods: {
-    bulletClass: function (player, playerIndex, n) {
+    bulletClass (player, playerIndex, n) {
       if (n > player.kills && n <= (player.kills + this.ups)) {
         return 'up'
       } else if (n === player.kills && this.downs === -1) {
@@ -88,7 +88,7 @@ export default {
       return ''
     },
 
-    score: function (playerIndex, score) {
+    score (playerIndex, score) {
       if (!this.match.isStarted) {
         return
       }
@@ -108,14 +108,14 @@ export default {
       }
     },
 
-    reset: function () {
+    reset () {
       this.ups = 0
       this.downs = 0
       this.shot = false
       this.reason = ''
     },
 
-    manual_shot: function () {
+    manual_shot () {
       if (!this.shot) {
         this.shot = true
         this.reason = 'manual'
@@ -126,7 +126,7 @@ export default {
     }
   },
 
-  mounted: function () {
+  mounted () {
     fitText(this.$refs.name, this.$refs.name.innerText, "'Yanone Kaffeesatz', sans-serif", 1)
   }
 }
