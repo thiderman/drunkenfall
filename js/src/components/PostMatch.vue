@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="tournament">
     <header>
       <div class="content">
         <div class="title">
@@ -19,79 +19,59 @@
 
 <script>
 import * as d3 from "d3"
-import ControlPlayer from './ControlPlayer.vue'
-import PreviewPlayer from './PreviewPlayer.vue'
-import LivePlayer from './LivePlayer.vue'
-import Match from '../models/Match.js'
-import Tournament from '../models/Tournament.js'
 
 export default {
   name: 'PostMatch',
-  components: {
-    ControlPlayer,
-    PreviewPlayer,
-    LivePlayer,
+
+  computed: {
+    user () {
+      return this.$store.state.user
+    },
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    match () {
+      let match
+      let index = this.tournament.current.index
+      let kind = this.tournament.current.kind
+
+      if (kind === 'final') {
+        return this.tournament.final
+      }
+
+      kind = kind + 's'
+
+      match = this.tournament[kind][index]
+
+      // We don't want to update until the next match has been
+      // started. If we do, the graphs are removed as soon as the
+      // judges end the previous match.
+      // Also, if we're on the first match there is no previous one,
+      // so don't try to grab the previous one in that case.
+      if (!match.isStarted || (kind === 'tryouts' && index === 0)) {
+        index = this.tournament.previous.index
+        kind = this.tournament.previous.kind + 's'
+        console.log([index, kind])
+        return this.tournament[kind][index]
+      }
+
+      return match
+    },
   },
 
-  data () {
-    return {
-      match: new Match(),
-      tournament: new Tournament(),
-      user: this.$root.user,
+  watch: {
+    tournament (nt, ot) {
+      console.log(nt)
+      console.log(ot)
+      if (nt) {
+        this.renderChart()
+      }
     }
   },
 
   methods: {
-    refresh () {
-      // Hax to make vue refresh the entire page.
-      // Since nothing on this page is properly bound to components right now
-      // the updates won't trigger properly.
-      this.$set('updated', Date.now())
-    },
-    setData (tournament) {
-      let match
-      let index = tournament.current.index
-      let kind = tournament.current.kind
-
-      if (kind === 'tryout') {
-        kind = 'tryouts'
-      } else if (kind === 'semi') {
-        kind = 'semis'
-      }
-
-      if (kind === 'final') {
-        match = Match.fromObject(tournament[kind])
-      } else {
-        match = Match.fromObject(tournament[kind][index])
-      }
-
-      if (!match.isStarted) {
-        // If we're on the first match, there is no previous, so bail.
-        if (index === 0 && kind === 'tryouts') {
-          this.$set('tournament', Tournament.fromObject(tournament))
-          return
-        }
-
-        index = tournament.previous.index
-        kind = tournament.previous.kind
-
-        if (kind === 'tryout') {
-          kind = 'tryouts'
-        } else if (kind === 'semi') {
-          kind = 'semis'
-        }
-
-        if (kind === 'final') {
-          match = Match.fromObject(tournament[kind])
-        } else {
-          match = Match.fromObject(tournament[kind][index])
-        }
-      }
-
-      this.$set('match', match)
-      this.$set('tournament', Tournament.fromObject(tournament))
-      this.renderChart()
-    },
     renderChart () {
       // set the dimensions and margins of the graph
       var margin = {top: 70, right: 50, bottom: 50, left: 50}
@@ -127,7 +107,7 @@ export default {
       var data = match.chartData
 
       var roundCount = data[0] ? data[0].length - 1 : 0
-      var maxScore = match.length
+      var maxScore = match.end
 
       // Scale the range of the data
       x.domain([0, roundCount])
@@ -181,44 +161,6 @@ export default {
         .attr("transform", "translate(55, 35)")
     },
   },
-
-  created () {
-    console.debug("Creating API resource")
-    let customActions = {
-      getTournamentData: { method: "GET", url: "/api/towerfall/tournament{/id}/" }
-    }
-    this.api = this.$resource("/api/towerfall", {}, customActions)
-  },
-
-  route: {
-    data ({ to }) {
-      // listen for tournaments from App
-      this.$on(`tournament${to.params.tournament}`, (tournament) => {
-        console.debug("New tournament from App:", tournament)
-        this.setData(tournament)
-      })
-
-      if (to.router.app.tournaments.length === 0) {
-        // Nothing is set - we're reloading the page and we need to get the
-        // data manually
-        this.api.getTournamentData({ id: to.params.tournament }).then(function (res) {
-          console.log(res)
-          this.setData(res.data.tournament)
-        }, function (res) {
-          console.log('error when getting tournament')
-          console.log(res)
-        })
-      } else {
-        // Something is set - we're clicking on a link and can reuse the
-        // already existing data immediately
-        this.setData(
-          to.router.app.get(to.params.tournament),
-          to.params.kind,
-          parseInt(to.params.match)
-        )
-      }
-    }
-  }
 }
 </script>
 

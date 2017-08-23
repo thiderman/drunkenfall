@@ -313,6 +313,7 @@ func (m *Match) End(r *http.Request) error {
 		}
 	}
 
+	m.Tournament.SetPrevious(m)
 	m.Tournament.Persist()
 	return nil
 }
