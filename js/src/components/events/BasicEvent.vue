@@ -65,18 +65,19 @@ export default {
     color: #555;
     padding: 0.5em;
   }
-}
 
-img {
-  display: block;
-  object-fit: cover;
-  border-radius: 100%;
-  width:  3em;
-  height: 3em;
-  margin: 2.5% 4.5% 2.5% 3.5%;
-  box-shadow: -1px -1px 6px rgba(0,0,0,0.5);
-  background-color: rgba(10,12,14,0.3);
-  float: left;
+  img {
+    display: block;
+    object-fit: cover;
+    border-radius: 100%;
+    width:  3em;
+    height: 3em;
+    margin: 2.5% 4.5% 2.5% 3.5%;
+    box-shadow: -1px -1px 6px rgba(0,0,0,0.5);
+    background-color: rgba(10,12,14,0.3);
+    float: left;
+  }
+
 }
 
 </style>
