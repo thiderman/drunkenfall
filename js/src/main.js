@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import Router from 'vue-router'
 import Resource from 'vue-resource'
 import Cookie from 'vue-cookie'
+import Vue2Filters from 'vue2-filters'
 import App from './App'
 
 import _ from 'lodash'
@@ -32,6 +33,7 @@ Vue.use(Vuex)
 Vue.use(Router)
 Vue.use(Resource)
 Vue.use(Cookie)
+Vue.use(Vue2Filters)
 
 // routing
 var router = new Router({
