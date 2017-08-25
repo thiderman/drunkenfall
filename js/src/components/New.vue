@@ -74,8 +74,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../pikaday.scss";
-
 form {
   display: flex;
   flex-direction: column;
