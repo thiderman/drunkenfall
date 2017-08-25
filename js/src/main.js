@@ -120,6 +120,10 @@ var router = new Router({
       name: 'match',
       component: Match
     },
+    {
+      path: '/towerfall/:tournament/*',
+      redirect: '/towerfall/:tournament/',
+    },
   ],
 })
 
