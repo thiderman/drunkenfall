@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div v-if="tournament">
     <div id="executive">
-      <img :alt="executive.nick" :src="executive.avatar"/>
+      <img :alt="credits.executive.nick" :src="credits.executive.avatar"/>
       <h2>Executive Producer</h2>
-      <h1>{{executive.name}}</h1>
-      <h3 :class="executive.color">{{executive.nick}}</h3>
+      <h1>{{credits.executive.name}}</h1>
+      <h3 :class="credits.executive.color">{{credits.executive.nick}}</h3>
     </div>
 
     <div id="producers">
       <h1>Producers</h1>
 
       <div class="first">
-        <div class="producer" v-for="p in first_producers">
+        <div class="producer" v-for="p in firstProducers">
           <img :alt="p.nick" :src="p.avatar"/>
           <div>
             <h1>{{p.name}}</h1>
@@ -21,7 +21,7 @@
       </div>
 
       <div class="second">
-        <div class="producer" v-for="p in second_producers">
+        <div class="producer" v-for="p in secondProducers">
           <img :alt="p.nick" :src="p.avatar"/>
           <div>
             <h1>{{p.name}}</h1>
@@ -29,6 +29,7 @@
           </div>
         </div>
       </div>
+
     </div>
 
     <div id="rolling">
@@ -37,7 +38,7 @@
 
       <div id="players">
         <h1>Combatants</h1>
-        <div class="player" v-for="p in players">
+        <div class="player" v-for="p in credits.players">
           <img :alt="p.nick" :src="p.avatar"/>
           <div>
             <h1 :class="p.color">{{p.nick}}</h1>
@@ -60,7 +61,7 @@
       <div class="clear"></div>
 
       <div id="harmed">
-        <span>{{archersHarmed}}</span> archers were harmed in the making of this broadcast
+        <span>{{credits.archers_harmed}}</span> archers were harmed in the making of this broadcast
       </div>
     </div>
 
@@ -76,36 +77,51 @@
 </template>
 
 <script>
-import Person from '../models/Person.js'
-import _ from "lodash"
-
 let pause = 2000
 let duration = 6000
-let roll = 8 * 1000
+let roll = 60 * 1000
 
 export default {
   name: 'Credits',
 
-  data () {
-    return {
-      executive: Person,
-      first_producers: [],
-      second_producers: [],
-      players: [],
-      archersHarmed: 0,
-    }
+  computed: {
+    tournament () {
+      return this.$store.getters.getTournament(
+        this.$route.params.tournament
+      )
+    },
+    credits () {
+      return this.$store.state.credits
+    },
+    firstProducers () {
+      return this.credits.producers.slice(0, 4)
+    },
+    secondProducers () {
+      return this.credits.producers.slice(4, 7)
+    },
   },
 
   created () {
-    console.debug("Creating API resource")
-    let customActions = {
+    let $vue = this
+    let id = this.$route.params.tournament
+
+    this.api = this.$resource("/api/towerfall", {}, {
       getCredits: { method: "GET", url: "/api/towerfall{/id}/credits/" }
-    }
-    this.api = this.$resource("/api/towerfall", {}, customActions)
+    })
+
+    this.api.getCredits({id: id}).then((res) => {
+      let j = JSON.parse(res.data)
+      $vue.$store.commit('setCredits', j)
+    }, (res) => {
+      console.log('error when setting credits')
+      console.log(res)
+      $vue.$router.push(`/towerfall/${id}/`)
+    })
 
     document.getElementsByTagName("body")[0].className = "scroll-less"
     this.producerCards()
   },
+
   methods: {
     producerCards () {
       let $vue = this
@@ -152,28 +168,11 @@ export default {
       }, pause)
     }
   },
-  route: {
-    data ({ to }) {
-      this.api.getCredits({ id: to.params.tournament }).then(function (res) {
-        console.log(res)
-        let data = res.json()
-
-        this.$set("executive", Person.fromObject(data.executive))
-        this.$set("first_producers", _.map(data.producers.slice(0, 4), Person.fromObject))
-        this.$set("second_producers", _.map(data.producers.slice(4, 7), Person.fromObject))
-        this.$set("players", _.map(data.players, Person.fromObject))
-        this.$set("archersHarmed", data.archers_harmed)
-      }, function (res) {
-        console.log('error when getting credits data')
-        console.log(res)
-      })
-    }
-  }
 }
+
 </script>
 
 <style lang="scss" scoped>
-
 @import "../variables.scss";
 
 .green  {color: $green;}

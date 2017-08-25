@@ -617,6 +617,10 @@ func (t *Tournament) SetMatchPointers() error {
 
 // GetCredits returns the credits object needed to display the credits roll.
 func (t *Tournament) GetCredits() (*Credits, error) {
+	if t.Ended.IsZero() {
+		return nil, errors.New("cannot roll credits for unfinished tournament")
+	}
+
 	// TODO(thiderman): Many of these values are currently hardcoded or
 	// broadly grabs everything.
 	// We should move towards specifying these live when setting

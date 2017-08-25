@@ -27,6 +27,7 @@ import FacebookFinalize from './components/FacebookFinalize.vue'
 import Credits from './components/Credits.vue'
 
 import User from './models/User.js'
+import {Credits as CreditsModel} from './models/Credits.js'
 import Tournament from './models/Tournament.js'
 
 // install packages
@@ -143,6 +144,7 @@ const store = new Vuex.Store({ // eslint-disable-line
   state: {
     tournaments: [],
     user: new User(),
+    credits: {}
   },
   mutations: {
     updateAll (state, tournaments) {
@@ -150,7 +152,10 @@ const store = new Vuex.Store({ // eslint-disable-line
     },
     setUser (state, user) {
       state.user = user
-    }
+    },
+    setCredits (state, credits) {
+      state.credits = CreditsModel.fromObject(credits)
+    },
   },
   getters: {
     getTournament: (state, getters) => (id) => {
