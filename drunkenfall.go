@@ -733,6 +733,8 @@ func main() {
 	// Set up the paths and the websocket listeners
 	s.RegisterHandlersAndListeners()
 
+	Kekkonen()
+
 	// Actually start serving
 	if err := s.Serve(); err != nil {
 		log.Fatal(err)
