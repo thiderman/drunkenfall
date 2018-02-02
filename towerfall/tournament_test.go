@@ -93,6 +93,15 @@ func TestStartingTournamentWith24PlayersWorks(t *testing.T) {
 	assert.Nil(err)
 }
 
+func TestDoubleStartIsForbidden(t *testing.T) {
+	assert := assert.New(t)
+	tm := testTournament(16)
+	err := tm.StartTournament(nil)
+	assert.Nil(err)
+	err = tm.StartTournament(nil)
+	assert.EqualError(err, "tournament is already running")
+}
+
 func TestStartingGivesTheRightAmountOfPlayoffs(t *testing.T) {
 	assert := assert.New(t)
 	for x := 8; x <= 32; x++ {

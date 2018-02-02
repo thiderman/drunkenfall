@@ -213,7 +213,11 @@ func (t *Tournament) ShufflePlayers() {
 func (t *Tournament) StartTournament(r *http.Request) error {
 	ps := len(t.Players)
 	if ps < minPlayers || ps > maxPlayers {
-		return fmt.Errorf("Tournament needs %d or more players and %d or less, got %d", minPlayers, maxPlayers, ps)
+		return fmt.Errorf("tournament needs %d or more players and %d or less, got %d", minPlayers, maxPlayers, ps)
+	}
+
+	if (t.IsRunning()) {
+		return errors.New("tournament is already running")
 	}
 
 	// If there are only eight players, we should skip doing playoffs and
