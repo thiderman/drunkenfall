@@ -25,7 +25,7 @@ LINTER_ARGS = -j 4 \
 
 .DEFAULT_GOAL: all
 
-.PHONY: clean clobber download install install-linter test cover race lint npm npm-dist nginx-start
+.PHONY: clean clobber download install install-linter test cover race lint npm npm-dist
 
 all: clean download npm test race lint $(BINARY)
 
@@ -77,10 +77,6 @@ npm-dist: npm
 
 $(BINARY)-start: $(BINARY)
 	./$(BINARY)
-
-nginx-start:
-	mkdir -p logs
-	sudo nginx -p . -c conf/nginx.conf
 
 .PHONY: vendor
 vendor:
