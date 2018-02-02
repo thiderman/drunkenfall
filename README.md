@@ -24,13 +24,17 @@ make
 ```
 
 ### Development environment
-
-In separate terminals, run each of:
+First run:
+```
+export DF_DB_PATH=$GOPATH/src/github.com/drunkenfall/drunkenfall/data/test.db
+mkdir $GOPATH/src/github.com/drunkenfall/drunkenfall/data && touch $DF_DB_PATH
+```
+Then, in separate terminals, run each of:
 
 ```
 make drunkenfall-start
 make npm-start
-make nginx-start
+sudo caddy -conf Caddyfile.local
 ```
 
 ## License
