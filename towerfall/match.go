@@ -843,7 +843,7 @@ func (r *Round) AddKill(p int) {
 		r.Reset()
 	}
 
-	r.Kills[p][0] += 1
+	r.Kills[p][0]++
 }
 
 // AddSelf adds one self to the specified player
@@ -852,7 +852,7 @@ func (r *Round) AddSelf(p int) {
 		r.Reset()
 	}
 
-	r.Kills[p][1] -= 1
+	r.Kills[p][1]--
 }
 
 func (r *Round) Reset() {
