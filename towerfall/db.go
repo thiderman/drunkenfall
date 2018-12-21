@@ -270,14 +270,6 @@ func (d *Database) GetPeople() ([]*Person, error) {
 	return ret, err
 }
 
-// GetPeopleInTournament gets the Person objects for the players that
-// have joined a tournament
-func (d *Database) GetPeopleById(ids ...string) ([]*Person, error) {
-	ret := make([]*Person, 0)
-	err := d.DB.Model(&ret).Where("person_id IN (?)", pg.In(ids)).Select()
-	return ret, err
-}
-
 // GetTournament gets a tournament by id, or returns the cached one if there is one
 func (d *Database) GetTournament(id uint) (*Tournament, error) {
 	// if d.tournament == nil {
