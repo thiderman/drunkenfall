@@ -178,7 +178,7 @@ func (Code) Vendor() error {
 func (Code) Lint() error {
 	mg.Deps(Code.InstallLinter)
 
-	return sh.Run("golangci-lint", "run")
+	return sh.Run("golangci-lint", "run", "--config", ".golangci-pedantic.yaml")
 }
 
 // Install the linter

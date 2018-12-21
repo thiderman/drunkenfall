@@ -13,6 +13,10 @@ export GOPATH := $(shell go env GOPATH)
 
 check: test lint
 
+.PHONY: lint
+lint:
+	golangci-lint run --config .golangci-pedantic.yaml
+
 # The CGO and GOOS are needed for it to statically link so that it is runnable in Docker
 .PHONY: install
 install:
